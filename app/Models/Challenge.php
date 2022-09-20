@@ -11,6 +11,8 @@ class Challenge extends Model
 
     protected $fillable = ['track_id', 'name', 'difficulty', 'points', 'attachment'];
 
+    //Relationships
+
     public function users()
     {
         return $this->belongsToMany('App\Models\User');

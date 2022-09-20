@@ -18,8 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'full_name',
         'email',
         'password',
         'points',
@@ -45,7 +44,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function username() {
+        return 'full_name';
+    }
+
+    public function hasRole($role) {
+        return ($this->role === $role);
+    }
+    //Relationships
+
     public function challenges() {
         return $this->belongsToMany('App\Models\Challenge', 'submissions');
     }
+
+
+
 }

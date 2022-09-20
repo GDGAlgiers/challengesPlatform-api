@@ -11,6 +11,7 @@ class Track extends Model
 
     protected $fillable = ['type', 'max_earned_points'];
 
+    //Relationships
     public function challenges() {
         return $this->hasMany('App\Models\Challenge');
     }
