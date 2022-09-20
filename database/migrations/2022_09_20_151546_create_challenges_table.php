@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+        Schema::create('challenges', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('track_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->enum('difficulty', ['easy', 'medium', 'hard']);
+            $table->string('attachment');
             $table->float('points');
-            $table->string('role');
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('challenges');
     }
 };
