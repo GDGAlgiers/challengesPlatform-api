@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tracks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('type');
+            $table->boolean('is_locked');
             $table->float('max_earned_points');
             $table->timestamps();
         });
