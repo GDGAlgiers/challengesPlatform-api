@@ -26,6 +26,14 @@ class AdminController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
+    public function delete_user($id) {
+        $response = $this->userRepository->delete_user($id);
+        if(!$response['success']) {
+            return $this->sendError($response['message']);
+        }
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
     public function get_challenges() {
         $response = $this->challengeRepository->get_all();
         return $this->sendResponse($response['data'], $response['message']);
@@ -49,7 +57,7 @@ class AdminController extends BaseController
         $response = $this->challengeRepository->delete($id);
         if(!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
-        
+
     }
 
 

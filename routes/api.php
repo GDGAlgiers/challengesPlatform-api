@@ -25,6 +25,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
     Route::prefix('user')->group(function() {
         Route::post('/create-judge', 'create_judge');
+        Route::delete('/delete-user/{id}', 'delete_user');
     });
 
     Route::prefix('challenge')->group(function() {

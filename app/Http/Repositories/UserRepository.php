@@ -35,4 +35,21 @@ Class UserRepository {
         $response['message'] = 'Succefully registred the judge!';
         return $response;
     }
+
+    public function delete_user($id) {
+        $response = [];
+
+        $user = User::find($id);
+        if(!$user) {
+            $response['success'] = false;
+            $response['message'] = 'User can not be found!';
+            return $response;
+        }
+        $user->delete();
+        $response['success'] = true;
+        $response['message'] = 'The user was succefully deleted!';
+        $response['data'] = [];
+
+        return $response;
+    }
 }
