@@ -19,8 +19,7 @@ Class TrackRepository {
     public function create($request) {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'type' => 'required|string',
-            'max_earned_points' => 'required'
+            'type' => 'required|string|unique:tracks,type',
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -32,7 +31,7 @@ Class TrackRepository {
         $track = Track::create([
             'type' => $request->type,
             'is_locked' => true,
-            'max_earned_points' => $request->max_earned_points
+            'max_earned_points' => 0
         ]);
         $response['success'] = true;
         $response['message'] = 'Track was succefully created!';
@@ -79,6 +78,7 @@ Class TrackRepository {
         $response['success'] = true;
         $response['message'] = 'Track was succefully deleted!';
         $response['data'] = [];
+        return $response;
     }
 
 }
