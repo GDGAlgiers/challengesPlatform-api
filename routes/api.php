@@ -34,5 +34,13 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
         Route::put('/update/{id}', 'update_challenge');
         Route::delete('/delete/{id}', 'delete_challenge');
     });
+
+    Route::prefix('track')->group(function() {
+        Route::get('/', 'get_tracks');
+        Route::post('/create', 'create_track');
+        Route::post('/lock', 'lock_tracks');
+        Route::post('/unlock', 'unlock_tracks');
+        Route::delete('/delete/{id}', 'delete_track');
+    });
 });
 
