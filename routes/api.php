@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,12 +16,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
+Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
+    ->controller(AdminController::class)->group(function() {
+    Route::prefix('user')->group(function() {
+        Route::post('/create-participant', 'create_participant');
+        Route::post('/create-judge', 'create_judge');
+        Route::delete('/delete-user/{id}', 'delete_user');
+    });
 
-Route::get('/test', function() {
-    return "HI";
-})->middleware(['auth:sanctum', 'hasRole:admin']);
+    Route::prefix('challenge')->group(function() {
+        Route::get('/', 'get_challenges');
+        Route::post('/create', 'create_challenges');
+        Route::put('/update/{id}', 'update_challenge');
+        Route::delete('/delete/{id}', 'delete_challenge');
+    });
+
+    Route::prefix('track')->group(function() {
+        Route::get('/', 'get_tracks');
+        Route::post('/create', 'create_track');
+        Route::post('/lock', 'lock_tracks');
+        Route::post('/unlock', 'unlock_tracks');
+        Route::delete('/delete/{id}', 'delete_track');
+    });
+});
+

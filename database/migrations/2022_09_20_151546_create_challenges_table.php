@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('track_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
-            $table->string('attachment');
+            $table->string('attachment')->nullable();
             $table->float('points');
             $table->timestamps();
         });

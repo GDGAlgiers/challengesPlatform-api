@@ -9,7 +9,7 @@ class Track extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'max_earned_points'];
+    protected $fillable = ['type', 'is_locked', 'max_earned_points'];
 
     //Relationships
     public function challenges() {
