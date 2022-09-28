@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -24,6 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
     Route::prefix('user')->group(function() {
+        Route::post('/create-participant', 'create_participant');
         Route::post('/create-judge', 'create_judge');
         Route::delete('/delete-user/{id}', 'delete_user');
     });

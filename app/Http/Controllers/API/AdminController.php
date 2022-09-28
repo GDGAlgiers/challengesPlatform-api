@@ -12,12 +12,19 @@ class AdminController extends BaseController
     private $userRepository;
     private $challengeRepository;
     private $trackRepository;
+
     public function __construct(UserRepository $userRepository, ChallengeRepository $challengeRepository, TrackRepository $trackRepository) {
         $this->userRepository = $userRepository;
         $this->challengeRepository = $challengeRepository;
         $this->trackRepository = $trackRepository;
     }
 
+    public function create_participant(Request $request) {
+        $response = $this->userRepository->create_participant($request);
+        if(!$response['success']) return $this->sendError($response['message'], $response['data']);
+
+        return $this->sendResponse($response['data'], $response['message']);
+    }
 
     public function create_judge(Request $request) {
         $response = $this->userRepository->create_judge($request);
