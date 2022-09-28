@@ -22,7 +22,7 @@ Class ChallengeRepository {
     public function create($request) {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'track_id' => 'required|exists:tracks',
+            'track_id' => 'required|exists:tracks,id',
             'name' => 'required|string',
             'difficulty' => 'required',
             'points' => 'required',
