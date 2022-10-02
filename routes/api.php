@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\ParticipantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +46,15 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     });
 });
 
+
+Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
+    ->controller(ParticipantController::class)->group(function() {
+    Route::prefix('track')->group(function () {
+        Route::get('/', 'get_tracks');
+        Route::get('/{track}/challenges', 'get_track_challenges');
+    });
+
+    Route::prefix('challenge')->group(function() {
+        
+    });
+});

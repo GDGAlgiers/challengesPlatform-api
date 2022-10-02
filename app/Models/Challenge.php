@@ -13,15 +13,22 @@ class Challenge extends Model
 
     //Relationships
 
-    public function users()
+    public function submitors()
     {
-        return $this->belongsToMany('App\Models\User');
+        return $this->belongsToMany('App\Models\User', 'submissions', 'challenge_id', 'user_id')->withPivot('status');
     }
 
     public function track() {
         return $this->belongsTo('App\Models\Track');
     }
 
+    public function solvers() {
+        return $this->belongsToMany('App\Models\User', 'solves');
+    }
+
+    public function locked() {
+        return $this->belongsToMany('App\Models\User', 'locks');
+    }
 }
 
 

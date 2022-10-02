@@ -23,6 +23,7 @@ class ChallengeSeeder extends Seeder
                 'track_id' => $trackIDs[rand(0, count($trackIDs)-1)],
                 'name' => 'challenge'.$i,
                 'difficulty' => 'easy',
+                'description' => 'description'.$i,
                 'points' => $i*20
             ]);
         }

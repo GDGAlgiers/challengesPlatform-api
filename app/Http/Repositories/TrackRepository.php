@@ -2,6 +2,7 @@
 namespace App\Http\Repositories;
 
 use App\Http\Resources\TrackResource;
+use App\Models\Challenge;
 use App\Models\Track;
 use Illuminate\Support\Facades\Validator;
 
@@ -78,6 +79,21 @@ Class TrackRepository {
         $response['success'] = true;
         $response['message'] = 'Track was succefully deleted!';
         $response['data'] = [];
+        return $response;
+    }
+
+    public function get_track_challenges($id) {
+        $response = [];
+        $track = Track::find($id);
+        if(!$track) {
+            $response['success'] = false;
+            $response['message'] = 'Track not found!';
+            return $response;
+        }
+        $challenges = $track->challenges()->get();
+        $response['success'] = true;
+        $response['message'] = 'Challenges were succefully retrieved!';
+        $response['data'] = Challenge::collection($challenges);
         return $response;
     }
 

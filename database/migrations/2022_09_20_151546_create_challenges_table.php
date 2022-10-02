@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('track_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('description');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
             $table->string('attachment')->nullable();
             $table->float('points');

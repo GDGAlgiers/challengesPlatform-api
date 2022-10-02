@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\TrackResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChallengeResource extends JsonResource
@@ -17,10 +16,12 @@ class ChallengeResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'track' => $this->track->type,
             'name' => $this->name,
             'difficulty' => $this->difficulty,
+            'description' => $this->description,
             'points' => $this->points,
-            'attachment' => $this->attachment
+            'attachment' => $this->attachment,
         ];
     }
 }

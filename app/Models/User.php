@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'points',
         'role',
+        'track_id'
     ];
 
     /**
@@ -51,12 +52,20 @@ class User extends Authenticatable
     public function hasRole($role) {
         return ($this->role === $role);
     }
+
     //Relationships
 
-    public function challenges() {
-        return $this->belongsToMany('App\Models\Challenge', 'submissions');
+    public function submissions() {
+        return $this->belongsToMany('App\Models\Challenge', 'submissions')->withPivot('status');
     }
 
+    public function solves() {
+        return $this->belongsToMany('App\Models\Challenge', 'solves');
+    }
+
+    public function locks() {
+        return $this->belongsToMany('App\Models\Challenge', 'locks');
+    }
 
 
 }
