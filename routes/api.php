@@ -50,11 +50,20 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
 Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
     ->controller(ParticipantController::class)->group(function() {
     Route::prefix('track')->group(function () {
+        Route::get('/test', function () {
+            $authUser = auth()->user();
+            return response()->json([
+                'success' => true,
+                'data' => $authUser->submissions
+            ]);
+        });
         Route::get('/', 'get_tracks');
         Route::get('/{track}/challenges', 'get_track_challenges');
     });
 
     Route::prefix('challenge')->group(function() {
-        
+
     });
 });
+
+
