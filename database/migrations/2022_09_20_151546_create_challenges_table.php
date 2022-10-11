@@ -21,6 +21,9 @@ return new class extends Migration
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
             $table->string('attachment')->nullable();
             $table->float('points');
+            $table->integer('max_tries');
+            $table->boolean('requires_judge');
+            $table->string('solution')->nullable();
             $table->timestamps();
         });
     }

@@ -29,4 +29,8 @@ class ParticipantController extends Controller
 
         return $this->sendResponse($response['data'], $response['message']);
     }
+
+    public function submit_challenge(Request $request, $id) {
+        $response = $this->challengeRepository->submit($request, $id);
+    }
 }

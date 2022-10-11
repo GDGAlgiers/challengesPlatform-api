@@ -56,7 +56,7 @@ class User extends Authenticatable
     //Relationships
 
     public function submissions() {
-        return $this->belongsToMany('App\Models\Challenge', 'submissions')->withPivot('status');
+        return $this->belongsToMany('App\Models\Challenge', 'submissions')->withPivot('status', 'attachment');
     }
 
     public function solves() {
@@ -65,6 +65,10 @@ class User extends Authenticatable
 
     public function locks() {
         return $this->belongsToMany('App\Models\Challenge', 'locks');
+    }
+
+    public function track() {
+        return $this->belongsTo('App\Models\Track');
     }
 
 

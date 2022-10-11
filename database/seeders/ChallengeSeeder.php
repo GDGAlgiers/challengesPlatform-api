@@ -24,7 +24,8 @@ class ChallengeSeeder extends Seeder
                 'name' => 'challenge'.$i,
                 'difficulty' => 'easy',
                 'description' => 'description'.$i,
-                'points' => $i*20
+                'points' => $i*20,
+                'max_tries' => 2
             ]);
         }
 

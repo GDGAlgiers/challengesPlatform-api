@@ -104,4 +104,80 @@ Class ChallengeRepository {
 
         return $response;
     }
+
+    public function submit($request, $id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        $user = auth()->user();
+        $this->incrementTries($user, $id);
+        if(!$challenge->requires_judge) {
+            $validator = Validator::make($request->all(), [
+                'answer' => 'required|string'
+            ]);
+            if($validator->fails()) {
+                $response['success'] = false;
+                $response['message'] = 'Validation failed';
+                $response['data'] = $validator->errors();
+                return $response;
+            }
+
+            if($challenge->solution == $request->answer) {
+                $this->addSubmission($user, $id, 'Approved');
+                $this->challengeSolved($user, $challenge);
+                $response['success'] = true;
+                $response['message'] = "That's right! you've succefully solved this challenge";
+                $response['data'] = [];
+                return $response;
+            }else {
+                $this->addSubmission($user, $id, 'Rejected');
+                $response['success'] = false;
+                $response['message'] = "That's wrong, think more";
+                return $response;
+            }
+        }else {
+            $validator = Validator::make($request->all(), [
+                'attachment' => 'required'
+            ]);
+            if($validator->fails()) {
+                $response['success'] = false;
+                $response['message'] = 'Validation failed';
+                $response['data'] = $validator->errors();
+                return $response;
+            }
+
+            //locking the challenge's submission until the judge review it
+            $user->locks()->attach($id);
+            $user->save();
+            $this->addSubmission($user, $id, 'Pending', $request->attachment);
+
+            $response['succes'] = true;
+            $response['message'] = 'The submission was succefully done, and it is under judgment';
+            $response['data'] = [];
+            return $response;
+        }
+    }
+
+
+    private function incrementTries($participant, $challenge) {
+        $participant->submissions()->attach($challenge);
+        $participant->save();
+        return;
+    }
+
+    private function addSubmission($participant, $challenge, $status, $attachment = NULL) {
+        $participant->submissions()->attach($challenge, [
+            'status' => $status,
+            'attachment' => $attachment
+        ]);
+        $participant->save();
+    }
+
+    private function challengeSolved($participant, $challenge) {
+        $participant->points += $challenge->points;
+        $participant->solves()->attach($challenge->id);
+        $participant->locks()->attach($challenge->id);
+        $participant->save();
+        return;
+    }
+
 }

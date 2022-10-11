@@ -9,13 +9,23 @@ class Challenge extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['track_id', 'name', 'difficulty', 'points', 'attachment'];
+    protected $fillable = [
+        'track_id',
+         'name',
+         'difficulty',
+         'description',
+         'points',
+         'attachment',
+         'max_tries',
+         'requires_judge',
+         'solution'
+    ];
 
     //Relationships
 
     public function submitors()
     {
-        return $this->belongsToMany('App\Models\User', 'submissions', 'challenge_id', 'user_id')->withPivot('status');
+        return $this->belongsToMany('App\Models\User', 'submissions', 'challenge_id', 'user_id')->withPivot('status', 'attachment');
     }
 
     public function track() {
