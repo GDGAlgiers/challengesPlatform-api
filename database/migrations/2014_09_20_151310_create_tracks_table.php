@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('type');
             $table->string('description');
             $table->boolean('is_locked');
-            $table->float('max_earned_points');
             $table->timestamps();
         });
     }

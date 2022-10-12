@@ -19,7 +19,6 @@ class TrackResource extends JsonResource
             'type' => $this->type,
             'description' => $this->description,
             'number_of_challenges' => count($this->challenges),
-            'max_earned_points' => $this->max_earned_points,
         ];
     }
 }

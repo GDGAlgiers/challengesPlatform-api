@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Track;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('123456'),
             'role' => 'admin'
         ]);
+        $tracks = Track::all()->pluck('id')->toArray();
         for($i=1; $i<=20; $i++) {
             User::create([
                 'full_name' => 'participant'.$i,
@@ -28,6 +30,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('123456'),
                 'role' => 'participant',
                 'points' => 0,
+                'track_id' => $tracks[rand(0, count($tracks)-1)]
             ]);
         }
     }

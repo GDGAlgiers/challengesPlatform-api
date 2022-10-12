@@ -15,17 +15,19 @@ Class UserRepository {
             'full_name' => 'required|unique:users,full_name',
             'email' => 'required|unique:users',
             'password' => 'required|min:6',
+            'track_id' => 'required|exists:tracks,id'
         ]);
 
         if($validator->fails()) {
             $response['success'] = false;
             $response['message'] = 'Validation failed!';
-            $response['data'] = $request->errors();
+            $response['data'] = $validator->errors();
             return $response;
         }
 
         $user = User::create([
             'full_name' => $request->full_name,
+            'track_id' => $request->track_id,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'participant',

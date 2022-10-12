@@ -22,6 +22,9 @@ class ChallengeResource extends JsonResource
             'description' => $this->description,
             'points' => $this->points,
             'attachment' => $this->attachment,
+            'max_tries' => $this->max_tries,
+            'requires_judge' => $this->requires_judge,
+            'solution' => $this->solution,
         ];
     }
 }

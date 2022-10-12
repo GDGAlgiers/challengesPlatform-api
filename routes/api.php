@@ -19,31 +19,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/login', [AuthController::class, 'login']); // TESTED
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
 
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
     Route::prefix('user')->group(function() {
-        Route::post('/create-participant', 'create_participant');
-        Route::post('/create-judge', 'create_judge');
-        Route::delete('/delete-user/{id}', 'delete_user');
+        Route::post('/create-participant', 'create_participant'); // TESTED
+        Route::post('/create-judge', 'create_judge'); // TESTED
+        Route::delete('/delete-user/{id}', 'delete_user'); // TESTED
     });
 
     Route::prefix('challenge')->group(function() {
-        Route::get('/', 'get_challenges');
-        Route::post('/create', 'create_challenges');
-        Route::put('/update/{id}', 'update_challenge');
-        Route::delete('/delete/{id}', 'delete_challenge');
+        Route::get('/', 'get_challenges'); // TESTED
+        Route::post('/create', 'create_challenges'); // TESTED
+        Route::put('/update/{id}', 'update_challenge'); // TESTED
+        Route::delete('/delete/{id}', 'delete_challenge'); // TESTED
     });
 
     Route::prefix('track')->group(function() {
-        Route::get('/', 'get_tracks');
-        Route::post('/create', 'create_track');
-        Route::post('/lock', 'lock_tracks');
-        Route::post('/unlock', 'unlock_tracks');
-        Route::delete('/delete/{id}', 'delete_track');
+        Route::get('/', 'get_tracks'); // TESTED
+        Route::post('/create', 'create_track'); // TESTED
+        Route::post('/lock', 'lock_tracks'); // TESTED
+        Route::post('/unlock', 'unlock_tracks'); // TESTED
+        Route::delete('/delete/{id}', 'delete_track'); // TESTED
     });
 });
 
@@ -51,8 +51,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
 Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
     ->controller(ParticipantController::class)->group(function() {
     Route::prefix('track')->group(function () {
-        Route::get('/', 'get_tracks');
-        Route::get('/{track}/challenges', 'get_track_challenges');
+        Route::get('/', 'get_tracks'); // TESTED
+        Route::get('/{track}/challenges', 'get_track_challenges'); // TESTED
     });
 
     Route::prefix('challenge')->group(function() {

@@ -7,7 +7,7 @@ use App\Http\Repositories\ChallengeRepository;
 use App\Http\Repositories\TrackRepository;
 use Illuminate\Http\Request;
 
-class ParticipantController extends Controller
+class ParticipantController extends BaseController
 {
     private $challengeRepository;
     private $trackRepository;

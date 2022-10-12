@@ -25,9 +25,20 @@ class ChallengeSeeder extends Seeder
                 'difficulty' => 'easy',
                 'description' => 'description'.$i,
                 'points' => $i*20,
-                'max_tries' => 2
+                'max_tries' => 2,
+                'requires_judge' => false,
             ]);
         }
+
+        Challenge::create([
+            'track_id' => $trackIDs[rand(0, count($trackIDs)-1)],
+            'name' => 'challenge31',
+            'difficulty' => 'easy',
+            'description' => 'description'.$i,
+            'points' => 250,
+            'max_tries' => 2,
+            'requires_judge' => true,
+        ]);
 
         $challengeIDs = Challenge::all()->pluck('id')->toArray();
         $participants = User::where('role', 'participant')->pluck('id')->toArray();

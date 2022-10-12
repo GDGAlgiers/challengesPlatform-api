@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Repositories;
 
+use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\TrackResource;
-use App\Models\Challenge;
 use App\Models\Track;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,6 +21,7 @@ Class TrackRepository {
         $response = [];
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|unique:tracks,type',
+            'description' => 'required|string'
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -31,6 +32,7 @@ Class TrackRepository {
 
         $track = Track::create([
             'type' => $request->type,
+            'description' => $request->description,
             'is_locked' => true,
             'max_earned_points' => 0
         ]);
@@ -90,10 +92,9 @@ Class TrackRepository {
             $response['message'] = 'Track not found!';
             return $response;
         }
-        $challenges = $track->challenges()->get();
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
-        $response['data'] = Challenge::collection($challenges);
+        $response['data'] = ChallengeResource::collection($track->challenges);
         return $response;
     }
 
