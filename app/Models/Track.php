@@ -9,10 +9,15 @@ class Track extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'is_locked', 'max_earned_points'];
+    protected $fillable = ['type', 'is_locked', 'description'];
 
     //Relationships
     public function challenges() {
         return $this->hasMany('App\Models\Challenge');
     }
+
+    public function participants() {
+        return $this->hasMany('App\Models\User');
+    }
 }
+

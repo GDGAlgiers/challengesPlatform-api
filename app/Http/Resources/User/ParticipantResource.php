@@ -20,6 +20,8 @@ class ParticipantResource extends JsonResource
             'email' => $this->email,
             'points' => $this->points,
             'role' => 'participant',
+            'track' => $this->track->type,
+
         ];
     }
 }

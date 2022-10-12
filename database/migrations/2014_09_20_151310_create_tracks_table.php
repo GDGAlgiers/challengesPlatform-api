@@ -13,17 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('challenges', function (Blueprint $table) {
+        Schema::create('tracks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('track_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->string('type');
             $table->string('description');
-            $table->enum('difficulty', ['easy', 'medium', 'hard']);
-            $table->string('attachment')->nullable();
-            $table->float('points');
-            $table->integer('max_tries');
-            $table->boolean('requires_judge');
-            $table->string('solution')->nullable();
+            $table->boolean('is_locked');
             $table->timestamps();
         });
     }
@@ -35,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('challenges');
+        Schema::dropIfExists('tracks');
     }
 };

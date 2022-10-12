@@ -25,9 +25,11 @@ Class ChallengeRepository {
             'track_id' => 'required|exists:tracks,id',
             'name' => 'required|string',
             'difficulty' => 'required',
+            'description' => 'required',
+            'max_tries' => 'required|integer',
+            'requires_judge' => 'required',
             'points' => 'required',
         ]);
-
         if($validator->fails()) {
             $response['success'] = false;
             $response['message'] = 'Validation failed';
@@ -35,10 +37,15 @@ Class ChallengeRepository {
             return $response;
         }
 
+
         $challenge = Challenge::create([
             'track_id' => $request->track_id,
             'name' => $request->name,
             'difficulty' => $request->difficulty,
+            'description' => $request->description,
+            'max_tries' => $request->max_tries,
+            'requires_judge' => $request->requires_judge,
+            'solution' => $request->solution,
             'points' => $request->points,
         ]);
 
@@ -65,11 +72,22 @@ Class ChallengeRepository {
         }
 
         $validator = Validator::make($request->all(), [
-            'track_id' => 'required|exists:tracks',
+            'track_id' => 'required|exists:tracks,id',
             'name' => 'required|string',
             'difficulty' => 'required',
+            'description' => 'required',
+            'max_tries' => 'required|integer',
+            'requires_judge' => 'required',
             'points' => 'required',
         ]);
+
+        if($validator->fails()) {
+            $response['success'] = false;
+            $response['message'] = 'Validation failed';
+            $response['data'] = $validator->errors();
+            return $response;
+        }
+
         $challenge->track_id = $request->track_id;
         $challenge->name = $request->name;
         $challenge->difficulty = $request->difficulty;
@@ -97,11 +115,88 @@ Class ChallengeRepository {
             $response['message'] = 'No challenge found!';
             return $response;
         }
+        if($challenge->attachment) Storage::delete($challenge->attachment);
         $challenge->delete();
-        $response['success'] = false;
+        $response['success'] = true;
         $response['message'] = 'The challenge was succefully deleted!';
         $response['data'] = [];
 
         return $response;
     }
+
+    public function submit($request, $id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        $user = auth()->user();
+        $this->incrementTries($user, $id);
+        if(!$challenge->requires_judge) {
+            $validator = Validator::make($request->all(), [
+                'answer' => 'required|string'
+            ]);
+            if($validator->fails()) {
+                $response['success'] = false;
+                $response['message'] = 'Validation failed';
+                $response['data'] = $validator->errors();
+                return $response;
+            }
+
+            if($challenge->solution == $request->answer) {
+                $this->addSubmission($user, $id, 'Approved');
+                $this->challengeSolved($user, $challenge);
+                $response['success'] = true;
+                $response['message'] = "That's right! you've succefully solved this challenge";
+                $response['data'] = [];
+                return $response;
+            }else {
+                $this->addSubmission($user, $id, 'Rejected');
+                $response['success'] = false;
+                $response['message'] = "That's wrong, think more";
+                return $response;
+            }
+        }else {
+            $validator = Validator::make($request->all(), [
+                'attachment' => 'required'
+            ]);
+            if($validator->fails()) {
+                $response['success'] = false;
+                $response['message'] = 'Validation failed';
+                $response['data'] = $validator->errors();
+                return $response;
+            }
+
+            //locking the challenge's submission until the judge reviewes it
+            $user->locks()->attach($id);
+            $user->save();
+            $this->addSubmission($user, $id, 'Pending', $request->attachment);
+
+            $response['succes'] = true;
+            $response['message'] = 'The submission was succefully done, and it is under judgment';
+            $response['data'] = [];
+            return $response;
+        }
+    }
+
+
+    private function incrementTries($participant, $challenge) {
+        $participant->submissions()->attach($challenge);
+        $participant->save();
+        return;
+    }
+
+    private function addSubmission($participant, $challenge, $status, $attachment = NULL) {
+        $participant->submissions()->attach($challenge, [
+            'status' => $status,
+            'attachment' => $attachment
+        ]);
+        $participant->save();
+    }
+
+    private function challengeSolved($participant, $challenge) {
+        $participant->points += $challenge->points;
+        $participant->solves()->attach($challenge->id);
+        $participant->locks()->attach($challenge->id);
+        $participant->save();
+        return;
+    }
+
 }

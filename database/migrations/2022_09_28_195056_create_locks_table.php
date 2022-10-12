@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tracks', function (Blueprint $table) {
+        Schema::create('locks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('type');
-            $table->boolean('is_locked');
-            $table->float('max_earned_points');
+            $table->foreignId('challenge_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tracks');
+        Schema::dropIfExists('locks');
     }
 };
