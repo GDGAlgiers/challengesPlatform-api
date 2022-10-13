@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Submission extends Model
 {
     use HasFactory;
-    protected $fillable = ['participant_id', 'challenge_id', 'attachment', 'status'];
+    protected $fillable = ['participant_id', 'challenge_id', 'track_id', 'attachment', 'status'];
 
     public function participant() {
         return $this->belongsTo('App\Models\User');
@@ -16,6 +16,10 @@ class Submission extends Model
 
     public function challenge() {
         return $this->belongsTo('App\Models\Challenge');
+    }
+
+    public function track() {
+        return $this->belongsTo('App\Models\Track');
     }
 }
 

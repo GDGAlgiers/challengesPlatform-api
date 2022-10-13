@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('challenge_id')->constrained()->onDelete('cascade');
             $table->foreignId('participant_id')->constrained("users")->onDelete('cascade');
+            $table->foreignId('track_id')->constrained()->onDelete('cascade');
             $table->string('attachment')->nullable();
             $table->enum('status', ['pending', 'rejected', 'approved']);
             $table->timestamps();

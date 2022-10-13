@@ -3,6 +3,7 @@ namespace App\Http\Repositories;
 
 use App\Http\Resources\ChallengeResource;
 use App\Models\Challenge;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -128,7 +129,6 @@ Class ChallengeRepository {
         $response = [];
         $challenge = Challenge::find($id);
         $user = auth()->user();
-        $this->incrementTries($user, $id);
         if(!$challenge->requires_judge) {
             $validator = Validator::make($request->all(), [
                 'answer' => 'required|string'
@@ -141,14 +141,14 @@ Class ChallengeRepository {
             }
 
             if($challenge->solution == $request->answer) {
-                $this->addSubmission($user, $id, 'Approved');
+                $this->addSubmission($id, $challenge->track->id, 'Approved');
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 $response['message'] = "That's right! you've succefully solved this challenge";
                 $response['data'] = [];
                 return $response;
             }else {
-                $this->addSubmission($user, $id, 'Rejected');
+                $this->addSubmission($id, $challenge->track->id, 'Rejected');
                 $response['success'] = false;
                 $response['message'] = "That's wrong, think more";
                 return $response;
@@ -167,7 +167,7 @@ Class ChallengeRepository {
             //locking the challenge's submission until the judge reviewes it
             $user->locks()->attach($id);
             $user->save();
-            $this->addSubmission($user, $id, 'Pending', $request->attachment);
+            $this->addSubmission($id, $challenge->track->id, 'Pending', $request->attachment);
 
             $response['succes'] = true;
             $response['message'] = 'The submission was succefully done, and it is under judgment';
@@ -176,19 +176,14 @@ Class ChallengeRepository {
         }
     }
 
-
-    private function incrementTries($participant, $challenge) {
-        $participant->submissions()->attach($challenge);
-        $participant->save();
-        return;
-    }
-
-    private function addSubmission($participant, $challenge, $status, $attachment = NULL) {
-        $participant->submissions()->attach($challenge, [
-            'status' => $status,
-            'attachment' => $attachment
+    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL) {
+        Submission::create([
+            'participant_id' => auth()->user()->id,
+            'challenge_id' => $challengeID,
+            'track_id' => $trackID,
+            'attachment' => $attachment,
+            'status' => $status
         ]);
-        $participant->save();
     }
 
     private function challengeSolved($participant, $challenge) {
