@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Challenge;
+use App\Models\Submission;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -27,8 +28,8 @@ class EnsureCanSubmit
             ]);
         }
         // Verifying if the submitor has dipassed the challenge's submission limit
-        $challengeTries = auth()->user()->submissions()->where('challenge_id', $request->route('id'))->get();
-        if(count($challengeTries) >= $challenge->max_tries) {
+        $submissions = Submission::where('participant_id', auth()->user()->id)->where('challenge_id', $request->route('id'))->get();
+        if(count($submissions) >= $challenge->max_tries) {
             return response()->json([
                 'success' => false,
                 'message' => 'You reached your submissions limit for this challenge'

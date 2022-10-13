@@ -23,9 +23,8 @@ class Challenge extends Model
 
     //Relationships
 
-    public function submitors()
-    {
-        return $this->belongsToMany('App\Models\User', 'submissions', 'challenge_id', 'user_id')->withPivot('status', 'attachment');
+    public function submissions() {
+        return $this->hasMany('App\Models\Submission');
     }
 
     public function track() {
