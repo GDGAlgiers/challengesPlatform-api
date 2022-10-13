@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'challengeExist' => \App\Http\Middleware\EnsureChallengeExists::class,
         'trackNotLocked' => \App\Http\Middleware\EnsureTrackNotLocked::class,
         'canSubmit' => \App\Http\Middleware\EnsureCanSubmit::class,
+        'canValidateSubmission' => \App\Http\Middleware\EnsureValidSubmissionToJudge::class,
+        'submissionExists' => \App\Http\Middleware\EnsureSubmissionExists::class,
     ];
 }

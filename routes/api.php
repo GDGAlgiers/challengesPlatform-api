@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,4 +62,8 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 });
 
 
-
+Route::prefix('judge')->middleware(['auth:sanctum', 'hasRole:judge'])
+    ->controller(JudgeController::class)->group(function() {
+    Route::get('/submissions', 'get_submissions');
+    Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['canValidateSubmission', 'submissionExists']);
+});
