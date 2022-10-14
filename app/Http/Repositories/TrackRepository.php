@@ -3,6 +3,7 @@ namespace App\Http\Repositories;
 
 use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\TrackResource;
+use App\Http\Resources\User\ParticipantResource;
 use App\Models\Track;
 use Illuminate\Support\Facades\Validator;
 
@@ -95,6 +96,17 @@ Class TrackRepository {
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
         $response['data'] = ChallengeResource::collection($track->challenges);
+        return $response;
+    }
+
+    public function getLeaderboardByName($name) {
+        $response = [];
+        $track = Track::where('type', $name)->first();
+        $participants = $track->participants()->orderBy('points', 'DESC')->get();
+        $response['success'] = true;
+        $response['message'] = 'Succefully retrieved the leaderboard';
+        $response['data'] = ParticipantResource::collection($participants);
+
         return $response;
     }
 

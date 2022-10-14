@@ -2,6 +2,7 @@
 namespace App\Http\Repositories;
 
 use App\Http\Resources\ChallengeResource;
+use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
@@ -135,7 +136,7 @@ Class ChallengeRepository {
             ]);
             if($validator->fails()) {
                 $response['success'] = false;
-                $response['message'] = 'Validation failed';
+                $response['message'] = 'Validation failed, inputs missed';
                 $response['data'] = $validator->errors();
                 return $response;
             }
@@ -159,7 +160,7 @@ Class ChallengeRepository {
             ]);
             if($validator->fails()) {
                 $response['success'] = false;
-                $response['message'] = 'Validation failed';
+                $response['message'] = 'Validation failed, inputes missed';
                 $response['data'] = $validator->errors();
                 return $response;
             }
@@ -174,6 +175,17 @@ Class ChallengeRepository {
             $response['data'] = [];
             return $response;
         }
+    }
+
+    public function getSubmissionsById($id) {
+        $response = [];
+        $submissions = Submission::where('challenge_id', $id)->where('participant_id', auth()->user()->id)->get();
+        $response['success'] = true;
+        $response['message'] = 'Succefully retrieved all submissions';
+        $response['data'] = SubmissionResource::collection($submissions);
+
+        return $response;
+
     }
 
     private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL) {

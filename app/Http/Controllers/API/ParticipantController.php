@@ -32,5 +32,17 @@ class ParticipantController extends BaseController
 
     public function submit_challenge(Request $request, $id) {
         $response = $this->challengeRepository->submit($request, $id);
+        if(!$response['success']) return $this->sendError($response['message']);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function get_submissions($id) {
+        $response = $this->challengeRepository->getSubmissionsById($id);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function leaderboard($name) {
+        $response = $this->trackRepository->getLeaderboardByName($name);
+        return $this->sendResponse($response['data'], $response['message']);
     }
 }

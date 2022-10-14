@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'canSubmit' => \App\Http\Middleware\EnsureCanSubmit::class,
         'canValidateSubmission' => \App\Http\Middleware\EnsureValidSubmissionToJudge::class,
         'submissionExists' => \App\Http\Middleware\EnsureSubmissionExists::class,
+        'trackExists' => \App\Http\Middleware\EnsureTrackExists::class,
     ];
 }

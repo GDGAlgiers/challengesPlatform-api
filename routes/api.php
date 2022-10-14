@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 // Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']); // TESTED
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
-
+Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum', 'trackExists']);
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
@@ -54,6 +54,7 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
     Route::prefix('track')->group(function () {
         Route::get('/', 'get_tracks'); // TESTED
         Route::get('/{track}/challenges', 'get_track_challenges'); // TESTED
+        Route::get('/challenge/{id}/submissions', 'get_submissions')->middleware('challengeExist');
     });
 
     Route::prefix('challenge')->group(function() {
