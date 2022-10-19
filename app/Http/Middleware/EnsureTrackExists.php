@@ -17,7 +17,7 @@ class EnsureTrackExists
      */
     public function handle(Request $request, Closure $next)
     {
-        $track = Track::where('type', $request->route('name'))->first();
+        $track = Track::find($request->route('id'));
         if(!$track) return response()->json([
             'success' => false,
             'message' => 'Track can not be found!'

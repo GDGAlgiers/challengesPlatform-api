@@ -47,6 +47,7 @@ Class UserRepository {
             'full_name' => 'required|string|unique:users',
             'email' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
+            'track_id' => 'required|exists:tracks,id'
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -59,7 +60,8 @@ Class UserRepository {
             'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'judge'
+            'role' => 'judge',
+            'track_id' => $request->track_id
         ]);
 
         $response['success'] = true;

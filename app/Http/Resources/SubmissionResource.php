@@ -16,7 +16,7 @@ class SubmissionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'track' => $this->track->name,
+            'track' => $this->track->type,
             'challenge' => new ChallengeResource($this->challenge),
             'attachment' => $this->attachment,
             'status' => $this->status

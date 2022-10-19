@@ -24,7 +24,7 @@ class EnsureCanSubmit
         if(in_array($request->route('id'), $challengesLocked)) {
             return response()->json([
                 'success' => false,
-                'message' => 'You can not submit this challenge now'
+                'message' => 'This challenge is locked for you now, try again later'
             ]);
         }
         // Verifying if the submitor has dipassed the challenge's submission limit
@@ -33,6 +33,13 @@ class EnsureCanSubmit
             return response()->json([
                 'success' => false,
                 'message' => 'You reached your submissions limit for this challenge'
+            ]);
+        }
+
+        if($challenge->track->id !== auth()->user()->track_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can not submit for this challenge'
             ]);
         }
         return $next($request);

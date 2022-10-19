@@ -35,7 +35,6 @@ Class TrackRepository {
             'type' => $request->type,
             'description' => $request->description,
             'is_locked' => true,
-            'max_earned_points' => 0
         ]);
         $response['success'] = true;
         $response['message'] = 'Track was succefully created!';
@@ -67,6 +66,28 @@ Class TrackRepository {
         $response['success'] = true;
         $response['data'] = [];
         $response['message'] = 'Tracks were succefully unlocked';
+        return $response;
+    }
+
+    public function lockById($id) {
+        $response = [];
+        $track = Track::find($id);
+        $track->is_locked = true;
+        $track->save();
+        $response['success'] = true;
+        $response['data'] = [];
+        $response['message'] = 'Track was succefully locked';
+        return $response;
+    }
+
+    public function unlockById($id) {
+        $response = [];
+        $track = Track::find($id);
+        $track->is_locked = false;
+        $track->save();
+        $response['success'] = true;
+        $response['data'] = [];
+        $response['message'] = 'Track was succefully unlocked';
         return $response;
     }
 

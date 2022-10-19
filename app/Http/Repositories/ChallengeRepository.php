@@ -67,19 +67,11 @@ Class ChallengeRepository {
     public function update($request, $id) {
         $response = [];
         $challenge = Challenge::find($id);
-        if(!$challenge) {
-            $response['success'] = false;
-            $response['message'] = 'No challenge found!';
-            return $response;
-        }
-
         $validator = Validator::make($request->all(), [
-            'track_id' => 'required|exists:tracks,id',
             'name' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
             'max_tries' => 'required|integer',
-            'requires_judge' => 'required',
             'points' => 'required',
         ]);
 
@@ -90,10 +82,12 @@ Class ChallengeRepository {
             return $response;
         }
 
-        $challenge->track_id = $request->track_id;
         $challenge->name = $request->name;
         $challenge->difficulty = $request->difficulty;
+        $challenge->description = $request->description;
+        $challenge->max_tries = $request->max_tries;
         $challenge->points = $request->points;
+        if($request->solution) $challenge->solution = $request->solution;
 
         if($request->hasFile('attachment')) {
             if($challenge->attachment) Storage::delete($challenge->attachment);
@@ -170,7 +164,7 @@ Class ChallengeRepository {
             $user->save();
             $this->addSubmission($id, $challenge->track->id, 'Pending', $request->attachment);
 
-            $response['succes'] = true;
+            $response['success'] = true;
             $response['message'] = 'The submission was succefully done, and it is under judgment';
             $response['data'] = [];
             return $response;

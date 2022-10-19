@@ -90,6 +90,16 @@ class AdminController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
+    public function lock_track($id) {
+        $response = $this->trackRepository->lockById($id);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function unlock_track($id) {
+        $response = $this->trackRepository->unlockById($id);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
     public function delete_track($id) {
         $response = $this->trackRepository->delete($id);
         if(!$response['success']) {return $this->sendError($response['message']);}

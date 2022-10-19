@@ -40,13 +40,13 @@ class ChallengeSeeder extends Seeder
             'requires_judge' => true,
         ]);
 
-        $challengeIDs = Challenge::all()->pluck('id')->toArray();
-        $participants = User::where('role', 'participant')->pluck('id')->toArray();
-        for($i=1; $i<=20; $i++) {
-            DB::table('submissions')->insert([
-                'challenge_id' => $challengeIDs[rand(0, count($challengeIDs)-1)],
-                'user_id' => $participants[rand(0, count($participants)-1)]
-            ]);
-        }
+        // $challengeIDs = Challenge::all()->pluck('id')->toArray();
+        // $participants = User::where('role', 'participant')->pluck('id')->toArray();
+        // for($i=1; $i<=20; $i++) {
+        //     DB::table('submissions')->insert([
+        //         'challenge_id' => $challengeIDs[rand(0, count($challengeIDs)-1)],
+        //         'participant_id' => $participants[rand(0, count($participants)-1)]
+        //     ]);
+        // }
     }
 }

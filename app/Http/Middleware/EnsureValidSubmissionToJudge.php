@@ -17,8 +17,8 @@ class EnsureValidSubmissionToJudge
      */
     public function handle(Request $request, Closure $next)
     {
-        $submission = Submission::find($request->route('id'))->first();
-        if($submission->track_id !== auth()->user()->track_id) {
+        $submission = Submission::find($request->route('id'));
+        if($submission->track_id !== auth()->user()->track_id || !$submission->challenge->requires_judge) {
             return response()->json([
                 'success' => false,
                 'message' => 'You can not judge this submission'
