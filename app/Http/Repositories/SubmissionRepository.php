@@ -10,12 +10,24 @@ Class SubmissionRepository {
 
     public function getByTrack() {
         $response = [];
-        $submissions = Submission::where('track_id', auth()->user()->track->id)->whereHas('challenge', function(Builder $query) {
+        $submissions = Submission::where('track_id', auth()->user()->track->id)->where('status', 'pending')->whereHas('challenge', function(Builder $query) {
             $query->where('requires_judge', true);
         })->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved all the submissions';
         $response['data'] = SubmissionResource::collection($submissions);
+
+        return $response;
+    }
+
+    public function assignById($id) {
+        $response = [];
+        $submission = Submission::find($id);
+        $submission->status = "judging";
+        $submission->save();
+        $response['success'] = true;
+        $response['message'] = 'Succefully assigning submission';
+        $response['data'] = new SubmissionResource($submission);
 
         return $response;
     }

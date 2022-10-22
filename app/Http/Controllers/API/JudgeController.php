@@ -20,6 +20,12 @@ class JudgeController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
+    public function assign_judge($id) {
+        $response = $this->submissionRepository->assignById($id);
+
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
     public function judge_submission(Request $request, $id) {
         $response = $this->submissionRepository->judgeById($request, $id);
         if(!$response['success']) return $this->sendError($response['message'], $response['data']);
