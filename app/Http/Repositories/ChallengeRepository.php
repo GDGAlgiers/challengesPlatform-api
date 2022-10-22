@@ -49,6 +49,7 @@ Class ChallengeRepository {
             'requires_judge' => $request->requires_judge,
             'solution' => $request->solution,
             'points' => $request->points,
+            'is_locked' => false
         ]);
 
         if($request->hasFile('attachment')) {
@@ -120,6 +121,38 @@ Class ChallengeRepository {
         return $response;
     }
 
+    public function lockById($id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        if($challenge->is_locked) {
+            $response['success'] = false;
+            $response['message'] = 'Challenge is already locked!';
+            return $response;
+        }
+        $challenge->is_locked = true;
+        $challenge->save();
+        $response['success'] = false;
+        $response['message'] = 'Challenge Succefully locked!';
+        $response['data'] = [];
+
+        return $response;
+    }
+    public function unlockById($id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        if(!$challenge->is_locked) {
+            $response['success'] = false;
+            $response['message'] = 'Challenge is already unlocked!';
+            return $response;
+        }
+        $challenge->is_locked = false;
+        $challenge->save();
+        $response['success'] = false;
+        $response['message'] = 'Challenge Succefully unlocked!';
+        $response['data'] = [];
+
+        return $response;
+    }
     public function submit($request, $id) {
         $response = [];
         $challenge = Challenge::find($id);

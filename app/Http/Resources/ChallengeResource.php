@@ -25,6 +25,7 @@ class ChallengeResource extends JsonResource
             'max_tries' => $this->max_tries,
             'requires_judge' => $this->requires_judge,
             'solution' => $this->solution,
+            'is_locked' => $this->is_locked
         ];
     }
 }

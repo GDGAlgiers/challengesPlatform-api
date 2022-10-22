@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('max_tries');
             $table->boolean('requires_judge');
             $table->string('solution')->nullable();
+            $table->boolean('is_locked')->default(false);
             $table->timestamps();
         });
     }
