@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'canValidateSubmission' => \App\Http\Middleware\EnsureValidSubmissionToJudge::class,
         'submissionExists' => \App\Http\Middleware\EnsureSubmissionExists::class,
         'submissionHasStatus' => \App\Http\Middleware\EnsureSubmissionHasStatus::class,
+        'submissionBelongsToAuth' => \App\Http\Middleware\EnsureSubmissionBelongsToAuth::class,
         'trackExists' => \App\Http\Middleware\EnsureTrackExists::class,
     ];
 }
