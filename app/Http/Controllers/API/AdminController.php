@@ -62,6 +62,16 @@ class AdminController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
+    public function lock_challenge($id) {
+        $response = $this->challengeRepository->lockById($id);
+        if(!$response['success']) return $this->sendError($response['message']);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+    public function unlock_challenge($id) {
+        $response = $this->challengeRepository->unlockById($id);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
     public function delete_challenge($id) {
         $response = $this->challengeRepository->delete($id);
         if(!$response['success']) return $this->sendError($response['message']);

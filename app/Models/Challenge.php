@@ -18,7 +18,8 @@ class Challenge extends Model
          'attachment',
          'max_tries',
          'requires_judge',
-         'solution'
+         'solution',
+         'is_locked'
     ];
 
     //Relationships

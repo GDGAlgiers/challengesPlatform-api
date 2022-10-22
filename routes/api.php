@@ -35,6 +35,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     Route::prefix('challenge')->group(function() {
         Route::get('/', 'get_challenges'); // TESTED
         Route::post('/create', 'create_challenges'); // TESTED
+        Route::post('/lock/{id}', 'lock_challenge')->middleware('challengeExist'); // TESTED
+        Route::post('/unlock/{id}', 'unlock_challenge')->middleware('challengeExist'); // TESTED
         Route::put('/update/{id}', 'update_challenge')->middleware('challengeExist'); // TESTED
         Route::delete('/delete/{id}', 'delete_challenge')->middleware('challengeExist'); // TESTED
     });
@@ -60,7 +62,7 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 
     Route::prefix('challenge')->group(function() {
         Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
-        Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'canSubmit']); // TESTED
+        Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
     });
 });
 

@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'hasRole' => \App\Http\Middleware\EnsureHasRole::class,
         'challengeExist' => \App\Http\Middleware\EnsureChallengeExists::class,
+        'challengeNotLocked' => \App\Http\Middleware\EnsureChallengeNotLocked::class,
         'trackNotLocked' => \App\Http\Middleware\EnsureTrackNotLocked::class,
         'canSubmit' => \App\Http\Middleware\EnsureCanSubmit::class,
         'canValidateSubmission' => \App\Http\Middleware\EnsureValidSubmissionToJudge::class,
