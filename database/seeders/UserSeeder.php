@@ -33,5 +33,15 @@ class UserSeeder extends Seeder
                 'track_id' => $tracks[rand(0, count($tracks)-1)]
             ]);
         }
+
+        for($i=1; $i<=4; $i++) {
+            User::create([
+                'full_name' => 'judge'.$i,
+                'email' => 'judge'.$i.'@judge.com',
+                'password' => Hash::make('123456'),
+                'role' => 'judge',
+                'track_id' => $tracks[rand(0, count($tracks)-1)]
+            ]);
+        }
     }
 }

@@ -70,5 +70,6 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 Route::prefix('judge')->middleware(['auth:sanctum', 'hasRole:judge'])
     ->controller(JudgeController::class)->group(function() {
     Route::get('/submissions', 'get_submissions');
-    Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission',]);
+    Route::post('/submission/{id}/assign-judge', 'assign_judge')->middleware(['submissionExists', 'submissionHasStatus:pending']);
+    Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']);
 });

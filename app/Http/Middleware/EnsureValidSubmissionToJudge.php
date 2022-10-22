@@ -24,12 +24,6 @@ class EnsureValidSubmissionToJudge
                 'message' => 'You can not judge this submission'
             ]);
         }
-        if($submission->status !== "pending") {
-            return response()->json([
-                'success' => false,
-                'message' => 'This submission either rejected or already approved'
-            ]);
-        }
         if(!$submission->attachment) {
             return response()->json([
                 'success' => false,

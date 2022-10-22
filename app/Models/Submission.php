@@ -10,6 +10,10 @@ class Submission extends Model
     use HasFactory;
     protected $fillable = ['participant_id', 'challenge_id', 'track_id', 'attachment', 'status'];
 
+    public function hasStatus($status) {
+        return ($this->status === $status);
+    }
+
     public function participant() {
         return $this->belongsTo('App\Models\User');
     }

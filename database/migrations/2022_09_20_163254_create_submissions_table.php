@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('participant_id')->constrained("users")->onDelete('cascade');
             $table->foreignId('track_id')->constrained()->onDelete('cascade');
             $table->string('attachment')->nullable();
-            $table->enum('status', ['pending', 'rejected', 'approved']);
+            $table->enum('status', ['pending', 'judging', 'rejected', 'approved']);
             $table->timestamps();
         });
     }
