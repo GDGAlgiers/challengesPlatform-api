@@ -82,4 +82,17 @@ Class SubmissionRepository {
         return $response;
     }
 
+    public function cancelById($id) {
+        $response = [];
+        $submission = Submission::find($id);
+        $submission->status = "canceled";
+        $submission->save();
+
+        $response['success'] = true;
+        $response['message'] = 'Submission was successfully canceled!';
+        $response['data'] = new SubmissionResource($submission);
+
+        return $response;
+    }
+
 }
