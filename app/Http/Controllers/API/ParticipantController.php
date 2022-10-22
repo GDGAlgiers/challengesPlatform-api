@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\ChallengeRepository;
+use App\Http\Repositories\SubmissionRepository;
 use App\Http\Repositories\TrackRepository;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,12 @@ class ParticipantController extends BaseController
 {
     private $challengeRepository;
     private $trackRepository;
+    private $submissionRepository;
 
-    public function __construct(ChallengeRepository $challengeRepository, TrackRepository $trackRepository) {
+    public function __construct(ChallengeRepository $challengeRepository, TrackRepository $trackRepository, SubmissionRepository $submissionRepository) {
         $this->challengeRepository = $challengeRepository;
         $this->trackRepository = $trackRepository;
+        $this->submissionRepository = $submissionRepository;
     }
 
     public function get_tracks() {
@@ -43,6 +46,11 @@ class ParticipantController extends BaseController
 
     public function leaderboard($name) {
         $response = $this->trackRepository->getLeaderboardByName($name);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function cancel_submission($id) {
+        $response = $this->submissionRepository->cancelById($id);
         return $this->sendResponse($response['data'], $response['message']);
     }
 }
