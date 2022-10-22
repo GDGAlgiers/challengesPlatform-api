@@ -5,6 +5,7 @@ use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,7 +48,7 @@ Class ChallengeRepository {
             'description' => $request->description,
             'max_tries' => $request->max_tries,
             'requires_judge' => $request->requires_judge,
-            'solution' => $request->solution,
+            'solution' => Hash::make($request->solution),
             'points' => $request->points,
             'is_locked' => false
         ]);
@@ -168,7 +169,7 @@ Class ChallengeRepository {
                 return $response;
             }
 
-            if($challenge->solution == $request->answer) {
+            if(Hash::check($request->answer, $challenge->solution)) {
                 $this->addSubmission($id, $challenge->track->id, 'Approved');
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
