@@ -16,6 +16,7 @@ class Challenge extends Model
          'description',
          'points',
          'attachment',
+         'external_resource',
          'max_tries',
          'requires_judge',
          'solution',

@@ -35,6 +35,7 @@ class ChallengeSeeder extends Seeder
             'name' => 'challenge31',
             'difficulty' => 'easy',
             'description' => 'description'.$i,
+            'external_resource' => 'https://devfest22.gdgalgiers.com',
             'points' => 250,
             'max_tries' => 2,
             'requires_judge' => true,
