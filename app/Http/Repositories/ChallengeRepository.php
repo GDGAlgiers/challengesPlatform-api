@@ -47,6 +47,7 @@ Class ChallengeRepository {
             'difficulty' => $request->difficulty,
             'description' => $request->description,
             'max_tries' => $request->max_tries,
+            'external_resource' => $request->external_resource,
             'requires_judge' => $request->requires_judge,
             'solution' => Hash::make($request->solution),
             'points' => $request->points,
@@ -89,7 +90,8 @@ Class ChallengeRepository {
         $challenge->description = $request->description;
         $challenge->max_tries = $request->max_tries;
         $challenge->points = $request->points;
-        if($request->solution) $challenge->solution = $request->solution;
+        if($request->solution) $challenge->solution = Hash::make($request->solution);
+        if($request->external_resource) $challenge->external_resource = $request->external_resource;
 
         if($request->hasFile('attachment')) {
             if($challenge->attachment) Storage::delete($challenge->attachment);
