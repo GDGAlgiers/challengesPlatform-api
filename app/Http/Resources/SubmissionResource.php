@@ -19,7 +19,8 @@ class SubmissionResource extends JsonResource
             'track' => $this->track->type,
             'challenge' => new ChallengeResource($this->challenge),
             'attachment' => $this->attachment,
-            'status' => $this->status
+            'status' => $this->status,
+            'submitted_at' => $this->created_at ? $this->created_at->diffForHumans() : NULL
         ];
     }
 }
