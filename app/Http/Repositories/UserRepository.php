@@ -6,6 +6,8 @@ use App\Http\Resources\User\ParticipantResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountCreated;
 
 Class UserRepository {
 
@@ -33,6 +35,7 @@ Class UserRepository {
             'role' => 'participant',
             'points' => 0
         ]);
+        Mail::to($request->email)->send(new AccountCreated($request->full_name, $request->password));
 
         $response['success'] = true;
         $response['message'] = 'Participant was succefully created!';
