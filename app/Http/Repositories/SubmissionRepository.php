@@ -82,6 +82,16 @@ Class SubmissionRepository {
         return $response;
     }
 
+    public function getAll() {
+        $response = [];
+        $submissions = Submission::where('participant_id', auth()->user()->id)->get();
+        $response['success'] = true;
+        $response['data'] = SubmissionResource::collection($submissions);
+        $response['message'] = 'Succefully retrieved all previous submissions!';
+        return $response;
+
+    }
+
     public function cancelById($id) {
         $response = [];
         $submission = Submission::find($id);

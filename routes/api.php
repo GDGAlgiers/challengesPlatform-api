@@ -67,6 +67,7 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
         Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
     });
     Route::prefix('submission')->group(function()  {
+        Route::get('/', 'get_all_submissions');
         Route::post('/{id}/cancel', 'cancel_submission')->middleware(['submissionExists', 'submissionBelongsToAuth', 'submissionHasStatus:pending']); // TESTED
     });
 });
