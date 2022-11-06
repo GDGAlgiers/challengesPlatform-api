@@ -62,6 +62,7 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 
     Route::prefix('challenge')->group(function() {
         Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'challengeNotLocked']);
+        Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'challengeNotLocked']);
         Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
         Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
     });

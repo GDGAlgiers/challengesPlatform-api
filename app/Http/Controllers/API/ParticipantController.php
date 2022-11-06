@@ -66,4 +66,10 @@ class ParticipantController extends BaseController
 
         return Storage::download($challenge->attachment, $challenge->name);
     }
+
+    public function get_challenge($id) {
+        $response = $this->challengeRepository->getById($id);
+        if(!$response['success']) return $this->sendError($response['message']);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
 }

@@ -67,6 +67,20 @@ Class ChallengeRepository {
         return $response;
     }
 
+    public function getById($id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        if($challenge->track_id !== auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = 'You can not view this challenge!';
+            return $response;
+        }
+        $response['success'] = true;
+        $response['data'] = new ChallengeResource($challenge);
+        $response['message'] = 'Succefully retrieved the challenge';
+        return $response;
+    }
+
     public function update($request, $id) {
         $response = [];
         $challenge = Challenge::find($id);
