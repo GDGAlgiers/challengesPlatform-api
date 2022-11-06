@@ -114,9 +114,15 @@ Class TrackRepository {
             $response['message'] = 'Track not found!';
             return $response;
         }
+        if($track->id !== auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = 'You can not get access to this challenge!';
+            return $response;
+        }
+        $challenges = $track->challenges()->where('track_id', auth()->user()->track_id)->get();
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
-        $response['data'] = ChallengeResource::collection($track->challenges);
+        $response['data'] = ChallengeResource::collection($challenges);
         return $response;
     }
 
