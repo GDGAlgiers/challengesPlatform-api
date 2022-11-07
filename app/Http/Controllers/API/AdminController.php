@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Repositories\ChallengeRepository;
+use App\Http\Repositories\GeneralRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\TrackRepository;
 use Illuminate\Http\Request;
@@ -12,11 +13,12 @@ class AdminController extends BaseController
     private $userRepository;
     private $challengeRepository;
     private $trackRepository;
-
-    public function __construct(UserRepository $userRepository, ChallengeRepository $challengeRepository, TrackRepository $trackRepository) {
+    private $generalRepository;
+    public function __construct(UserRepository $userRepository, ChallengeRepository $challengeRepository, TrackRepository $trackRepository, GeneralRepository $generalRepository) {
         $this->userRepository = $userRepository;
         $this->challengeRepository = $challengeRepository;
         $this->trackRepository = $trackRepository;
+        $this->generalRepository = $generalRepository;
     }
 
     public function get_all_users() {
@@ -123,6 +125,11 @@ class AdminController extends BaseController
     public function delete_track($id) {
         $response = $this->trackRepository->delete($id);
         if(!$response['success']) {return $this->sendError($response['message']);}
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function get_stats() {
+        $response = $this->generalRepository->getStats();
         return $this->sendResponse($response['data'], $response['message']);
     }
 

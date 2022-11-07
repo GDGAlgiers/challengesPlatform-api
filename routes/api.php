@@ -26,6 +26,7 @@ Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderbo
 
 Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
+    Route::get('/stats', 'get_stats');
     Route::prefix('user')->group(function() {
         Route::get('/', 'get_all_users'); // TESTED
         Route::post('/create-participant', 'create_participant'); // TESTED
