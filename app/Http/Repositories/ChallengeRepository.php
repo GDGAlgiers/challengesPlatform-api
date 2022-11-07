@@ -186,14 +186,14 @@ Class ChallengeRepository {
             }
 
             if(Hash::check($request->answer, $challenge->solution)) {
-                $this->addSubmission($id, $challenge->track->id, 'Approved');
+                $this->addSubmission($id, $challenge->track->id, 'Approved', NULL, $challenge->points);
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 $response['message'] = "That's right! you've succefully solved this challenge";
                 $response['data'] = [];
                 return $response;
             }else {
-                $this->addSubmission($id, $challenge->track->id, 'Rejected');
+                $this->addSubmission($id, $challenge->track->id, 'Rejected', NULL, 0);
                 $response['success'] = false;
                 $response['message'] = "That's wrong, think more";
                 return $response;
@@ -232,13 +232,14 @@ Class ChallengeRepository {
 
     }
 
-    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL) {
+    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL, $points = NULL) {
         Submission::create([
             'participant_id' => auth()->user()->id,
             'challenge_id' => $challengeID,
             'track_id' => $trackID,
             'attachment' => $attachment,
-            'status' => $status
+            'status' => $status,
+            'assigned_points' => $points
         ]);
     }
 
