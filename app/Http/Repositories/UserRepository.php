@@ -12,9 +12,9 @@ Class UserRepository {
 
     public function getAll() {
         $response = [];
-        $users = User::orderBy('id')->cursorPaginate(10);
+        $users = User::all();
         $response['success'] = true;
-        $response['data'] = $users;
+        $response['data'] = UserResource::collection($users);
         $response['message'] = 'Successfully retrieved all the users!';
         return $response;
     }
