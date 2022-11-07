@@ -34,7 +34,7 @@ Class SubmissionRepository {
 
     public function judgeById($request, $id) {
         $response = [];
-        // judgment is the pourcentage of all possible points (from 0 to 1)
+        // judgment is the status general of the judge(approved OR rejected)
         $validator = Validator::make($request->all(), [
             'judgment' => 'required'
         ]);
@@ -48,6 +48,7 @@ Class SubmissionRepository {
         $submission = Submission::find($id);
         if($request->judgment == "rejected") {
             $submission->status = "rejected";
+            $submission->assigned_points = 0;
             $submission->save();
             $response['status'] = true;
             $response['message'] = 'Succefully Rejected the submission';
@@ -59,7 +60,7 @@ Class SubmissionRepository {
             return $response;
         }
         $validator = Validator::make($request->all(), [
-            'points' => 'required|numeric|between:0,1'
+            'points' => 'required|numeric'
         ]);
 
         if($validator->fails()) {
@@ -70,10 +71,18 @@ Class SubmissionRepository {
             return $response;
         }
 
-        $submission->participant->points += ($submission->challenge->points * $request->points);
+        if($request->points > $submission->challenge->points) {
+            $response['success'] = false;
+            $response['message'] = 'Given points are greater than the maximaum of this challenge!';
+            $response['data'] =[];
+            return $response;
+        }
+
+        $submission->participant->points += $request->points;
         $submission->participant->solves()->attach($submission->challenge_id);
         $submission->participant->save();
         $submission->status = "approved";
+        $submission->assigned_points = $request->points;
         $submission->save();
         $response['success'] = true;
         $response['message'] = "Succefully Approved the submission";

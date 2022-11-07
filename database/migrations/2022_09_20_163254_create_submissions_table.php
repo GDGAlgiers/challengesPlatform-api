@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('track_id')->constrained()->onDelete('cascade');
             $table->string('attachment')->nullable();
             $table->enum('status', ['pending', 'judging', 'rejected', 'approved', 'canceled']);
+            $table->float('assigned_points')->nullable();
             $table->timestamps();
         });
     }

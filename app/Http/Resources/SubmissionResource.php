@@ -20,6 +20,7 @@ class SubmissionResource extends JsonResource
             'challenge' => new ChallengeResource($this->challenge),
             'attachment' => $this->attachment,
             'status' => $this->status,
+            'assigned_points' => $this->assigned_points,
             'submitted_at' => $this->created_at ? $this->created_at->diffForHumans() : NULL
         ];
     }

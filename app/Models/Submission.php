@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Submission extends Model
 {
     use HasFactory;
-    protected $fillable = ['participant_id', 'challenge_id', 'track_id', 'attachment', 'status'];
+    protected $fillable = ['participant_id', 'challenge_id', 'track_id', 'attachment', 'status', 'assigned_points'];
 
     public function hasStatus($status) {
         return ($this->status === $status);
