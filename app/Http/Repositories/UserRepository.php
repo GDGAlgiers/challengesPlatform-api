@@ -3,12 +3,21 @@ namespace App\Http\Repositories;
 
 use App\Http\Resources\User\JudgeResource;
 use App\Http\Resources\User\ParticipantResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 Class UserRepository {
 
+    public function getAll() {
+        $response = [];
+        $users = User::orderBy('id')->cursorPaginate(10);
+        $response['success'] = true;
+        $response['data'] = $users;
+        $response['message'] = 'Successfully retrieved all the users!';
+        return $response;
+    }
     public function create_participant($request) {
         $response = [];
         $validator = Validator::make($request->all(), [

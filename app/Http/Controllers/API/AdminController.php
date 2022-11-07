@@ -19,6 +19,10 @@ class AdminController extends BaseController
         $this->trackRepository = $trackRepository;
     }
 
+    public function get_all_users() {
+        $response = $this->userRepository->getAll();
+        return $this->sendResponse($response['data'], $response['message']);
+    }
     public function create_participant(Request $request) {
         $response = $this->userRepository->create_participant($request);
         if(!$response['success']) return $this->sendError($response['message'], $response['data']);
