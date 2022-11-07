@@ -42,6 +42,28 @@ Class TrackRepository {
         return $response;
     }
 
+    public function updateById($request, $id) {
+        $response = [];
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string'
+        ]);
+        if($validator->fails()) {
+            $response['success'] = false;
+            $response['message'] = 'Validation data failed!';
+            $response['data'] = $validator->errors();
+
+            return $response;
+        }
+        $track = Track::find($id);
+        $track->description = $request->description;
+        $track->save();
+        $response['success'] = true;
+        $response['message'] = 'Successfully updated the track!';
+        $response['data'] = new TrackResource($track);
+
+        return $response;
+    }
+
     public function lock() {
         $response = [];
         $tracks = Track::all();

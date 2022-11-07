@@ -27,7 +27,7 @@ Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderbo
 Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     ->controller(AdminController::class)->group(function() {
     Route::prefix('user')->group(function() {
-        Route::get('/', 'get_all_users');
+        Route::get('/', 'get_all_users'); // TESTED
         Route::post('/create-participant', 'create_participant'); // TESTED
         Route::post('/create-judge', 'create_judge'); // TESTED
         Route::delete('/delete/{id}', 'delete_user'); // TESTED
@@ -45,6 +45,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
     Route::prefix('track')->group(function() {
         Route::get('/', 'get_tracks'); // TESTED
         Route::post('/create', 'create_track'); // TESTED
+        Route::put('/{id}/update', 'update_track')->middleware('trackExists'); // TESTED
         Route::post('/lock-all', 'lock_tracks'); // TESTED
         Route::post('/unlock-all', 'unlock_tracks'); // TESTED
         Route::post('/lock/{id}', 'lock_track')->middleware('trackExists'); // TESTED

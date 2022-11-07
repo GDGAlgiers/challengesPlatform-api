@@ -91,7 +91,13 @@ class AdminController extends BaseController
     public function create_track(Request $request) {
         $response = $this->trackRepository->create($request);
         if(!$response['success']) return $this->sendError($response['message'], $response['data']);
-        return $this->sendError($response['data'], $response['message']);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function update_track(Request $request, $id) {
+        $response = $this->trackRepository->updateById($request, $id);
+        if(!$response['success']) return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
     }
 
     public function lock_tracks() {
