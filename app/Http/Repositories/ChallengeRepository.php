@@ -33,6 +33,7 @@ Class ChallengeRepository {
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
+            'attachment' => 'nullable|mimes:zip,pdf|max:2024'
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -40,6 +41,8 @@ Class ChallengeRepository {
             $response['data'] = $validator->errors();
             return $response;
         }
+
+
 
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $challenge = Challenge::create([
@@ -54,7 +57,6 @@ Class ChallengeRepository {
             'points' => $request->points,
             'is_locked' => false
         ]);
-
         if($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('challenges/attachments');
             $challenge->attachment = $path;
