@@ -5,6 +5,7 @@ use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
+use App\Models\Track;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ Class ChallengeRepository {
     public function create($request) {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'track_id' => 'required|exists:tracks,id',
+            'track' => 'required|exists:tracks,type',
             'name' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
@@ -40,9 +41,9 @@ Class ChallengeRepository {
             return $response;
         }
 
-
+        $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $challenge = Challenge::create([
-            'track_id' => $request->track_id,
+            'track_id' => $trackID,
             'name' => $request->name,
             'difficulty' => $request->difficulty,
             'description' => $request->description,
