@@ -65,12 +65,12 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 
     Route::prefix('challenge')->group(function() {
         Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'challengeNotLocked']);
-        Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'challengeNotLocked']);
+        Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'challengeNotLocked']); // TESTED
         Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
         Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
     });
     Route::prefix('submission')->group(function()  {
-        Route::get('/', 'get_all_submissions');
+        Route::get('/', 'get_all_submissions'); // TESTED
         Route::post('/{id}/cancel', 'cancel_submission')->middleware(['submissionExists', 'submissionBelongsToAuth', 'submissionHasStatus:pending']); // TESTED
     });
 });
@@ -78,7 +78,7 @@ Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant']
 
 Route::prefix('judge')->middleware(['auth:sanctum', 'hasRole:judge'])
     ->controller(JudgeController::class)->group(function() {
-    Route::get('/submissions', 'get_submissions');
-    Route::post('/submission/{id}/assign-judge', 'assign_judge')->middleware(['submissionExists', 'submissionHasStatus:pending']);
-    Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']);
+    Route::get('/submissions', 'get_submissions'); // TESTED
+    Route::post('/submission/{id}/assign-judge', 'assign_judge')->middleware(['submissionExists', 'submissionHasStatus:pending']); // TESTED
+    Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']); // TESTED
 });

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('type');
             $table->string('description');
-            $table->boolean('is_locked');
+            $table->boolean('is_locked')->default(true);
             $table->timestamps();
         });
     }

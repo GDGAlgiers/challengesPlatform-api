@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ChallengeSeeder extends Seeder
 {
@@ -26,7 +24,8 @@ class ChallengeSeeder extends Seeder
                 'description' => 'description'.$i,
                 'points' => $i*20,
                 'max_tries' => 2,
-                'requires_judge' => false,
+                'requires_judge' => true,
+
             ]);
         }
 
@@ -38,7 +37,8 @@ class ChallengeSeeder extends Seeder
             'external_resource' => 'https://devfest22.gdgalgiers.com',
             'points' => 250,
             'max_tries' => 2,
-            'requires_judge' => true,
+            'requires_judge' => false,
+            'solution' => 'solution'
         ]);
 
         // $challengeIDs = Challenge::all()->pluck('id')->toArray();

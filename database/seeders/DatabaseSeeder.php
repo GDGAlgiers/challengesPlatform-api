@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             TrackSeeder::class,
             UserSeeder::class,
             ChallengeSeeder::class,
-            SubmissionSeeder::class,
+            // SubmissionSeeder::class,
         ]);
     }
 }
