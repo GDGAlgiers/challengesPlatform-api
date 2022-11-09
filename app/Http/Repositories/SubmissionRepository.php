@@ -12,6 +12,8 @@ Class SubmissionRepository {
         $response = [];
         $submissions = Submission::where('track_id', auth()->user()->track->id)->where('status', 'pending')->whereHas('challenge', function(Builder $query) {
             $query->where('requires_judge', true);
+        })->orWhere(function($query) {
+            $query->where('status', 'judging')->where('judge_id', auth()->user()->id);
         })->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved all the submissions';

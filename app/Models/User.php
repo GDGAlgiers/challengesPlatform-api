@@ -56,7 +56,11 @@ class User extends Authenticatable
     //Relationships
 
     public function submissions() {
-        return $this->hasMany('App\Model\Submission'. 'submissions', 'participant_id', 'challenge_id', 'track_id');
+        return $this->hasMany('App\Model\Submission'. 'submissions', 'participant_id', 'challenge_id', 'track_id', 'judge_id');
+    }
+
+    public function judges() {
+        return $this->hasMany('App\Model\Submission'. 'submissions', 'judge_id', 'participant_id', 'challenge_id', 'track_id');
     }
 
     public function solves() {

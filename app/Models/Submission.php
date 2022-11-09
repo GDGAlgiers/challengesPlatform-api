@@ -18,6 +18,10 @@ class Submission extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function judge() {
+        return $this->belongsTo('App\Models\User');
+    }
+
     public function challenge() {
         return $this->belongsTo('App\Models\Challenge');
     }
