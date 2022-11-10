@@ -31,4 +31,5 @@ return [
 
     'supports_credentials' => true,
 
+    'allowed_user_agent' => env('ALLOWED_USER_AGENT', 'default-name')
 ];

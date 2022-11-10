@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\ApiDomainRestriction::class,
     ];
 
     /**
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
         'submissionHasStatus' => \App\Http\Middleware\EnsureSubmissionHasStatus::class,
         'submissionBelongsToAuth' => \App\Http\Middleware\EnsureSubmissionBelongsToAuth::class,
         'trackExists' => \App\Http\Middleware\EnsureTrackExists::class,
+        'onlySPA' =>\App\Http\Middleware\OnlySPA::class,
     ];
 }
