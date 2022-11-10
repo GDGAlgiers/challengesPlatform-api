@@ -32,7 +32,6 @@
         <div>
             <p>Devfest22 Challenges infra API</p>
             <a href="#">Go to challenges</a>
-            <p>Testing deployment sync</p>
         </div>
     </body>
 </html>
