@@ -37,14 +37,14 @@ use Illuminate\Support\Facades\Route;
             Route::post('/create', 'create_challenges'); // TESTED
             Route::post('/lock/{id}', 'lock_challenge')->middleware('challengeExist'); // TESTED
             Route::post('/unlock/{id}', 'unlock_challenge')->middleware('challengeExist'); // TESTED
-            Route::put('/update/{id}', 'update_challenge')->middleware('challengeExist'); // TESTED
+            Route::post('/update/{id}', 'update_challenge')->middleware('challengeExist'); // TESTED
             Route::delete('/delete/{id}', 'delete_challenge')->middleware('challengeExist'); // TESTED
         });
 
         Route::prefix('track')->group(function() {
             Route::get('/', 'get_tracks'); // TESTED
             Route::post('/create', 'create_track'); // TESTED
-            Route::put('/{id}/update', 'update_track')->middleware('trackExists'); // TESTED
+            Route::post('/{id}/update', 'update_track')->middleware('trackExists'); // TESTED
             Route::post('/lock-all', 'lock_tracks'); // TESTED
             Route::post('/unlock-all', 'unlock_tracks'); // TESTED
             Route::post('/lock/{id}', 'lock_track')->middleware('trackExists'); // TESTED
