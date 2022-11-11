@@ -52,7 +52,7 @@ Class SubmissionRepository {
             $submission->status = "rejected";
             $submission->assigned_points = 0;
             $submission->save();
-            $response['status'] = true;
+            $response['success'] = true;
             $response['message'] = 'Succefully Rejected the submission';
             $response['data'] = [];
 
