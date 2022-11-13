@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 // Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']); // TESTED
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
-    Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum', 'trackExists']); // TESTED
+    Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']); // TESTED
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
         ->controller(AdminController::class)->group(function() {

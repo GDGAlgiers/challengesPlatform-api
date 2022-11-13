@@ -151,6 +151,12 @@ Class TrackRepository {
     public function getLeaderboardByName($name) {
         $response = [];
         $track = Track::where('type', $name)->first();
+        if(!$track) {
+            $response['success'] = false;
+            $response['message'] = 'Track can not be found!';
+
+            return $response;
+        }
         $participants = $track->participants()->orderBy('points', 'DESC')->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved the leaderboard';

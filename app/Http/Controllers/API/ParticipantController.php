@@ -48,6 +48,7 @@ class ParticipantController extends BaseController
 
     public function leaderboard($name) {
         $response = $this->trackRepository->getLeaderboardByName($name);
+        if(!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
