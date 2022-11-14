@@ -1,5 +1,7 @@
 <?php
 
+
+
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
@@ -83,6 +85,6 @@ use Illuminate\Http\Request;
 
 Route::get('/ping', function (Request $request) {
     return response()->json([
-        'host' => parse_url($request->header('Origin'),  PHP_URL_HOST)
+        'message' => 'pong'
     ]);
 });
