@@ -17,7 +17,9 @@ class ApiDomainRestriction
     public function handle(Request $request, Closure $next)
     {
         if(env('APP_ENV') == "production") {
-            if(in_array($request->getHost(), ['devfest22-challenges.gdgalgiers.com']) == false)
+            $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
+            $requestHost = parse_url($request->header('Host'), PHP_URL_HOST);
+            if(!in_array($requestHost, $allowedHosts, false))
             {
                 return response('', 400);
             }
