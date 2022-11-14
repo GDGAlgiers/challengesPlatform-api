@@ -81,3 +81,8 @@ use Illuminate\Support\Facades\Route;
         Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']); // TESTED
     });
 
+Route::get('/ping', function () {
+    return response()->json([
+        'messsage' => 'pong'
+    ]);
+});

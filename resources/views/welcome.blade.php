@@ -31,7 +31,7 @@
     <body>
         <div>
             <p>Devfest22 Challenges infra API</p>
-            <a href="#">Go to challenges</a>
+            <a href="https://devfest22-challenges.gdgalgiers.com">Go to challenges</a>
         </div>
     </body>
 </html>
