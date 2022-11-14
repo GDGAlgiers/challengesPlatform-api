@@ -5,7 +5,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -81,8 +81,8 @@ use Illuminate\Support\Facades\Route;
         Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']); // TESTED
     });
 
-Route::get('/ping', function () {
+Route::get('/ping', function (Request $request) {
     return response()->json([
-        'messsage' => 'pong'
+        'host' => $request->getHost()
     ]);
 });
