@@ -83,6 +83,6 @@ use Illuminate\Http\Request;
 
 Route::get('/ping', function (Request $request) {
     return response()->json([
-        'host' => $request->getHost()
+        'host' => parse_url($request->header('Origin'),  PHP_URL_HOST)
     ]);
 });

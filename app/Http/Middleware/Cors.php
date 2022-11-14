@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class ApiDomainRestriction
+class Cors
 {
     /**
      * Handle an incoming request.
@@ -16,14 +16,8 @@ class ApiDomainRestriction
      */
     public function handle(Request $request, Closure $next)
     {
-        if(env('APP_ENV') == "production") {
-            $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
-            $requestHost = parse_url($request->headers->get('origin'), PHP_URL_HOST);
-            if(!in_array($requestHost, $allowedHosts, false))
-            {
-                return response('', 400);
-            }
-        }
-        return $next($request);
+        return $next($request)
+        ->header('Access-Control-Allow-Origin', 'devfest22-challenges.gdgalgiers.com')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 }
