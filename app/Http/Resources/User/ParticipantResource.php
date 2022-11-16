@@ -21,6 +21,7 @@ class ParticipantResource extends JsonResource
             'points' => $this->points,
             'role' => 'participant',
             'track' => $this->track->type,
+            'submissions' => $this->submissions,
 
         ];
     }
