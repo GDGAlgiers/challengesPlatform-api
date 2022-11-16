@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\SubmissionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ParticipantResource extends JsonResource
@@ -21,7 +22,7 @@ class ParticipantResource extends JsonResource
             'points' => $this->points,
             'role' => 'participant',
             'track' => $this->track->type,
-            'submissions' => $this->submissions,
+            'submissions' => SubmissionResource::collection($this->submissions),
 
         ];
     }
