@@ -25,6 +25,13 @@ Class SubmissionRepository {
     public function assignById($id) {
         $response = [];
         $submission = Submission::find($id);
+        if($submission->track_id != auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = "You can not take this submission";
+
+            return $response;
+        }
+        $submission->judge_id = auth()->user()->id;
         $submission->status = "judging";
         $submission->save();
         $response['success'] = true;
@@ -80,8 +87,18 @@ Class SubmissionRepository {
             return $response;
         }
 
-        $submission->participant->points += $request->points;
+        $prevSubmissions = Submission::where('participant_id', $submission->participant_id)->where('challenge_id', $submission->challenge_id)->pluck('assigned_points')->toArray();
+        if(max($prevSubmissions) < $request->points) {
+            $submission->participant->points += ($request->points - max($prevSubmissions));
+        }else {
+            $submission->participant->points += $request->points;
+        }
+        $submission->participant->solves()->detach($submission->challenge_id);
+        $submission->participant->save();
         $submission->participant->solves()->attach($submission->challenge_id);
+        if(count($prevSubmissions) < $submission->challenge->max_tries) {
+            $submission->participant->locks()->detach($submission->challenge_id);
+        }
         $submission->participant->save();
         $submission->status = "approved";
         $submission->assigned_points = $request->points;
@@ -115,5 +132,6 @@ Class SubmissionRepository {
 
         return $response;
     }
+
 
 }
