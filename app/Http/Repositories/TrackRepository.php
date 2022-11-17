@@ -157,7 +157,7 @@ Class TrackRepository {
 
             return $response;
         }
-        $participants = $track->participants()->orderBy('points', 'DESC')->get();
+        $participants = $track->participants()->where('role', 'participant')->orderBy('points', 'DESC')->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved the leaderboard';
         $response['data'] = ParticipantResource::collection($participants);
