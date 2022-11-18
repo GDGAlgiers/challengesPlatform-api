@@ -76,7 +76,8 @@ Class UserRepository {
             'role' => 'judge',
             'track_id' => $trackID
         ]);
-
+        Mail::to($request->email)->send(new AccountCreated($request->full_name, $request->password));
+        
         $response['success'] = true;
         $response['data'] = new JudgeResource($user);
         $response['message'] = 'Succefully registred the judge!';
