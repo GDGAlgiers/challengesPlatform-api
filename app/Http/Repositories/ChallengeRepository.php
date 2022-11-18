@@ -5,6 +5,7 @@ use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
+use App\Models\Track;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -25,13 +26,14 @@ Class ChallengeRepository {
     public function create($request) {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'track_id' => 'required|exists:tracks,id',
+            'track' => 'required|exists:tracks,type',
             'name' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
+            'attachment' => 'nullable|mimes:zip,pdf|max:2024'
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -41,8 +43,10 @@ Class ChallengeRepository {
         }
 
 
+
+        $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $challenge = Challenge::create([
-            'track_id' => $request->track_id,
+            'track_id' => $trackID,
             'name' => $request->name,
             'difficulty' => $request->difficulty,
             'description' => $request->description,
@@ -53,7 +57,6 @@ Class ChallengeRepository {
             'points' => $request->points,
             'is_locked' => false
         ]);
-
         if($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store('challenges/attachments');
             $challenge->attachment = $path;
@@ -64,6 +67,20 @@ Class ChallengeRepository {
         $response['message'] = 'The challenge was succefully added!';
         $response['data'] = new ChallengeResource($challenge);
 
+        return $response;
+    }
+
+    public function getById($id) {
+        $response = [];
+        $challenge = Challenge::find($id);
+        if($challenge->track_id !== auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = 'You can not view this challenge!';
+            return $response;
+        }
+        $response['success'] = true;
+        $response['data'] = new ChallengeResource($challenge);
+        $response['message'] = 'Succefully retrieved the challenge';
         return $response;
     }
 
@@ -172,14 +189,14 @@ Class ChallengeRepository {
             }
 
             if(Hash::check($request->answer, $challenge->solution)) {
-                $this->addSubmission($id, $challenge->track->id, 'Approved');
+                $this->addSubmission($id, $challenge->track->id, 'Approved', NULL, $challenge->points);
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 $response['message'] = "That's right! you've succefully solved this challenge";
                 $response['data'] = [];
                 return $response;
             }else {
-                $this->addSubmission($id, $challenge->track->id, 'Rejected');
+                $this->addSubmission($id, $challenge->track->id, 'Rejected', NULL, 0);
                 $response['success'] = false;
                 $response['message'] = "That's wrong, think more";
                 return $response;
@@ -218,13 +235,14 @@ Class ChallengeRepository {
 
     }
 
-    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL) {
+    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL, $points = NULL) {
         Submission::create([
             'participant_id' => auth()->user()->id,
             'challenge_id' => $challengeID,
             'track_id' => $trackID,
             'attachment' => $attachment,
-            'status' => $status
+            'status' => $status,
+            'assigned_points' => $points
         ]);
     }
 

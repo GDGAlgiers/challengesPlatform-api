@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Repositories\ChallengeRepository;
 use App\Http\Repositories\SubmissionRepository;
 use App\Http\Repositories\TrackRepository;
+use App\Models\Challenge;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ParticipantController extends BaseController
 {
@@ -46,11 +48,34 @@ class ParticipantController extends BaseController
 
     public function leaderboard($name) {
         $response = $this->trackRepository->getLeaderboardByName($name);
+        if(!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
     public function cancel_submission($id) {
         $response = $this->submissionRepository->cancelById($id);
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function download_attachment($id) {
+        $challenge = Challenge::find($id);
+
+        if(!$challenge->attachment) return response()->json([
+            'success' => false,
+            'message' => 'This challenge does not have an attachment'
+        ]);
+
+        return Storage::download($challenge->attachment, $challenge->name);
+    }
+
+    public function get_all_submissions() {
+        $response = $this->submissionRepository->getAll();
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function get_challenge($id) {
+        $response = $this->challengeRepository->getById($id);
+        if(!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 }

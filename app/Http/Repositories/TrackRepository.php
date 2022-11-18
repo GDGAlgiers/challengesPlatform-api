@@ -42,6 +42,28 @@ Class TrackRepository {
         return $response;
     }
 
+    public function updateById($request, $id) {
+        $response = [];
+        $validator = Validator::make($request->all(), [
+            'description' => 'required|string'
+        ]);
+        if($validator->fails()) {
+            $response['success'] = false;
+            $response['message'] = 'Validation data failed!';
+            $response['data'] = $validator->errors();
+
+            return $response;
+        }
+        $track = Track::find($id);
+        $track->description = $request->description;
+        $track->save();
+        $response['success'] = true;
+        $response['message'] = 'Successfully updated the track!';
+        $response['data'] = new TrackResource($track);
+
+        return $response;
+    }
+
     public function lock() {
         $response = [];
         $tracks = Track::all();
@@ -114,16 +136,28 @@ Class TrackRepository {
             $response['message'] = 'Track not found!';
             return $response;
         }
+        if($track->id !== auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = 'You can not get access to this challenge!';
+            return $response;
+        }
+        $challenges = $track->challenges()->where('track_id', auth()->user()->track_id)->get();
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
-        $response['data'] = ChallengeResource::collection($track->challenges);
+        $response['data'] = ChallengeResource::collection($challenges);
         return $response;
     }
 
     public function getLeaderboardByName($name) {
         $response = [];
         $track = Track::where('type', $name)->first();
-        $participants = $track->participants()->orderBy('points', 'DESC')->get();
+        if(!$track) {
+            $response['success'] = false;
+            $response['message'] = 'Track can not be found!';
+
+            return $response;
+        }
+        $participants = $track->participants()->where('role', 'participant')->orderBy('points', 'DESC')->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved the leaderboard';
         $response['data'] = ParticipantResource::collection($participants);

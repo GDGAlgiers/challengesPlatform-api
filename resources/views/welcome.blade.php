@@ -4,15 +4,34 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Devfest 22 challenges API</title>
 
+        <title>Devfest22 challenges infra API</title>
         <style>
             body {
-                font-family: 'Nunito', sans-serif;
+                height:100vh;
+                background:#1a1a1a;
+                color:#fff;
+                display: flex;
+                overflow:hidden;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            p {
+                font-weight: bold;
+                font-size:2rem;
+            }
+            a {
+                display:block;
+                color:green;
+                text-align: center;
             }
         </style>
     </head>
     <body>
-        <h1 class="text-center">Welcome to Devfest22 challenges API!</h1>
+        <div>
+            <p>Devfest22 Challenges infra API</p>
+            <a href="https://devfest22-challenges.gdgalgiers.com">Go to challenges</a>
+        </div>
     </body>
 </html>

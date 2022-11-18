@@ -12,6 +12,8 @@ Class SubmissionRepository {
         $response = [];
         $submissions = Submission::where('track_id', auth()->user()->track->id)->where('status', 'pending')->whereHas('challenge', function(Builder $query) {
             $query->where('requires_judge', true);
+        })->orWhere(function($query) {
+            $query->where('status', 'judging')->where('judge_id', auth()->user()->id);
         })->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved all the submissions';
@@ -23,6 +25,13 @@ Class SubmissionRepository {
     public function assignById($id) {
         $response = [];
         $submission = Submission::find($id);
+        if($submission->track_id != auth()->user()->track_id) {
+            $response['success'] = false;
+            $response['message'] = "You can not take this submission";
+
+            return $response;
+        }
+        $submission->judge_id = auth()->user()->id;
         $submission->status = "judging";
         $submission->save();
         $response['success'] = true;
@@ -34,7 +43,7 @@ Class SubmissionRepository {
 
     public function judgeById($request, $id) {
         $response = [];
-        // judgment is the pourcentage of all possible points (from 0 to 1)
+        // judgment is the status general of the judge(approved OR rejected)
         $validator = Validator::make($request->all(), [
             'judgment' => 'required'
         ]);
@@ -48,8 +57,9 @@ Class SubmissionRepository {
         $submission = Submission::find($id);
         if($request->judgment == "rejected") {
             $submission->status = "rejected";
+            $submission->assigned_points = 0;
             $submission->save();
-            $response['status'] = true;
+            $response['success'] = true;
             $response['message'] = 'Succefully Rejected the submission';
             $response['data'] = [];
 
@@ -59,7 +69,7 @@ Class SubmissionRepository {
             return $response;
         }
         $validator = Validator::make($request->all(), [
-            'points' => 'required|numeric|between:0,1'
+            'points' => 'required|numeric'
         ]);
 
         if($validator->fails()) {
@@ -70,16 +80,44 @@ Class SubmissionRepository {
             return $response;
         }
 
-        $submission->participant->points += ($submission->challenge->points * $request->points);
+        if($request->points > $submission->challenge->points) {
+            $response['success'] = false;
+            $response['message'] = 'Given points are greater than the maximaum of this challenge!';
+            $response['data'] =[];
+            return $response;
+        }
+
+        $prevSubmissions = Submission::where('participant_id', $submission->participant_id)->where('challenge_id', $submission->challenge_id)->pluck('assigned_points')->toArray();
+        if(max($prevSubmissions) < $request->points) {
+            $submission->participant->points += ($request->points - max($prevSubmissions));
+        }else {
+            $submission->participant->points += $request->points;
+        }
+        $submission->participant->solves()->detach($submission->challenge_id);
+        $submission->participant->save();
         $submission->participant->solves()->attach($submission->challenge_id);
+        if(count($prevSubmissions) < $submission->challenge->max_tries) {
+            $submission->participant->locks()->detach($submission->challenge_id);
+        }
         $submission->participant->save();
         $submission->status = "approved";
+        $submission->assigned_points = $request->points;
         $submission->save();
         $response['success'] = true;
         $response['message'] = "Succefully Approved the submission";
         $response['data'] = [];
 
         return $response;
+    }
+
+    public function getAll() {
+        $response = [];
+        $submissions = Submission::where('participant_id', auth()->user()->id)->get();
+        $response['success'] = true;
+        $response['data'] = SubmissionResource::collection($submissions);
+        $response['message'] = 'Succefully retrieved all previous submissions!';
+        return $response;
+
     }
 
     public function cancelById($id) {
@@ -94,5 +132,6 @@ Class SubmissionRepository {
 
         return $response;
     }
+
 
 }

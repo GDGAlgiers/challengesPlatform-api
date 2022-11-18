@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources\User;
 
-use App\Http\Resources\SubmissionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ParticipantResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,11 +18,9 @@ class ParticipantResource extends JsonResource
             'id' => $this->id,
             'full_name' => $this->full_name,
             'email' => $this->email,
-            'points' => $this->points,
-            'role' => 'participant',
-            'track' => $this->track->type,
-            'submissions' => $this->submissions,
-
+            'role' => $this->role,
+            'track' => $this->track,
+            'points' => $this->points
         ];
     }
 }

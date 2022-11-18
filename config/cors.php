@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://devfest22-challenges.gdgalgiers.com'],
 
     'allowed_origins_patterns' => [],
 
@@ -31,4 +31,5 @@ return [
 
     'supports_credentials' => true,
 
+    'allowed_user_agent' => env('ALLOWED_USER_AGENT', 'default-name')
 ];
