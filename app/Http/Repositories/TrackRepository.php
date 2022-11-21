@@ -131,12 +131,13 @@ Class TrackRepository {
     public function get_track_challenges($id) {
         $response = [];
         $track = Track::find($id);
-        if(!$track) {
+        if($track->is_locked) {
             $response['success'] = false;
-            $response['message'] = 'Track not found!';
+            $response['message'] = "The track is locked for now!";
+
             return $response;
         }
-        if($track->id !== auth()->user()->track_id) {
+        if($track->id != auth()->user()->track_id) {
             $response['success'] = false;
             $response['message'] = 'You can not get access to this challenge!';
             return $response;
