@@ -64,7 +64,7 @@ use Illuminate\Http\Request;
         });
 
         Route::prefix('challenge')->group(function() {
-            Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'challengeNotLocked']);
+            Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked']);
             Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'challengeNotLocked']); // TESTED
             Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
             Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
