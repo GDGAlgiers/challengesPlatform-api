@@ -35,8 +35,7 @@ class EnsureCanSubmit
                 'message' => 'You reached your submissions limit for this challenge'
             ]);
         }
-
-        if($challenge->track->id !== auth()->user()->track_id) {
+        if($challenge->track_id != auth()->user()->track_id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You can not submit for this challenge'
