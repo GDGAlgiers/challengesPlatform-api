@@ -197,7 +197,11 @@ Class ChallengeRepository {
                 $this->addSubmission($id, $challenge->track->id, 'Approved', NULL, $challenge->points);
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
-                $response['message'] = "That's right! you've succefully solved this challenge";
+                if(auth()->user()->step > $challenge->track->challenges()->count()) {
+                    $response['message'] = "Congrats! you've won the challenge!";
+                }else {
+                    $response['message'] = "That's right! you've succefully solved this challenge";
+                }
                 $response['data'] = [];
                 return $response;
             }else {
@@ -253,6 +257,7 @@ Class ChallengeRepository {
 
     private function challengeSolved($participant, $challenge) {
         $participant->points += $challenge->points;
+        $participant->step +=1;
         $participant->solves()->attach($challenge->id);
         $participant->locks()->attach($challenge->id);
         $participant->save();

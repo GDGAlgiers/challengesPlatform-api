@@ -21,6 +21,7 @@ class ChallengeResource extends JsonResource
             'author' => $this->author,
             'difficulty' => $this->difficulty,
             'description' => $this->description,
+            'step' => $this->step,
             'points' => $this->points,
             'attachment' => $this->attachment,
             'external_resource' => $this->external_resource,
