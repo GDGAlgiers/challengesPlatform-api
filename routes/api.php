@@ -28,7 +28,7 @@ Route::middleware(['throttle:api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register']); // TESTED
     Route::post('/login', [AuthController::class, 'login']); // TESTED
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
-    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['auth:sanctum'])->name('verification.send');
+    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['auth:sanctum']);
     Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']); // TESTED
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
