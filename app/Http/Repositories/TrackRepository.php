@@ -142,7 +142,7 @@ Class TrackRepository {
             $response['message'] = 'You can not get access to this challenge!';
             return $response;
         }
-        $challenges = $track->challenges()->where('track_id', auth()->user()->track_id)->get();
+        $challenges = $track->challenges()->where('track_id', auth()->user()->track_id)->where('step', "<=", auth()->user()->step)->get();
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
         $response['data'] = ChallengeResource::collection($challenges);

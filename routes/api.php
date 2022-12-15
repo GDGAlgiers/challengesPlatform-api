@@ -70,11 +70,11 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::get('/{id}/challenges', 'get_track_challenges')->middleware('trackExists'); // TESTED
         });
 
-        Route::prefix('challenge')->group(function() {
-            Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked']);
-            Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked']); // TESTED
-            Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
-            Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
+        Route::prefix('challenge')->middleware(['challengeExist', 'verifyAuthStep'])->group(function() {
+            Route::get('/{id}/download', 'download_attachment')->middleware(['trackNotLocked', 'challengeNotLocked']);
+            Route::get('/{id}', 'get_challenge')->middleware(['trackNotLocked', 'challengeNotLocked']); // TESTED
+            Route::get('/{id}/submissions', 'get_submissions'); // TESTED
+            Route::post('/{id}/submit', 'submit_challenge')->middleware(['trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
         });
         Route::prefix('submission')->group(function()  {
             Route::get('/', 'get_all_submissions'); // TESTED
