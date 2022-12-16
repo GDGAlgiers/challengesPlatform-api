@@ -28,7 +28,7 @@ Route::middleware(['throttle:api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register']); // TESTED
     Route::post('/login', [AuthController::class, 'login']); // TESTED
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
-    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['auth:sanctum']);
+    // Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['auth:sanctum']);
     Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']); // TESTED
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
@@ -63,7 +63,7 @@ Route::middleware(['throttle:api'])->group(function() {
     });
 
 
-    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant', 'verified'])
+    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
         ->controller(ParticipantController::class)->group(function() {
         Route::prefix('track')->group(function () {
             Route::get('/', 'get_tracks'); // TESTED

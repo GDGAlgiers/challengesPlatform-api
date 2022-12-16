@@ -16,10 +16,8 @@ class AuthController extends BaseController
 {
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string',
-            'email' => 'required|string|unique:users',
+            'full_name' => 'required|string|unique:users,full_name',
             'password' => 'required|string|min:6',
-            'password_confirmation' => 'required|same:password',
         ]);
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
@@ -27,14 +25,13 @@ class AuthController extends BaseController
 
         $user = User::create([
             'full_name' => $request->full_name,
-            'email' => $request->email,
             'password' => Hash::make($request->password),
             'step' => 1,
             'role' => 'participant',
             'points' => 0
         ]);
         $token = $user->createToken('welcomeDay22')->plainTextToken;
-        event(new Registered(($user)));
+        // event(new Registered(($user)));
         $result = [
             'user' => new ParticipantResource($user),
             'token' => $token
@@ -46,10 +43,10 @@ class AuthController extends BaseController
 
     public function login(Request $request){
         $validator = $request->validate([
-            'email' => 'required',
+            'full_name' => 'required',
             'password' => 'required'
         ]);
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('full_name',$request->full_name)->first();
         if(!$user) {
             return $this->sendError("No user found with these credentials");
         }

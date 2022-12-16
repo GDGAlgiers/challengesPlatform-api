@@ -20,7 +20,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'full_name',
-        'email',
         'step',
         'password',
         'points',
@@ -71,6 +70,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function track() {
         return $this->belongsTo('App\Models\Track');
+    }
+
+    public function username() {
+        return "full_name";
     }
 
 
