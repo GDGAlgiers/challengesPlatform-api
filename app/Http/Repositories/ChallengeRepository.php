@@ -8,6 +8,7 @@ use App\Models\Submission;
 use App\Models\Track;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 Class ChallengeRepository {
 
@@ -198,7 +199,8 @@ Class ChallengeRepository {
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 if(auth()->user()->step > $challenge->track->challenges()->count()) {
-                    $response['message'] = "Congrats! you've won the challenge!";
+                    $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
+                    $response['message'] = "Congrats! you've won the challenge! here's your golden ticket, make sure to bring it with you on the Welcome day! ".$goldenTicket;
                 }else {
                     $response['message'] = "That's right! you've succefully solved this challenge";
                 }
