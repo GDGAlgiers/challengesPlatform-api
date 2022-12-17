@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->float('points')->nullable();
             $table->enum('role', ['participant', 'judge', 'admin']);
+            $table->string('golden_ticket')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

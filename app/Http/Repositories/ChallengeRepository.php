@@ -6,6 +6,7 @@ use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
 use App\Models\Track;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -199,8 +200,15 @@ Class ChallengeRepository {
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 if(auth()->user()->step > $challenge->track->challenges()->count()) {
-                    $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
-                    $response['message'] = "Congrats! you've won the challenge! here's your golden ticket, make sure to bring it with you on the Welcome day! ".$goldenTicket;
+                    $numOfWinners = User::where('step', '>', $challenge->track->challenges()->count())->get();
+                    if($numOfWinners < 3) {
+                        $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
+                        auth()->user()->golden_ticket = $goldenTicket;
+                        auth()->user()->save();
+                        $response['message'] = "Congrats! you've won the challenge! here's your golden ticket, make sure to bring it with you on the Welcome day! ".$goldenTicket;
+                    }else {
+                        $response['message'] = "Congrats! you've won the challenge! but there are others who came first :)";
+                    }
                 }else {
                     $response['message'] = "That's right! you've succefully solved this challenge";
                 }
