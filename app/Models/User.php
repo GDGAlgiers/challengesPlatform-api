@@ -24,6 +24,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'points',
         'role',
+        'is_member',
+        'golden_ticket',
         'track_id'
     ];
 

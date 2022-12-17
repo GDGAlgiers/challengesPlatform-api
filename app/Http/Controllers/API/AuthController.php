@@ -29,6 +29,7 @@ class AuthController extends BaseController
             'password' => Hash::make($request->password),
             'step' => 1,
             'role' => 'participant',
+            'is_member' => $request->is_member,
             'points' => 0,
             'track_id' => $welcomeDayTrackID
         ]);
