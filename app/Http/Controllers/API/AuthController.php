@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Resources\User\AdministratorResource;
 use App\Http\Resources\User\JudgeResource;
 use App\Http\Resources\User\ParticipantResource;
+use App\Models\Track;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -22,13 +23,14 @@ class AuthController extends BaseController
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
         }
-
+        $welcomeDayTrackID = Track::where('type', 'Welcome Day22 Challenges')->pluck('id')->first();
         $user = User::create([
             'full_name' => $request->full_name,
             'password' => Hash::make($request->password),
             'step' => 1,
             'role' => 'participant',
-            'points' => 0
+            'points' => 0,
+            'track_id' => $welcomeDayTrackID
         ]);
         $token = $user->createToken('welcomeDay22')->plainTextToken;
         // event(new Registered(($user)));
