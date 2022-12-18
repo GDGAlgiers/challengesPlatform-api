@@ -15,14 +15,10 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-        $file = public_path("../database/seeders/tracks.csv");
-        $records = CSVReader::import_CSV($file);
-        foreach($records as $record) {
-            Track::create([
-                'type' => $record['type'],
-                'is_locked' => true,
-                'description' => $record['description'],
-            ]);
-        }
+        Track::create([
+            'type' => 'Welcome Day22 Challenges',
+            'description' => 'Can you earn the golden Ticket and joing GDG Algiers Directly?',
+            'is_locked' => 1
+        ]);
     }
 }

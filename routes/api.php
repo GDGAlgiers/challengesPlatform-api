@@ -6,12 +6,13 @@ use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
+use App\Http\Controllers\API\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\CSVReader;
-use App\Mail\ChallengesAcceptance;
 use App\Mail\HackathonCertificate;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,8 +25,10 @@ use App\Mail\HackathonCertificate;
 */
 
 Route::middleware(['throttle:api'])->group(function() {
+    Route::post('/register', [AuthController::class, 'register']); // TESTED
     Route::post('/login', [AuthController::class, 'login']); // TESTED
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum'); // TESTED
+    // Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['auth:sanctum']);
     Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']); // TESTED
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
@@ -67,11 +70,11 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::get('/{id}/challenges', 'get_track_challenges')->middleware('trackExists'); // TESTED
         });
 
-        Route::prefix('challenge')->group(function() {
-            Route::get('/{id}/download', 'download_attachment')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked']);
-            Route::get('/{id}', 'get_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked']); // TESTED
-            Route::get('/{id}/submissions', 'get_submissions')->middleware('challengeExist'); // TESTED
-            Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeExist', 'trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
+        Route::prefix('challenge')->middleware(['challengeExist', 'verifyAuthStep'])->group(function() {
+            Route::get('/{id}/download', 'download_attachment')->middleware(['trackNotLocked', 'challengeNotLocked']);
+            Route::get('/{id}', 'get_challenge')->middleware(['trackNotLocked', 'challengeNotLocked']); // TESTED
+            Route::get('/{id}/submissions', 'get_submissions'); // TESTED
+            Route::post('/{id}/submit', 'submit_challenge')->middleware(['trackNotLocked', 'challengeNotLocked', 'canSubmit']); // TESTED
         });
         Route::prefix('submission')->group(function()  {
             Route::get('/', 'get_all_submissions'); // TESTED
@@ -87,63 +90,4 @@ Route::middleware(['throttle:api'])->group(function() {
         Route::post('/submission/{id}/judge', 'judge_submission')->middleware(['submissionExists', 'canValidateSubmission', 'submissionHasStatus:judging']); // TESTED
     });
 });
-Route::get('/hackathon-certificates', function() {
-    set_time_limit(800);
-    $file = public_path("../database/seeders/hackathon-accepted.csv");
-    $records = CSVReader::import_CSV($file);
-    foreach($records as $record) {
-        $current = file_get_contents(public_path("../database/seeders/sent.txt"));
-        Mail::to($record['email'])->send(new HackathonCertificate($record['email']));
-        $current .= $record['email']."\n";
-        file_put_contents(public_path("../database/seeders/sent.txt"), $current);
-    }
-    return response()->json([
-        'success' => true
-    ]);
-});
-// Route::get('/challenges-acceptance', function() {
-//     set_time_limit(800);
-//     $file = public_path("../database/seeders/participants.csv");
-//     $records = CSVReader::import_CSV($file);
-//     foreach($records as $record) {
-//         $current = file_get_contents(public_path("../database/seeders/sent.txt"));
-//         Mail::to($record['email'])->send(new ChallengesAcceptance());
-//         $current .= $record['email']."\n";
-//         file_put_contents(public_path("../database/seeders/sent.txt"), $current);
-//     }
-//     return response()->json([
-//         'success' => true
-//     ]);
-// })->middleware(['auth:sanctum', 'hasRole:admin']);
-
-
-// Route::get('/hackathon-acceptance', function() {
-//     set_time_limit(800);
-//     $file = public_path("../database/seeders/hackathon-accepted.csv");
-//     $records = CSVReader::import_CSV($file);
-//     foreach($records as $record) {
-//         $current = file_get_contents(public_path("../database/seeders/sent-acceptence-emails.txt"));
-//         Mail::to($record['email'])->send(new HackathonAccepted());
-//         $current .= $record['email']."\n";
-//         file_put_contents(public_path("../database/seeders/sent-acceptence-emails.txt"), $current);
-//     }
-//     return response()->json([
-//         'success' => true
-//     ]);
-// })->middleware(['auth:sanctum', 'hasRole:admin']);
-
-// Route::get('/hackathon-waiting', function() {
-//     set_time_limit(1200);
-//     $file = public_path("../database/seeders/hackathon-waitingList.csv");
-//     $records = CSVReader::import_CSV($file);
-//     foreach($records as $record) {
-//         $current = file_get_contents(public_path("../database/seeders/sent-waitingList.txt"));
-//         Mail::to($record['email'])->send(new HackathonRefused());
-//         $current .= $record['email']."\n";
-//         file_put_contents(public_path("../database/seeders/sent-waitingList.txt"), $current);
-//     }
-//     return response()->json([
-//         'success' => true
-//     ]);
-// })->middleware(['auth:sanctum', 'hasRole:admin']);
 

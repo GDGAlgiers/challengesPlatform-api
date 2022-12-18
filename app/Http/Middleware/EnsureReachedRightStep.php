@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Challenge;
 use Closure;
 use Illuminate\Http\Request;
 
-class Cors
+class EnsureReachedRightStep
 {
     /**
      * Handle an incoming request.
@@ -16,8 +17,13 @@ class Cors
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request)
-        ->header('Access-Control-Allow-Origin', 'https://welcomeday-challenges.gdgalgiers.com')
-        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        $challenge = Challenge::find($request->route('id'));
+        if(auth()->user()->step < $challenge->step) {
+            return response()->json([
+                'success' => false,
+                "message" => "Woah! you're not ready for this challenge yet ;) solve the previous ones first!"
+            ]);
+        }
+        return $next($request);
     }
 }
