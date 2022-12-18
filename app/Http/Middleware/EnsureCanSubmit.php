@@ -20,7 +20,7 @@ class EnsureCanSubmit
     {
         $challenge = Challenge::find($request->route('id'));
         // Verifying the challenge step
-        if($challenge->step !== auth()->user()->step) {
+        if($challenge->step > auth()->user()->step) {
             return response()->json([
                 'success' => false,
                 'message' => "Woah! you're not ready for this challenge yet ;) solve the previous ones first!"
