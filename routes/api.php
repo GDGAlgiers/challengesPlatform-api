@@ -6,12 +6,8 @@ use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
-use App\Http\Controllers\API\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
-use App\Helpers\CSVReader;
-use App\Mail\HackathonCertificate;
-use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------

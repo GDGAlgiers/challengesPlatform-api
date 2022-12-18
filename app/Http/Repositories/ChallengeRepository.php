@@ -202,8 +202,8 @@ Class ChallengeRepository {
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
                 if(auth()->user()->step > $challenge->track->challenges()->count()) {
-                    $numOfWinners = count(User::where('is_member', false)->where('step', '>', count($challenge->track->challenges))->get());
-                    if($numOfWinners < 3 && !auth()->user()->is_member) {
+                    $numOfWinners = User::where('is_member', false)->where('step', '>', count(Challenge::all()))->count();
+                    if($numOfWinners <= 3 && !auth()->user()->is_member) {
                         $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
                         auth()->user()->golden_ticket = $goldenTicket;
                         auth()->user()->save();
