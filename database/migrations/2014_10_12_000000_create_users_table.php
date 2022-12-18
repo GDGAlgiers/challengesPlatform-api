@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float('points')->nullable();
             $table->enum('role', ['participant', 'judge', 'admin']);
             $table->string('golden_ticket')->nullable();
-            $table->boolean('is_member');
+            $table->boolean('is_member')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
