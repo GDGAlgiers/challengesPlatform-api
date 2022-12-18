@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://devfest22-challenges.gdgalgiers.com'],
+    'allowed_origins' => ['https://welcomeday-challenges.gdgalgiers.com'],
 
     'allowed_origins_patterns' => [],
 

@@ -207,14 +207,16 @@ Class ChallengeRepository {
                         $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
                         auth()->user()->golden_ticket = $goldenTicket;
                         auth()->user()->save();
-                        $response['message'] = "Congrats! you've won the challenge! here's your golden ticket, make sure to bring it with you on the Welcome day! ".$goldenTicket;
+                        $response['message'] = "Congrats! you've won the challenge!";
+                        $response['data'] = $goldenTicket;
                     }else {
                         $response['message'] = "Congrats! you've won the challenge! but there are others who came first :)";
+                        $response['data'] = [];
                     }
                 }else {
                     $response['message'] = "That's right! you've succefully solved this challenge";
+                    $response['data'] = [];
                 }
-                $response['data'] = [];
                 return $response;
             }else {
                 $this->addSubmission($id, $challenge->track->id, 'Rejected', NULL, 0);
