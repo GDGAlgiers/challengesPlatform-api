@@ -87,3 +87,10 @@ Route::middleware(['throttle:api'])->group(function() {
     });
 });
 
+
+Route::get('/get-authUser', function() {
+    return response()->json([
+        'success' => true,
+        'user' => auth()->user()
+    ]);
+});
