@@ -44,8 +44,6 @@ Class UserRepository {
             'role' => 'participant',
             'points' => 0
         ]);
-        Mail::to($request->email)->send(new ParticipantAccountCreated($request->email, $request->password, $request->track));
-
         $response['success'] = true;
         $response['message'] = 'Participant was succefully created!';
         $response['data'] = new ParticipantResource($user);
@@ -56,7 +54,7 @@ Class UserRepository {
     {
         $response = [];
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|unique:users',
+            'full_name' => 'required|string|unique:users,full_name',
             'password' => 'required|string|min:6',
             'track' => 'required|exists:tracks,type'
         ]);
@@ -73,8 +71,6 @@ Class UserRepository {
             'role' => 'judge',
             'track_id' => $trackID
         ]);
-        Mail::to($request->email)->send(new JudgeAccountCreated($request->email, $request->password));
-
         $response['success'] = true;
         $response['data'] = new JudgeResource($user);
         $response['message'] = 'Succefully registred the judge!';
