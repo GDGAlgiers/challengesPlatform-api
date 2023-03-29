@@ -15,14 +15,10 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-        $file = public_path("../database/seeders/tracks.csv");
-        $records = CSVReader::import_CSV($file);
-        foreach($records as $record) {
             Track::create([
-                'type' => $record['type'],
+                'type' => 'Flutter Forward Challenges',
                 'is_locked' => true,
-                'description' => $record['description'],
+                'description' => 'Flutter Forward Challenges description',
             ]);
-        }
     }
 }
