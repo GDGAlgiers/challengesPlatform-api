@@ -18,7 +18,9 @@ class ApiDomainRestriction
     {
             $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
             $requestHost = $request->getHost();
-            if(!in_array($requestHost, $allowedHosts, false))
+            
+            $allowedIps = ['105.106.171.160', '129.45.74.135'];
+            if(!in_array($requestHost, $allowedHosts, false) && !in_array($request->ip(), $allowedIps))
             {
                 return response('Unauthorized', 401);
             }
