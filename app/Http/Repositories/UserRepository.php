@@ -26,7 +26,6 @@ Class UserRepository {
         $response = [];
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|unique:users,full_name',
-            'email' => 'required|unique:users',
             'password' => 'required|min:6',
             'track' => 'required|exists:tracks,type'
         ]);
@@ -41,7 +40,6 @@ Class UserRepository {
         $user = User::create([
             'full_name' => $request->full_name,
             'track_id' => $trackID,
-            'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'participant',
             'points' => 0
@@ -59,7 +57,6 @@ Class UserRepository {
         $response = [];
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|unique:users',
-            'email' => 'required|string|unique:users',
             'password' => 'required|string|min:6',
             'track' => 'required|exists:tracks,type'
         ]);
@@ -72,7 +69,6 @@ Class UserRepository {
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $user = User::create([
             'full_name' => $request->full_name,
-            'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'judge',
             'track_id' => $trackID
