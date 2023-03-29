@@ -16,14 +16,12 @@ class ApiDomainRestriction
      */
     public function handle(Request $request, Closure $next)
     {
-        if(env('APP_ENV') == "production") {
             $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
-            $requestHost = parse_url($request->headers->get('origin'), PHP_URL_HOST);
+            $requestHost = $request->getHost();
             if(!in_array($requestHost, $allowedHosts, false))
             {
-                return response('', 400);
+                return response('Unauthorized', 401);
             }
-        }
         return $next($request);
     }
 }
