@@ -30,8 +30,8 @@
     </head>
     <body>
         <div>
-            <p>Devfest22 Challenges infra API</p>
-            <a href="https://devfest22-challenges.gdgalgiers.com">Go to challenges</a>
+            <p>Flutter Forward Extended 2022 Challenges infra API</p>
+            <a href="https://ffe2023-challenges.gdgalgiers.com">Go to challenges</a>
         </div>
     </body>
 </html>

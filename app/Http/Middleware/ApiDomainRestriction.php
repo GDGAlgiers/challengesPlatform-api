@@ -16,14 +16,15 @@ class ApiDomainRestriction
      */
     public function handle(Request $request, Closure $next)
     {
-            $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
-            $requestHost = $request->getHost();
+        $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
+        $requestHost = $request->getHost();
             
-            $allowedIps = ['105.106.171.160', '129.45.74.135'];
-            if(!in_array($requestHost, $allowedHosts, false) && !in_array($request->ip(), $allowedIps))
-            {
-                return response('Unauthorized', 401);
-            }
+        $allowedIps = ['105.106.171.160', '129.45.74.135'];
+        if(!in_array($requestHost, $allowedHosts, false) && !in_array($request->ip(), $allowedIps))
+        {
+            return response('Unauthorized', 401);
+        }
+
         return $next($request);
     }
 }
