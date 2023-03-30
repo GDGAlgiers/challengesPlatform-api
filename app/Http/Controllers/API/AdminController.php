@@ -37,7 +37,6 @@ class AdminController extends BaseController
         if(!$response['success']) {
             return $this->sendError($response['message'], $response['data']);
         }
-
         return $this->sendResponse($response['data'], $response['message']);
     }
 

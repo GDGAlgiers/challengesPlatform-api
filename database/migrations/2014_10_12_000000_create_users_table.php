@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->float('points')->nullable();
             $table->enum('role', ['participant', 'judge', 'admin']);
-            $table->ipAddress('ip');
+            $table->ipAddress('ip')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
