@@ -6,8 +6,10 @@ use App\Http\Resources\SubmissionResource;
 use App\Models\Challenge;
 use App\Models\Submission;
 use App\Models\Track;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 Class ChallengeRepository {
 
@@ -30,6 +32,7 @@ Class ChallengeRepository {
             'author' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
+            'step' => 'required',
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
@@ -51,6 +54,7 @@ Class ChallengeRepository {
             'author' => $request->author,
             'difficulty' => $request->difficulty,
             'description' => $request->description,
+            'step' => $request->step,
             'max_tries' => $request->max_tries,
             'external_resource' => $request->external_resource,
             'requires_judge' => $request->requires_judge,
@@ -197,8 +201,22 @@ Class ChallengeRepository {
                 $this->addSubmission($id, $challenge->track->id, 'Approved', NULL, $challenge->points);
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
-                $response['message'] = "That's right! you've succefully solved this challenge";
-                $response['data'] = [];
+                if(auth()->user()->step > $challenge->track->challenges()->count()) {
+                    $numOfWinners = User::where('is_member', false)->where('step', '>', count(Challenge::all()))->count();
+                    if($numOfWinners <= 3 && !auth()->user()->is_member) {
+                        $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
+                        auth()->user()->golden_ticket = $goldenTicket;
+                        auth()->user()->save();
+                        $response['message'] = "Congrats! you've won the challenge!";
+                        $response['data'] = $goldenTicket;
+                    }else {
+                        $response['message'] = "Congrats! you've won the challenge! but there are others who came first :)";
+                        $response['data'] = [];
+                    }
+                }else {
+                    $response['message'] = "That's right! you've succefully solved this challenge";
+                    $response['data'] = [];
+                }
                 return $response;
             }else {
                 $this->addSubmission($id, $challenge->track->id, 'Rejected', NULL, 0);
@@ -253,6 +271,7 @@ Class ChallengeRepository {
 
     private function challengeSolved($participant, $challenge) {
         $participant->points += $challenge->points;
+        $participant->step +=1;
         $participant->solves()->attach($challenge->id);
         $participant->locks()->attach($challenge->id);
         $participant->save();

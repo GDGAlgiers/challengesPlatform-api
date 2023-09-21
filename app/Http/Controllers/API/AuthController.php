@@ -7,6 +7,7 @@ use App\Http\Resources\User\JudgeResource;
 use App\Http\Resources\User\ParticipantResource;
 use App\Models\Track;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,7 @@ class AuthController extends BaseController
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
         }
-
+      
         $track = Track::where('type', 'Flutter Forward Challenges')->first();
         if(!$track) {
             return $this->sendError("We are not accepting registrations yet!");
@@ -32,21 +33,24 @@ class AuthController extends BaseController
         if($usersCount >=2) {
             return $this->sendError("You have reached your accounts limit, contact admins in case of issues");
         }
+
         $user = User::create([
             'full_name' => $request->full_name,
             'password' => Hash::make($request->password),
+            'step' => 1,
             'role' => 'participant',
             'points' => 0,
             'track_id' => $track->id,
             'ip' => $request->ip()
         ]);
-        $token = $user->createToken('devfest')->plainTextToken;
+        $token = $user->createToken('welcomeDay22')->plainTextToken;
+        // event(new Registered(($user)));
         $result = [
             'user' => new ParticipantResource($user),
             'token' => $token
         ];
         Auth::login($user);
-        return $this->sendResponse($result,'Registration succesfull');
+        return $this->sendResponse($result,'Registration was made succesfully!');
 
     }
 
@@ -60,7 +64,7 @@ class AuthController extends BaseController
             return $this->sendError("No user found with these credentials");
         }
         if(Auth::attempt($validator)){
-            $token = $user->createToken('devfest22')->plainTextToken;
+            $token = $user->createToken('welcomeDay22')->plainTextToken;
             $result = [
                 'user' => $user->role === 'participant' ? new ParticipantResource($user) : ($user->role === 'judge' ? new JudgeResource($user) : new AdministratorResource($user)),
                 'token' => $token

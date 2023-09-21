@@ -19,12 +19,19 @@ class EnsureCanSubmit
     public function handle(Request $request, Closure $next)
     {
         $challenge = Challenge::find($request->route('id'));
+        // Verifying the challenge step
+        if($challenge->step > auth()->user()->step) {
+            return response()->json([
+                'success' => false,
+                'message' => "Woah! you're not ready for this challenge yet ;) solve the previous ones first!"
+            ]);
+        }
         // Verifying if the challenge is locked for the submitor
         $challengesLocked = auth()->user()->locks->pluck('id')->toArray();
         if(in_array($request->route('id'), $challengesLocked)) {
             return response()->json([
                 'success' => false,
-                'message' => "This challenge is locked for you now, either because it's under judgment, already obtained full points, or reached your max tries"
+                'message' => "This challenge is locked for you, either because you already solved it, or your reached your max tries"
             ]);
         }
         // Verifying if the submitor has dipassed the challenge's submission limit
