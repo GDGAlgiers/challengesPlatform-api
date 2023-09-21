@@ -16,14 +16,14 @@ class ApiDomainRestriction
      */
     public function handle(Request $request, Closure $next)
     {
-        if(env('APP_ENV') == "production") {
-            $allowedHosts = explode(',', env('ALLOWED_DOMAINS'));
-            $requestHost = parse_url($request->headers->get('origin'), PHP_URL_HOST);
-            if(!in_array($requestHost, $allowedHosts, false))
-            {
-                return response('', 400);
-            }
+        $allowedOrigins = ['https://flutter-forward-extended-2023-challenges.gdgalgiers.com'];
+        $requestOrigin = $request->headers->get('Origin');
+        $allowedIps = ['105.106.171.160'];
+        if(!in_array($requestOrigin, $allowedOrigins, false) && !in_array($request->ip(), $allowedIps))
+        {
+            return response('Unauthorized', 401);
         }
+
         return $next($request);
     }
 }

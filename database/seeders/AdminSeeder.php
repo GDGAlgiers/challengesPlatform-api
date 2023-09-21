@@ -19,26 +19,20 @@ class AdminSeeder extends Seeder
             User::create([
                 'full_name' => 'abdessamed',
                 'password' => Hash::make('5RO8TTzmUPg4'),
-                'is_member' => true,
-                'role' => 'admin'
+                'role' => 'admin',
+                'ip' => '127.0.0.1'
             ]);
             User::create([
                 'full_name' => 'ouael',
                 'password' => Hash::make('FVFHAOEr3FA8'),
-                'is_member' => true,
-                'role' => 'admin'
+                'role' => 'admin',
+                'ip' => '127.0.0.1'
             ]);
             User::create([
                 'full_name' => 'abderraouf',
                 'password' => Hash::make('Ui3tCLLtlpl2'),
-                'is_member' => true,
-                'role' => 'admin'
-            ]);
-            User::create([
-                'full_name' => 'abderrahman',
-                'password' => Hash::make('PrCiXwB5X9wy'),
-                'is_member' => true,
-                'role' => 'admin'
+                'role' => 'admin',
+                'ip' => '127.0.0.1'
             ]);
     }
 }

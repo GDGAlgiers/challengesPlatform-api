@@ -15,10 +15,10 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-        Track::create([
-            'type' => 'Welcome Day22 Challenges',
-            'description' => 'Can you earn the golden Ticket and joing GDG Algiers Directly?',
-            'is_locked' => 1
-        ]);
+            Track::create([
+                'type' => 'Flutter Forward Challenges',
+                'is_locked' => true,
+                'description' => 'Flutter Forward Challenges description',
+            ]);
     }
 }

@@ -20,45 +20,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $file = public_path("../database/seeders/participants.csv");
-        $records = CSVReader::import_CSV($file);
-        foreach($records as $record) {
-            $current = file_get_contents(public_path("../database/seeders/sent.txt"));
-            $randomPassword = 'devfest22'.Str::random(5).'@algiers'.Str::random(12). 'challenges';
-            $trackID = Track::where('type', $record['track'])->pluck('id')->first();
-            $user = User::create([
-                'full_name' => $record['fullName'],
-                'email' => $record['email'],
-                'password' => Hash::make($randomPassword),
-                'role' => 'participant',
+        $track = Track::where('type', 'Flutter Forward Challenges')->first()->pluck('id');
+        for($i=1; $i<=15; $i++) {
+            User::create([
+                'full_name' => 'username'.$i,
+                'password' => Hash::make('123456789'),
                 'points' => 0,
-                'track_id' => $trackID,
-
+                'role' => 'participant',
+                'ip' => '127.0.0.1',
+                'track_id' => $track
             ]);
-            Mail::to($record['email'])->send(new ParticipantAccountCreated($user->email, $randomPassword, $record['track']));
-            $current .= $record['email']."\n";
-            file_put_contents(public_path("../database/seeders/sent.txt"), $current);
         }
-        // $tracks = Track::all()->pluck('id')->toArray();
-        // for($i=1; $i<=20; $i++) {
-        //     User::create([
-        //         'full_name' => 'participant'.$i,
-        //         'email' => 'participant'.$i.'@gmail.com',
-        //         'password' => Hash::make('123456'),
-        //         'role' => 'participant',
-        //         'points' => 0,
-        //         'track_id' => $tracks[rand(0, count($tracks)-1)]
-        //     ]);
-        // }
-
-        // for($i=1; $i<=4; $i++) {
-        //     User::create([
-        //         'full_name' => 'judge'.$i,
-        //         'email' => 'judge'.$i.'@judge.com',
-        //         'password' => Hash::make('123456'),
-        //         'role' => 'judge',
-        //         'track_id' => $tracks[rand(0, count($tracks)-1)]
-        //     ]);
-        // }
     }
 }

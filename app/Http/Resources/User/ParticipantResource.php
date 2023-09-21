@@ -18,14 +18,12 @@ class ParticipantResource extends JsonResource
         return [
             'id' => $this->id,
             'full_name' => $this->full_name,
-            'step' => $this->step,
             'points' => $this->points,
             'role' => 'participant',
             'email_verified' => $this->email_verified_at ? true: false,
             'track' => $this->track?->type,
             'is_member' => $this->is_member ? true: false,
             'submissions' => SubmissionResource::collection($this->submissions),
-
         ];
     }
 }

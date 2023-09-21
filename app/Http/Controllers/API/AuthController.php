@@ -23,15 +23,25 @@ class AuthController extends BaseController
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
         }
-        $welcomeDayTrackID = Track::where('type', 'Welcome Day22 Challenges')->pluck('id')->first();
+      
+        $track = Track::where('type', 'Flutter Forward Challenges')->first();
+        if(!$track) {
+            return $this->sendError("We are not accepting registrations yet!");
+        }
+
+        $usersCount = count(User::where('ip', $request->ip())->get());
+        if($usersCount >=2) {
+            return $this->sendError("You have reached your accounts limit, contact admins in case of issues");
+        }
+
         $user = User::create([
             'full_name' => $request->full_name,
             'password' => Hash::make($request->password),
             'step' => 1,
             'role' => 'participant',
-            'is_member' => $request->is_member,
             'points' => 0,
-            'track_id' => $welcomeDayTrackID
+            'track_id' => $track->id,
+            'ip' => $request->ip()
         ]);
         $token = $user->createToken('welcomeDay22')->plainTextToken;
         // event(new Registered(($user)));
