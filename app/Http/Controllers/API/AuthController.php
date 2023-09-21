@@ -23,11 +23,6 @@ class AuthController extends BaseController
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
         }
-      
-        $track = Track::where('type', 'Flutter Forward Challenges')->first();
-        if(!$track) {
-            return $this->sendError("We are not accepting registrations yet!");
-        }
 
         $usersCount = count(User::where('ip', $request->ip())->get());
         if($usersCount >=2) {
@@ -37,14 +32,11 @@ class AuthController extends BaseController
         $user = User::create([
             'full_name' => $request->full_name,
             'password' => Hash::make($request->password),
-            'step' => 1,
             'role' => 'participant',
             'points' => 0,
-            'track_id' => $track->id,
             'ip' => $request->ip()
         ]);
-        $token = $user->createToken('welcomeDay22')->plainTextToken;
-        // event(new Registered(($user)));
+        $token = $user->createToken('arizona-platform')->plainTextToken;
         $result = [
             'user' => new ParticipantResource($user),
             'token' => $token
