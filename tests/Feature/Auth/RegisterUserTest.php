@@ -27,7 +27,6 @@ class RegisterUserTest extends TestCase
                 'success',
                 'data' => [
                     'user' => [
-                        'id',
                         'full_name',
                         'points',
                         'role',
