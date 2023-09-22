@@ -19,8 +19,8 @@ class EnsureHasRole
         if(!$request->user()->hasRole($role)) {
             return response()->json([
                 'success' => false,
-                'message' => 'You are not Authorized'
-            ]);
+                'message' => 'You are not authorized'
+            ], 401);
         }
         return $next($request);
     }
