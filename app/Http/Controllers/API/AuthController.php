@@ -41,7 +41,7 @@ class AuthController extends BaseController
             'user' => new ParticipantResource($user),
             'token' => $token
         ];
-        Auth::login($user);
+
         return $this->sendResponse($result,'Registration was made succesfully!');
 
     }
@@ -71,10 +71,12 @@ class AuthController extends BaseController
             return $this->sendError("Incorrect data", ["password" => ["No user found with the specified data"]]);
         }
     }
-public function logout(){
-        $id=auth('sanctum')->id();
+
+    public function logout(){
+        $id= auth('sanctum')->id();
         $user = User::find($id);
         $user->tokens()->delete();
-    return $this->sendResponse([],'Logged out succesfully');
-}
+
+        return $this->sendResponse([],'Logged out succesfully');
+    }
 }
