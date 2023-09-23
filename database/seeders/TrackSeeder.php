@@ -15,6 +15,6 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-        Track::factory()->create();
+        Track::factory()->count(4)->create();
     }
 }
