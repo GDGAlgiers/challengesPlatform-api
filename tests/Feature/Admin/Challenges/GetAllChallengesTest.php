@@ -37,7 +37,7 @@ class GetAllChallengesTest extends TestCase
                     'difficulty',
                     'description',
                     'points',
-                    'attachment',
+                    'has_attachment',
                     'external_resource',
                     'max_tries',
                     'requires_judge',

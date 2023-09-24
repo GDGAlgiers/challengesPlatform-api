@@ -32,7 +32,6 @@ Class ChallengeRepository {
             'author' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
-            'step' => 'required',
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
@@ -44,8 +43,6 @@ Class ChallengeRepository {
             $response['data'] = $validator->errors();
             return $response;
         }
-
-
 
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $challenge = Challenge::create([
@@ -64,7 +61,7 @@ Class ChallengeRepository {
         ]);
         if($request->hasFile('attachment')) {
             $name = $request->file('attachment')->getClientOriginalName();
-            $path = $request->file('attachment')->move('challenges/attachments', $name);
+            $path = $request->file('attachment')->store("challenges_attachments");
             $challenge->attachment = $path;
             $challenge->save();
         }

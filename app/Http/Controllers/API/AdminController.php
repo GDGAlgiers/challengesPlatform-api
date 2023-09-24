@@ -58,7 +58,7 @@ class AdminController extends BaseController
         if(!$response['success']) {
             return $this->sendError($response['message'], $response['data']);
         }
-        return $this->sendResponse($response['data'], $response['message']);
+        return $this->sendResponse($response['data'], $response['message'], 201);
     }
 
     public function update_challenge(Request $request, $id) {

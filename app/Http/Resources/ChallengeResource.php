@@ -21,7 +21,7 @@ class ChallengeResource extends JsonResource
             'difficulty' => $this->difficulty,
             'description' => $this->description,
             'points' => $this->points,
-            'attachment' => $this->attachment,
+            'has_attachment' => $this->attachment ? true: false,
             'external_resource' => $this->external_resource,
             'max_tries' => $this->max_tries,
             'requires_judge' => $this->requires_judge ? true: false,
