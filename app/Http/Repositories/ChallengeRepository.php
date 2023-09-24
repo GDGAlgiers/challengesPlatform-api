@@ -171,7 +171,7 @@ Class ChallengeRepository {
         }
         $challenge->is_locked = false;
         $challenge->save();
-        $response['success'] = false;
+        $response['success'] = true;
         $response['message'] = 'Challenge Succefully unlocked!';
         $response['data'] = [];
 
