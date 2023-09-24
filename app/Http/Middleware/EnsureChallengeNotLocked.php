@@ -21,7 +21,7 @@ class EnsureChallengeNotLocked
         if($challenge->is_locked) return response()->json([
             'success' => false,
             'message' => 'This challenge is locked for now'
-        ]);
+        ], 400);
         return $next($request);
     }
 }

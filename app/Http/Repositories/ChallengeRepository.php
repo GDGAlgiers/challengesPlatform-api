@@ -150,14 +150,12 @@ Class ChallengeRepository {
     public function lockById($id) {
         $response = [];
         $challenge = Challenge::find($id);
-        if($challenge->is_locked) {
-            $response['success'] = false;
-            $response['message'] = 'Challenge is already locked!';
-            return $response;
-        }
+
+        // We lock directly because the challenge should be not locked
+        // as this request already passed the middleware `challengeNotLocked`
         $challenge->is_locked = true;
         $challenge->save();
-        $response['success'] = false;
+        $response['success'] = true;
         $response['message'] = 'Challenge Succefully locked!';
         $response['data'] = [];
 

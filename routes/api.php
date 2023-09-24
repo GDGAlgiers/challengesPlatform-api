@@ -40,7 +40,7 @@ Route::middleware(['throttle:api'])->group(function() {
         Route::prefix('challenge')->group(function() {
             Route::get('/', 'get_challenges'); // TESTED
             Route::post('/create', 'create_challenges'); // TESTED
-            Route::post('/lock/{id}', 'lock_challenge')->middleware('challengeExist'); // TESTED
+            Route::post('/lock/{id}', 'lock_challenge')->middleware(['challengeExist', 'challengeNotLocked']); // TESTED
             Route::post('/unlock/{id}', 'unlock_challenge')->middleware('challengeExist'); // TESTED
             Route::post('/update/{id}', 'update_challenge')->middleware('challengeExist'); // TESTED
             Route::delete('/delete/{id}', 'delete_challenge')->middleware('challengeExist'); // TESTED
