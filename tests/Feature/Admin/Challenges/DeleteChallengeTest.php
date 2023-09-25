@@ -48,15 +48,15 @@ class DeleteChallengeTest extends TestCase
     public function test_delete_challenge_with_attachment()
     {
         Storage::fake('local');
-        UploadedFile::fake()->create('attachment.zip', 1024)->store('challenges_attachments');
+        $mockAttachment = UploadedFile::fake()->create('attachment.zip', 1024)->store('challenges_attachments');
         Track::factory()->create();
-        $challenge = Challenge::factory()->create(['attachment' => 'challenges_attachments/attachment.zip']);
+        $challenge = Challenge::factory()->create(['attachment' => $mockAttachment]);
 
         Sanctum::actingAs(
             User::factory()->create(['role' => 'admin']),
             ['*']
         );
-        
+
         $response = $this->deleteJson($this->endpoint.$challenge->id);
 
         $response->assertStatus(200)->assertExactJson([

@@ -61,7 +61,6 @@ Class ChallengeRepository {
             'is_locked' => false
         ]);
         if($request->hasFile('attachment')) {
-            $name = $request->file('attachment')->getClientOriginalName();
             $path = $request->file('attachment')->store("challenges_attachments");
             $challenge->attachment = $path;
             $challenge->save();
@@ -117,9 +116,8 @@ Class ChallengeRepository {
         if($request->external_resource) $challenge->external_resource = $request->external_resource;
 
         if($request->hasFile('attachment')) {
-            if($challenge->attachment) unlink(public_path()."/".$challenge->attachment);
-            $name = $request->file('attachment')->getClientOriginalName();
-            $path = $request->file('attachment')->move('challenges/attachments', $name);
+            if($challenge->attachment) Storage::delete($challenge->attachment);
+            $path = $request->file('attachment')->store('challenges_attachments');
             $challenge->attachment = $path;
         }
 
@@ -137,7 +135,7 @@ Class ChallengeRepository {
 
         if($challenge->attachment) Storage::delete($challenge->attachment);
         $challenge->delete();
-        
+
         $response['success'] = true;
         $response['message'] = 'The challenge was succefully deleted!';
         $response['data'] = [];
