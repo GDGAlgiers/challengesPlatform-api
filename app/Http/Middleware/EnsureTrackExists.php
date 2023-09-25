@@ -21,7 +21,7 @@ class EnsureTrackExists
         if(!$track) return response()->json([
             'success' => false,
             'message' => 'Track can not be found!'
-        ]);
+        ], 400);
         return $next($request);
     }
 }

@@ -49,7 +49,7 @@ Route::middleware(['throttle:api'])->group(function() {
         Route::prefix('track')->group(function() {
             Route::get('/', 'get_tracks'); // TESTED
             Route::post('/create', 'create_track'); // TESTED
-            Route::post('/{id}/update', 'update_track')->middleware('trackExists'); // TESTED
+            Route::post('/update/{id}', 'update_track')->middleware('trackExists'); // TESTED
             Route::post('/lock-all', 'lock_tracks'); // TESTED
             Route::post('/unlock-all', 'unlock_tracks'); // TESTED
             Route::post('/lock/{id}', 'lock_track')->middleware('trackExists'); // TESTED
