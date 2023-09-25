@@ -13,7 +13,7 @@ Class TrackRepository {
         $response = [];
         $tracks = Track::all();
         $response['success'] = true;
-        $response['message'] = 'Tracks were succefully restored';
+        $response['message'] = 'Tracks were succefully retreived';
         $response['data'] = TrackResource::collection($tracks);
         return $response;
     }

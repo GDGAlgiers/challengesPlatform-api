@@ -15,11 +15,10 @@ class TrackResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'type' => $this->type,
             'description' => $this->description,
             'number_of_challenges' => count($this->challenges),
-            'is_locked' => $this->is_locked
+            'is_locked' => $this->is_locked ? true: false
         ];
     }
 }
