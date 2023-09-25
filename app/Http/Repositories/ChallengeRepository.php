@@ -8,6 +8,7 @@ use App\Models\Submission;
 use App\Models\Track;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -133,13 +134,10 @@ Class ChallengeRepository {
     public function delete($id) {
         $response = [];
         $challenge = Challenge::find($id);
-        if(!$challenge) {
-            $response['success'] = false;
-            $response['message'] = 'No challenge found!';
-            return $response;
-        }
-        if($challenge->attachment) unlink(public_path()."/".$challenge->attachment);
+
+        if($challenge->attachment) Storage::delete($challenge->attachment);
         $challenge->delete();
+        
         $response['success'] = true;
         $response['message'] = 'The challenge was succefully deleted!';
         $response['data'] = [];
