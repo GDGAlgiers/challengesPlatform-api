@@ -19,6 +19,7 @@ class TrackFactory extends Factory
         return [
             'type' => fake()->text(8),
             'description' => fake()->text(20),
+            'is_locked' => true
         ];
     }
 }
