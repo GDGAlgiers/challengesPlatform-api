@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'trackExists' => \App\Http\Middleware\EnsureTrackExists::class,
         'onlySPA' =>\App\Http\Middleware\OnlySPA::class,
         'verifyAuthStep' =>\App\Http\Middleware\EnsureReachedRightStep::class,
+        'hasAccessToTrack' => \App\Http\Middleware\EnsureHasAccessToTrack::class,
     ];
 }

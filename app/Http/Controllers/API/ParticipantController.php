@@ -30,8 +30,6 @@ class ParticipantController extends BaseController
 
     public function get_track_challenges($id) {
         $response = $this->trackRepository->get_track_challenges($id);
-        if(!$response['success']) return $this->sendError($response['message']);
-
         return $this->sendResponse($response['data'], $response['message']);
     }
 

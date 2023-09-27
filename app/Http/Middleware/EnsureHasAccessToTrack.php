@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Challenge;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureTrackNotLocked
+class EnsureHasAccessToTrack
 {
     /**
      * Handle an incoming request.
@@ -17,11 +16,13 @@ class EnsureTrackNotLocked
      */
     public function handle(Request $request, Closure $next)
     {
-        $challenge = Challenge::find($request->route('id'));
-        if($challenge->track->is_locked) return response()->json([
-            'success' => false,
-            'message' => 'Submissions can not be accepted now'
-        ], 400);
+        if ($request->route('id') != auth()->user()->track_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can not get access to this challenge!'
+            ], 401);
+        }
+
         return $next($request);
     }
 }

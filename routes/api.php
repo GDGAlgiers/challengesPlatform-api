@@ -63,7 +63,7 @@ Route::middleware(['throttle:api'])->group(function() {
         ->controller(ParticipantController::class)->group(function() {
         Route::prefix('track')->group(function () {
             Route::get('/', 'get_tracks'); // TESTED
-            Route::get('/{id}/challenges', 'get_track_challenges')->middleware('trackExists'); // TESTED
+            Route::get('/{id}/challenges', 'get_track_challenges')->middleware(['trackExists', 'trackNotLocked', 'hasAccessToTrack']); // TESTED
         });
 
         Route::prefix('challenge')->middleware(['challengeExist', 'verifyAuthStep'])->group(function() {
