@@ -4,12 +4,9 @@ namespace Tests\Feature\Admin\UserManagement;
 
 use App\Models\Track;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class CreateParticipantTest extends TestCase
+class CreateParticipantTest extends AdminTestCase
 {
     protected $endpoint = '/api/admin/user/create-participant';
 
@@ -20,11 +17,6 @@ class CreateParticipantTest extends TestCase
      */
     public function test_success_creation_of_participant()
     {
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $track = Track::factory()->create();
         $payload = [
             'full_name' => $this->faker->name(),
@@ -63,11 +55,6 @@ class CreateParticipantTest extends TestCase
     {
         $payload = [];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(400)->assertExactJson([
@@ -96,11 +83,6 @@ class CreateParticipantTest extends TestCase
             'track' => $this->faker->text(6)
         ];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(400)->assertExactJson([
@@ -128,11 +110,6 @@ class CreateParticipantTest extends TestCase
             'password' => $this->faker->password(),
             'track' => $track->type
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
 

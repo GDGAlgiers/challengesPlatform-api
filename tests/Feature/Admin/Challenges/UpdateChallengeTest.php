@@ -4,16 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class UpdateChallengeTest extends TestCase
+class UpdateChallengeTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/challenge/update/';
 
@@ -37,11 +33,6 @@ class UpdateChallengeTest extends TestCase
             'solution' => 'solution',
             'points' => rand(10, 500),
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint.$challenge->id, $payload);
         $response->assertStatus(200)->assertExactJson([
@@ -97,11 +88,6 @@ class UpdateChallengeTest extends TestCase
             'solution' => 'solution',
             'points' => rand(10, 500),
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint.$oldChallenge->id, $payload);
         $response->assertStatus(200)->assertExactJson([
@@ -162,11 +148,6 @@ class UpdateChallengeTest extends TestCase
             'points' => rand(10, 500),
             'attachment' => $mockAttachment
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint.$oldChallenge->id, $payload);
         $response->assertStatus(200)->assertExactJson([

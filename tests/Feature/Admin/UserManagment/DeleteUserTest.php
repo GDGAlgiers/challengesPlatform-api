@@ -3,12 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class DeleteUserTest extends TestCase
+class DeleteUserTest extends AdminTestCase
 {
     protected $endpoint = '/api/admin/user/delete/';
 
@@ -20,11 +17,6 @@ class DeleteUserTest extends TestCase
     public function test_delete_user_successfully()
     {
         $user = User::factory()->create();
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->deleteJson($this->endpoint.$user->id);
 
@@ -48,11 +40,6 @@ class DeleteUserTest extends TestCase
 
      public function test_delete_unexisting_user()
      {
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->deleteJson($this->endpoint.'2333');
 
         $response->assertStatus(400)->assertExactJson([

@@ -4,11 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class DeleteTrackTest extends TestCase
+class DeleteTrackTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/track/delete/';
 
@@ -20,8 +18,6 @@ class DeleteTrackTest extends TestCase
     public function test_delete_track_that_does_not_have_challenges()
     {
         $track = Track::factory()->create();
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
 
         $response = $this->deleteJson($this->endpoint.$track->id);
 
@@ -47,8 +43,6 @@ class DeleteTrackTest extends TestCase
         $track = Track::factory()->create();
         $challenge = Challenge::factory()->create();
         $challenge->track()->associate($track);
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
 
         $response = $this->deleteJson($this->endpoint.$track->id);
 

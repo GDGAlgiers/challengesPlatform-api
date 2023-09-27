@@ -4,11 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class UnlockChallengeTest extends TestCase
+class UnlockChallengeTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/challenge/unlock/';
 
@@ -21,10 +19,6 @@ class UnlockChallengeTest extends TestCase
     {
         Track::factory()->create();
         $challenge = Challenge::factory()->create(['is_locked' => true]);
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint.$challenge->id);
 
@@ -49,10 +43,6 @@ class UnlockChallengeTest extends TestCase
     {
         Track::factory()->create();
         $challenge = Challenge::factory()->create();
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint.$challenge->id);
 

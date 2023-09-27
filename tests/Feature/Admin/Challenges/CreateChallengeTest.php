@@ -3,14 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class CreateChallengeTest extends TestCase
+class CreateChallengeTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/challenge/create';
 
@@ -32,11 +30,6 @@ class CreateChallengeTest extends TestCase
             'requires_judge' => false,
             'points' => rand(10, 500),
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
 
@@ -83,11 +76,6 @@ class CreateChallengeTest extends TestCase
     {
         $payload = [];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
@@ -118,10 +106,6 @@ class CreateChallengeTest extends TestCase
         $payload = [
             'track' => $this->faker->name(),
         ];
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertJson([
@@ -154,11 +138,6 @@ class CreateChallengeTest extends TestCase
             'points' => rand(10, 500),
             'attachment' => $mockAttachment
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
 
@@ -217,11 +196,6 @@ class CreateChallengeTest extends TestCase
             'attachment' => $mockAttachment
         ];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
@@ -247,11 +221,6 @@ class CreateChallengeTest extends TestCase
         $payload = [
             'attachment' => $mockAttachment
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
         $response

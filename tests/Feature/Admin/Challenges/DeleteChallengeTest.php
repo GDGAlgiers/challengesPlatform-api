@@ -4,14 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class DeleteChallengeTest extends TestCase
+class DeleteChallengeTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/challenge/delete/';
 
@@ -24,11 +22,6 @@ class DeleteChallengeTest extends TestCase
     {
         Track::factory()->create();
         $challenge = Challenge::factory()->create();
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->deleteJson($this->endpoint.$challenge->id);
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
@@ -51,11 +44,6 @@ class DeleteChallengeTest extends TestCase
         $mockAttachment = UploadedFile::fake()->create('attachment.zip', 1024)->store('challenges_attachments');
         Track::factory()->create();
         $challenge = Challenge::factory()->create(['attachment' => $mockAttachment]);
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->deleteJson($this->endpoint.$challenge->id);
 

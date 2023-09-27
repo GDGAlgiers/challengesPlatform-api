@@ -4,12 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Track;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class CreateJudgeTest extends TestCase
+class CreateJudgeTest extends AdminTestCase
 {
     protected $endpoint = '/api/admin/user/create-judge';
 
@@ -20,11 +17,6 @@ class CreateJudgeTest extends TestCase
      */
     public function test_success_creation_of_judge()
     {
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $track = Track::factory()->create();
         $payload = [
             'full_name' => $this->faker->name(),
@@ -59,11 +51,6 @@ class CreateJudgeTest extends TestCase
     {
         $payload = [];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(400)->assertExactJson([
@@ -92,11 +79,6 @@ class CreateJudgeTest extends TestCase
             'track' => $this->faker->text(6)
         ];
 
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(400)->assertExactJson([
@@ -124,11 +106,6 @@ class CreateJudgeTest extends TestCase
             'password' => $this->faker->password(),
             'track' => $track->type
         ];
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->postJson($this->endpoint, $payload);
 

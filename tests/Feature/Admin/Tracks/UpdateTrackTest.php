@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Http\Response;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class UpdateTrackTest extends TestCase
+class UpdateTrackTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/track/update/';
 
@@ -23,9 +21,6 @@ class UpdateTrackTest extends TestCase
         $payload = [
             'description' => $this->faker->text(30)
         ];
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
 
         $response = $this->postJson($this->endpoint.$track->id, $payload);
 
@@ -62,9 +57,6 @@ class UpdateTrackTest extends TestCase
             'type' => $this->faker->word(),
             'description' => $this->faker->text(30)
         ];
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
 
         $response = $this->postJson($this->endpoint.$track->id, $payload);
 

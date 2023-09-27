@@ -4,12 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Http\Response;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class GetAllTracksTest extends TestCase
+class GetAllTracksTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/track';
 
@@ -23,11 +21,6 @@ class GetAllTracksTest extends TestCase
         $tracks = Track::factory()->count(3)->create();
         $challenge = Challenge::factory()->create();
         $challenge->track()->associate($tracks[0]);
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->getJson($this->endpoint);
         $response

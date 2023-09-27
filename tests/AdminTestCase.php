@@ -8,12 +8,17 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Sanctum\Sanctum;
 
-abstract class TestCase extends BaseTestCase
+abstract class AdminTestCase extends BaseTestCase
 {
     use CreatesApplication, WithFaker, DatabaseMigrations;
 
     public function setUp(): void
     {
         parent::setUp();
+
+        Sanctum::actingAs(
+            User::factory()->create(['role' => 'admin']),
+            ['*']
+        );
     }
 }

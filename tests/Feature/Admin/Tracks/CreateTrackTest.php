@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Http\Response;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class CreateTrackTest extends TestCase
+class CreateTrackTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/track/create';
 
@@ -23,9 +21,6 @@ class CreateTrackTest extends TestCase
             'type' => $this->faker->text(8),
             'description' => $this->faker->text(30)
         ];
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
 
         $response = $this->postJson($this->endpoint, $payload);
 
@@ -57,9 +52,6 @@ class CreateTrackTest extends TestCase
     {
         $payload = [];
 
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
-
         $response = $this->postJson($this->endpoint, $payload);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
@@ -87,9 +79,6 @@ class CreateTrackTest extends TestCase
             'type' => $track->type,
             'description' => $this->faker->text(30)
         ];
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
 
         $response = $this->postJson($this->endpoint, $payload);
 

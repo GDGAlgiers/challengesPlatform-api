@@ -3,13 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Track;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class LockAndUnlockTracksTest extends TestCase
+class LockAndUnlockTracksTest extends AdminTestCase
 {
     /**
      * A feature test for locking all tracks.
@@ -19,8 +15,6 @@ class LockAndUnlockTracksTest extends TestCase
     public function test_lock_all_tracks()
     {
         $tracks = Track::factory()->count(3)->create(['is_locked' => 0]);
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
 
         $response = $this->postJson('/api/admin/track/lock-all');
 
@@ -47,8 +41,6 @@ class LockAndUnlockTracksTest extends TestCase
     {
         $tracks = Track::factory()->count(3)->create(['is_locked' => 1]);
 
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
         $response = $this->postJson('/api/admin/track/unlock-all');
 
         $response->assertStatus(200)->assertExactJson([
@@ -74,8 +66,6 @@ class LockAndUnlockTracksTest extends TestCase
     {
         $track = Track::factory()->create(['is_locked' => 0]);
 
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
-
         $response = $this->postJson('/api/admin/track/lock/'.$track->id);
 
         $response->assertStatus(200)->assertExactJson([
@@ -98,8 +88,6 @@ class LockAndUnlockTracksTest extends TestCase
     public function test_unlock_track()
     {
         $track = Track::factory()->create(['is_locked' => 1]);
-
-        Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
 
         $response = $this->postJson('/api/admin/track/unlock/'.$track->id);
 

@@ -4,11 +4,9 @@ namespace Tests\Feature\Admin\Challenges;
 
 use App\Models\Challenge;
 use App\Models\Track;
-use App\Models\User;
-use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
+use Tests\AdminTestCase;
 
-class GetAllChallengesTest extends TestCase
+class GetAllChallengesTest extends AdminTestCase
 {
     private $endpoint = '/api/admin/challenge';
     /**
@@ -20,11 +18,6 @@ class GetAllChallengesTest extends TestCase
     {
         Track::factory()->count(4)->create();
         $challenges = Challenge::factory()->count(2)->create();
-
-        Sanctum::actingAs(
-            User::factory()->create(['role' => 'admin']),
-            ['*']
-        );
 
         $response = $this->getJson($this->endpoint);
         $response->assertStatus(200)->assertJsonStructure([
