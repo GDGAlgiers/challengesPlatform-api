@@ -61,16 +61,17 @@ class ParticipantController extends BaseController
         if(!$challenge->attachment) return response()->json([
             'success' => false,
             'message' => 'This challenge does not have an attachment'
-        ]);
-        $file = public_path()."/".$challenge->attachment;
-        $headers = ['Content-Type: application/zip, application/octet-stream'];
-        if(file_exists($file)) {
-            return response()->download($file, $challenge->name, $headers);
+        ], 404);
+
+        $headers = ['Content-Type: application/octet-stream'];
+        if(Storage::exists($challenge->attachment)) {
+            return Storage::download($challenge->attachment, $challenge->name, $headers);
         }
+        
         return response()->json([
             'success' => false,
-            'message' => 'Can not find the challenge file'
-        ]);
+            'message' => 'Can not find the challenge file, contact the admins'
+        ], 404);
     }
 
     public function get_all_submissions() {
