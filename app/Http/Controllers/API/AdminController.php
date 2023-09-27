@@ -125,7 +125,7 @@ class AdminController extends BaseController
     public function delete_track($id) {
         $response = $this->trackRepository->delete($id);
         if(!$response['success']) {return $this->sendError($response['message']);}
-        return $this->sendResponse($response['data'], $response['message']);
+        return $this->sendResponse($response['data'], $response['message'], 200);
     }
 
     public function get_stats() {

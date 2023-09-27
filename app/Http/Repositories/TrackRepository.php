@@ -116,11 +116,6 @@ Class TrackRepository {
     public function delete($id) {
         $response = [];
         $track = Track::find($id);
-        if(!$track) {
-            $response['success'] = false;
-            $response['message'] = 'Track can not be found!';
-            return $response;
-        }
         $track->delete();
         $response['success'] = true;
         $response['message'] = 'Track was succefully deleted!';
