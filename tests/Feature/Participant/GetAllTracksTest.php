@@ -32,5 +32,13 @@ class GetAllParticipantTracksTest extends ParticipantTestCase
             'message'
         ])->assertJsonPath('success', true);
 
+        foreach ($tracks as $track) {
+            $this->assertTrue(in_array([
+                'type' => $track->type,
+                'description' => $track->description,
+                'number_of_challenges' => count($track->challenges),
+                'is_locked' => $track->is_locked ? true: false
+            ], $response['data']));
+        }
     }
 }
