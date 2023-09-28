@@ -66,7 +66,7 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::get('/{id}/challenges', 'get_track_challenges')->middleware(['trackExists', 'trackNotLocked', 'hasAccessToTrack']); // TESTED
         });
 
-        Route::prefix('challenge')->middleware(['challengeExist', 'verifyAuthStep'])->group(function() {
+        Route::prefix('challenge')->middleware(['challengeExist'])->group(function() {
             Route::get('/{id}/download', 'download_attachment')->middleware(['trackNotLocked', 'challengeNotLocked']);
             Route::get('/{id}', 'get_challenge')->middleware(['trackNotLocked', 'challengeNotLocked']); // TESTED
             Route::get('/{id}/submissions', 'get_submissions'); // TESTED
