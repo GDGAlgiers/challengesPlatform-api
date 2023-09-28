@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Http\Resources\ChallengeResource;
 use App\Models\Challenge;
 use App\Models\Track;
 use Illuminate\Http\Response;
