@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Track;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Challenge>
@@ -27,7 +28,7 @@ class ChallengeFactory extends Factory
             'points' => rand(10, 500),
             'max_tries' => fake()->randomDigit(),
             'requires_judge' => false,
-            'solution' => fake()->word(),
+            'solution' => Hash::make(fake()->word()),
         ];
     }
 }

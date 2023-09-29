@@ -35,7 +35,7 @@ class ParticipantController extends BaseController
 
     public function submit_challenge(Request $request, $id) {
         $response = $this->challengeRepository->submit($request, $id);
-        if(!$response['success']) return $this->sendError($response['message']);
+        if(!$response['success']) return $this->sendError($response['message'], $response['data']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
@@ -67,7 +67,7 @@ class ParticipantController extends BaseController
         if(Storage::exists($challenge->attachment)) {
             return Storage::download($challenge->attachment, $challenge->name, $headers);
         }
-        
+
         return response()->json([
             'success' => false,
             'message' => 'Can not find the challenge file, contact the admins'
