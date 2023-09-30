@@ -27,16 +27,16 @@ Class SubmissionRepository {
         $submission = Submission::find($id);
         if($submission->track_id != auth()->user()->track_id) {
             $response['success'] = false;
-            $response['message'] = "You can not take this submission";
-
+            $response['message'] = "You can not judge this submission";
+            $response['code'] = 403;
             return $response;
         }
         $submission->judge_id = auth()->user()->id;
         $submission->status = "judging";
         $submission->save();
         $response['success'] = true;
-        $response['message'] = 'Succefully assigning submission';
-        $response['data'] = new SubmissionResource($submission);
+        $response['message'] = 'Succefully assigned the submission judgment to you';
+        $response['data'] = [];
 
         return $response;
     }
