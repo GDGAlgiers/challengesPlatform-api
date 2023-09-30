@@ -13,10 +13,10 @@ Class SubmissionRepository {
         $submissions = Submission::where('track_id', auth()->user()->track->id)->where('status', 'pending')->whereHas('challenge', function(Builder $query) {
             $query->where('requires_judge', true);
         })->orWhere(function($query) {
-            $query->where('status', 'judging')->where('judge_id', auth()->user()->id);
+            $query->where('status', 'judging')->where('judge_id', auth()->user()->id)->where('track_id', auth()->user()->track_id);
         })->get();
         $response['success'] = true;
-        $response['message'] = 'Succefully retrieved all the submissions';
+        $response['message'] = 'Succefully retrieved all the pending submissions';
         $response['data'] = SubmissionResource::collection($submissions);
 
         return $response;
