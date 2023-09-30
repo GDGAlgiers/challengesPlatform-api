@@ -21,7 +21,7 @@ class EnsureSubmissionExists
         if(!$submission) return response()->json([
             'success' => false,
             'message' => 'Submission can not be found!'
-        ]);
+        ], 404);
         return $next($request);
     }
 }

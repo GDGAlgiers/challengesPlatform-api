@@ -128,7 +128,7 @@ Class SubmissionRepository {
 
         $response['success'] = true;
         $response['message'] = 'Submission was successfully canceled!';
-        $response['data'] = new SubmissionResource($submission);
+        $response['data'] = [];
 
         return $response;
     }

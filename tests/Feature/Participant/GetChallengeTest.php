@@ -92,8 +92,7 @@ class GetChallengeTest extends ParticipantTestCase
     public function test_get_challenge_that_can_not_be_viewed_by_participant()
     {
         $track = Track::factory()->create(['is_locked' => 0]);
-        $challenge = Challenge::factory()->create();
-        $challenge->track()->associate($track);
+        $challenge = Challenge::factory()->create(['track_id' => $track->id]);
 
         $response = $this->getJson($this->endpoint.$challenge->id);
 
