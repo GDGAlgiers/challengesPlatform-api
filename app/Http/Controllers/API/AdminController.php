@@ -58,7 +58,7 @@ class AdminController extends BaseController
         if(!$response['success']) {
             return $this->sendError($response['message'], $response['data']);
         }
-        return $this->sendResponse($response['data'], $response['message']);
+        return $this->sendResponse($response['data'], $response['message'], 201);
     }
 
     public function update_challenge(Request $request, $id) {
@@ -74,6 +74,7 @@ class AdminController extends BaseController
     }
     public function unlock_challenge($id) {
         $response = $this->challengeRepository->unlockById($id);
+        if (!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
@@ -124,7 +125,7 @@ class AdminController extends BaseController
     public function delete_track($id) {
         $response = $this->trackRepository->delete($id);
         if(!$response['success']) {return $this->sendError($response['message']);}
-        return $this->sendResponse($response['data'], $response['message']);
+        return $this->sendResponse($response['data'], $response['message'], 200);
     }
 
     public function get_stats() {

@@ -21,7 +21,7 @@ class EnsureChallengeExists
         if(!$challenge) return response()->json([
             'success' => false,
             'message' => 'Challenge can not be found'
-        ]);
+        ], 400);
 
         return $next($request);
     }

@@ -15,15 +15,13 @@ class ChallengeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
             'track' => $this->track->type,
             'name' => $this->name,
             'author' => $this->author,
             'difficulty' => $this->difficulty,
             'description' => $this->description,
-            'step' => $this->step,
             'points' => $this->points,
-            'attachment' => $this->attachment,
+            'has_attachment' => $this->attachment ? true: false,
             'external_resource' => $this->external_resource,
             'max_tries' => $this->max_tries,
             'requires_judge' => $this->requires_judge ? true: false,

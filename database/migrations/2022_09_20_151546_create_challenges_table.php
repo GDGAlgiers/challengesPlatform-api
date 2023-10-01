@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('author');
             $table->string('description');
-            $table->integer('step');
             $table->enum('difficulty', ['easy', 'medium', 'hard']);
             $table->string('attachment')->nullable();
             $table->string('external_resource')->nullable();

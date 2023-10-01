@@ -21,7 +21,7 @@ class EnsureTrackNotLocked
         if($challenge->track->is_locked) return response()->json([
             'success' => false,
             'message' => 'Submissions can not be accepted now'
-        ]);
+        ], 400);
         return $next($request);
     }
 }

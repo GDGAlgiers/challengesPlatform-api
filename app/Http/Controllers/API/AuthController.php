@@ -23,11 +23,6 @@ class AuthController extends BaseController
         if($validator->fails()){
             return $this->sendError("Validation of data failed",$validator->errors());
         }
-      
-        $track = Track::where('type', 'Flutter Forward Challenges')->first();
-        if(!$track) {
-            return $this->sendError("We are not accepting registrations yet!");
-        }
 
         $usersCount = count(User::where('ip', $request->ip())->get());
         if($usersCount >=2) {
@@ -37,48 +32,51 @@ class AuthController extends BaseController
         $user = User::create([
             'full_name' => $request->full_name,
             'password' => Hash::make($request->password),
-            'step' => 1,
             'role' => 'participant',
             'points' => 0,
-            'track_id' => $track->id,
             'ip' => $request->ip()
         ]);
-        $token = $user->createToken('welcomeDay22')->plainTextToken;
-        // event(new Registered(($user)));
+        $token = $user->createToken('arizona-platform')->plainTextToken;
         $result = [
             'user' => new ParticipantResource($user),
             'token' => $token
         ];
-        Auth::login($user);
+
         return $this->sendResponse($result,'Registration was made succesfully!');
 
     }
 
     public function login(Request $request){
-        $validator = $request->validate([
-            'full_name' => 'required',
-            'password' => 'required'
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|exists:users,full_name',
+            'password' => 'required|string',
         ]);
+        if($validator->fails()){
+            return $this->sendError("Validation of data failed", $validator->errors());
+        }
+
         $user = User::where('full_name',$request->full_name)->first();
         if(!$user) {
             return $this->sendError("No user found with these credentials");
         }
-        if(Auth::attempt($validator)){
-            $token = $user->createToken('welcomeDay22')->plainTextToken;
+        if(Auth::attempt($validator->validated())){
+            $token = $user->createToken('arizona-platform')->plainTextToken;
             $result = [
                 'user' => $user->role === 'participant' ? new ParticipantResource($user) : ($user->role === 'judge' ? new JudgeResource($user) : new AdministratorResource($user)),
                 'token' => $token
             ];
-            return $this->sendResponse($result,'Login succesfull');
+            return $this->sendResponse($result,'Successfull login');
         }
         else{
-            return $this->sendError("No user found with the specified data");
+            return $this->sendError("Incorrect data", ["password" => ["No user found with the specified data"]]);
         }
     }
-public function logout(){
-        $id=auth('sanctum')->id();
+
+    public function logout(){
+        $id= auth('sanctum')->id();
         $user = User::find($id);
         $user->tokens()->delete();
-    return $this->sendResponse([],'Logged out succesfully');
-}
+
+        return $this->sendResponse([],'Logged out succesfully');
+    }
 }
