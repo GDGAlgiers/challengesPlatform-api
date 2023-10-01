@@ -21,13 +21,21 @@ class SubmissionFactory extends Factory
     {
         $track = Track::factory()->create();
         $participant = User::factory()->create(['track_id' => $track->id]);
-        $challenge = Challenge::factory()->create(['track_id' => $track->id, 'requires_judge' => true]);
+        $challenge = Challenge::factory()->create([
+            'track_id' => $track->id,
+            'requires_judge' => true,
+            'points' => 100,
+            'max_tries' => 3
+        ]);
+
+        $participant->locks()->attach($challenge->id);
 
         return [
             'challenge_id' => $challenge->id,
             'participant_id' => $participant->id,
             'track_id' => $track->id,
-            'status' => 'pending'
+            'status' => 'pending',
+            'attachment' => fake()->url()
         ];
     }
 }

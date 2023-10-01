@@ -43,7 +43,8 @@ Class SubmissionRepository {
 
     public function judgeById($request, $id) {
         $response = [];
-        // judgment is the status general of the judge(approved OR rejected)
+
+        // judgment input is the status general of the judgmentt(approved OR rejected)
         $validator = Validator::make($request->all(), [
             'judgment' => 'required'
         ]);
@@ -59,13 +60,15 @@ Class SubmissionRepository {
             $submission->status = "rejected";
             $submission->assigned_points = 0;
             $submission->save();
-            $response['success'] = true;
-            $response['message'] = 'Succefully Rejected the submission';
-            $response['data'] = [];
 
             // unlock the challenge
             $submission->participant->locks()->detach($submission->challenge_id);
             $submission->participant->save();
+
+            $response['success'] = true;
+            $response['message'] = 'Succefully Rejected the submission';
+            $response['data'] = [];
+
             return $response;
         }
         $validator = Validator::make($request->all(), [
@@ -82,20 +85,24 @@ Class SubmissionRepository {
 
         if($request->points > $submission->challenge->points) {
             $response['success'] = false;
-            $response['message'] = 'Given points are greater than the maximaum of this challenge!';
+            $response['message'] = 'The given points are greater than the maximaum points of this challenge!';
             $response['data'] =[];
             return $response;
         }
 
         $prevSubmissions = Submission::where('participant_id', $submission->participant_id)->where('challenge_id', $submission->challenge_id)->pluck('assigned_points')->toArray();
+
+        // We only update the participant's points if the current judge points is greater than all
+        // previous assigned points
         if(max($prevSubmissions) < $request->points) {
             $submission->participant->points += ($request->points - max($prevSubmissions));
-        }else {
-            $submission->participant->points += $request->points;
         }
-        $submission->participant->solves()->detach($submission->challenge_id);
-        $submission->participant->save();
-        $submission->participant->solves()->attach($submission->challenge_id);
+
+        $submission->participant->solves()->syncWithoutDetaching([$submission->challenge_id]);
+
+        // we unlock the challenge for the participant if
+        // he doesn't reach the max limit of tries
+        // AND he didn't get the full points of the challenge yet
         if((count($prevSubmissions) < $submission->challenge->max_tries)&& ($request->points < $submission->challenge->points)) {
             $submission->participant->locks()->detach($submission->challenge_id);
         }
