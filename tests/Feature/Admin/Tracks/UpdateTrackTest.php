@@ -8,7 +8,7 @@ use Tests\AdminTestCase;
 
 class UpdateTrackTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/track/update/';
+    private $endpoint = '/api/admin/track/';
 
     /**
      * A feature test for updating a track.
@@ -22,7 +22,7 @@ class UpdateTrackTest extends AdminTestCase
             'description' => $this->faker->text(30)
         ];
 
-        $response = $this->postJson($this->endpoint.$track->id, $payload);
+        $response = $this->postJson($this->endpoint.$track->id.'/update', $payload);
 
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
@@ -58,7 +58,7 @@ class UpdateTrackTest extends AdminTestCase
             'description' => $this->faker->text(30)
         ];
 
-        $response = $this->postJson($this->endpoint.$track->id, $payload);
+        $response = $this->postJson($this->endpoint.$track->id.'/update', $payload);
 
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,

@@ -66,7 +66,7 @@ class LockAndUnlockTracksTest extends AdminTestCase
     {
         $track = Track::factory()->create(['is_locked' => 0]);
 
-        $response = $this->postJson('/api/admin/track/lock/'.$track->id);
+        $response = $this->postJson('/api/admin/track/'.$track->id.'/lock');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
@@ -89,7 +89,7 @@ class LockAndUnlockTracksTest extends AdminTestCase
     {
         $track = Track::factory()->create(['is_locked' => 1]);
 
-        $response = $this->postJson('/api/admin/track/unlock/'.$track->id);
+        $response = $this->postJson('/api/admin/track/'.$track->id.'/unlock');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,

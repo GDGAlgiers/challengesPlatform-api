@@ -8,7 +8,7 @@ use Tests\AdminTestCase;
 
 class LockChallengeTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/challenge/lock/';
+    private $endpoint = '/api/admin/challenge/';
 
     /**
      * A feature test for locking a challenge.
@@ -20,7 +20,7 @@ class LockChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create();
 
-        $response = $this->postJson($this->endpoint.$challenge->id);
+        $response = $this->postJson($this->endpoint.$challenge->id.'/lock');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
@@ -44,7 +44,7 @@ class LockChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create(['is_locked' => true]);
 
-        $response = $this->postJson($this->endpoint.$challenge->id);
+        $response = $this->postJson($this->endpoint.$challenge->id.'/lock');
 
         $response->assertStatus(400)->assertExactJson([
             'success' => false,

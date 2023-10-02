@@ -8,7 +8,7 @@ use Tests\AdminTestCase;
 
 class UnlockChallengeTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/challenge/unlock/';
+    private $endpoint = '/api/admin/challenge/';
 
     /**
      * A feature test for unlocking a challenge.
@@ -20,7 +20,7 @@ class UnlockChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create(['is_locked' => true]);
 
-        $response = $this->postJson($this->endpoint.$challenge->id);
+        $response = $this->postJson($this->endpoint.$challenge->id.'/unlock');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
@@ -44,7 +44,7 @@ class UnlockChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create();
 
-        $response = $this->postJson($this->endpoint.$challenge->id);
+        $response = $this->postJson($this->endpoint.$challenge->id.'/unlock');
 
         $response->assertStatus(400)->assertExactJson([
             'success' => false,

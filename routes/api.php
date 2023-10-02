@@ -22,7 +22,7 @@ Route::middleware(['throttle:api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-    Route::get('/track/{name}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']);
+    Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']);
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
         ->controller(AdminController::class)->group(function() {
@@ -31,27 +31,27 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::get('/', 'get_all_users');
             Route::post('/create-participant', 'create_participant');
             Route::post('/create-judge', 'create_judge');
-            Route::delete('/delete/{id}', 'delete_user');
+            Route::delete('/{id}/delete', 'delete_user');
         });
 
         Route::prefix('challenge')->group(function() {
             Route::get('/', 'get_challenges');
             Route::post('/create', 'create_challenges');
-            Route::post('/lock/{id}', 'lock_challenge')->middleware(['challengeExist', 'challengeNotLocked']);
-            Route::post('/unlock/{id}', 'unlock_challenge')->middleware('challengeExist');
-            Route::post('/update/{id}', 'update_challenge')->middleware('challengeExist');
-            Route::delete('/delete/{id}', 'delete_challenge')->middleware('challengeExist');
+            Route::post('/{id}/lock', 'lock_challenge')->middleware(['challengeExist', 'challengeNotLocked']);
+            Route::post('/{id}/unlock', 'unlock_challenge')->middleware('challengeExist');
+            Route::post('/{id}/update', 'update_challenge')->middleware('challengeExist');
+            Route::delete('{id}/delete', 'delete_challenge')->middleware('challengeExist');
         });
 
         Route::prefix('track')->group(function() {
             Route::get('/', 'get_tracks');
             Route::post('/create', 'create_track');
-            Route::post('/update/{id}', 'update_track')->middleware('trackExists');
+            Route::post('/{id}/update', 'update_track')->middleware('trackExists');
             Route::post('/lock-all', 'lock_tracks');
             Route::post('/unlock-all', 'unlock_tracks');
-            Route::post('/lock/{id}', 'lock_track')->middleware('trackExists');
-            Route::post('/unlock/{id}', 'unlock_track')->middleware('trackExists');
-            Route::delete('/delete/{id}', 'delete_track')->middleware('trackExists');
+            Route::post('/{id}/lock', 'lock_track')->middleware('trackExists');
+            Route::post('/{id}/unlock', 'unlock_track')->middleware('trackExists');
+            Route::delete('/{id}/delete', 'delete_track')->middleware('trackExists');
         });
     });
 

@@ -22,7 +22,7 @@ class ChallengeExistsMiddlewareTest extends TestCase
             ['*']
         );
 
-        $response = $this->postJson('/api/admin/challenge/lock/1000');
+        $response = $this->postJson('/api/admin/challenge/1000/lock');
 
         $response->assertStatus(400)->assertExactJson([
             'success' => false,

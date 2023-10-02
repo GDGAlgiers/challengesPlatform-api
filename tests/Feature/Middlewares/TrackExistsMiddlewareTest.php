@@ -20,7 +20,7 @@ class TrackExistsMiddlewareTest extends TestCase
     {
         Sanctum::actingAs(User::factory()->create(['role' => 'admin']), ['*']);
 
-        $response = $this->postJson('/api/admin/track/update/111');
+        $response = $this->postJson('/api/admin/track/111/update');
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,

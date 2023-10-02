@@ -8,7 +8,7 @@ use Tests\AdminTestCase;
 
 class DeleteTrackTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/track/delete/';
+    private $endpoint = '/api/admin/track/';
 
     /**
      * A feature test for deleting a track that doesn't have challenges.
@@ -19,7 +19,7 @@ class DeleteTrackTest extends AdminTestCase
     {
         $track = Track::factory()->create();
 
-        $response = $this->deleteJson($this->endpoint.$track->id);
+        $response = $this->deleteJson($this->endpoint.$track->id.'/delete');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
@@ -44,7 +44,7 @@ class DeleteTrackTest extends AdminTestCase
         $challenge = Challenge::factory()->create();
         $challenge->track()->associate($track);
 
-        $response = $this->deleteJson($this->endpoint.$track->id);
+        $response = $this->deleteJson($this->endpoint.$track->id.'/delete');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
