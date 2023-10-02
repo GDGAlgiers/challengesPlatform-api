@@ -7,7 +7,6 @@ use App\Http\Resources\User\JudgeResource;
 use App\Http\Resources\User\ParticipantResource;
 use App\Models\Track;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +17,7 @@ class AuthController extends BaseController
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|unique:users,full_name',
+            'track' => 'required|string|exists:tracks,type',
             'password' => 'required|string|min:6',
         ]);
         if($validator->fails()){
@@ -29,13 +29,17 @@ class AuthController extends BaseController
             return $this->sendError("You have reached your accounts limit, contact admins in case of issues");
         }
 
+        $trackID = Track::where('type', $request->track)->pluck('id')->first();
+
         $user = User::create([
             'full_name' => $request->full_name,
+            'track_id' => $trackID,
             'password' => Hash::make($request->password),
             'role' => 'participant',
             'points' => 0,
             'ip' => $request->ip()
         ]);
+
         $token = $user->createToken('arizona-platform')->plainTextToken;
         $result = [
             'user' => new ParticipantResource($user),
