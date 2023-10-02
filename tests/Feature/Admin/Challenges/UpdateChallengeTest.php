@@ -11,7 +11,7 @@ use Tests\AdminTestCase;
 
 class UpdateChallengeTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/challenge/update/';
+    private $endpoint = '/api/admin/challenge/';
 
     /**
      * A feature test for updating challenge that doesn't have an attachment.
@@ -34,7 +34,7 @@ class UpdateChallengeTest extends AdminTestCase
             'points' => rand(10, 500),
         ];
 
-        $response = $this->postJson($this->endpoint.$challenge->id, $payload);
+        $response = $this->postJson($this->endpoint.$challenge->id.'/update', $payload);
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [
@@ -89,7 +89,7 @@ class UpdateChallengeTest extends AdminTestCase
             'points' => rand(10, 500),
         ];
 
-        $response = $this->postJson($this->endpoint.$oldChallenge->id, $payload);
+        $response = $this->postJson($this->endpoint.$oldChallenge->id.'/update', $payload);
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [
@@ -149,7 +149,7 @@ class UpdateChallengeTest extends AdminTestCase
             'attachment' => $mockAttachment
         ];
 
-        $response = $this->postJson($this->endpoint.$oldChallenge->id, $payload);
+        $response = $this->postJson($this->endpoint.$oldChallenge->id.'/update', $payload);
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [

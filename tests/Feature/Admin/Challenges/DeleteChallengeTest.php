@@ -11,7 +11,7 @@ use Tests\AdminTestCase;
 
 class DeleteChallengeTest extends AdminTestCase
 {
-    private $endpoint = '/api/admin/challenge/delete/';
+    private $endpoint = '/api/admin/challenge/';
 
     /**
      * A feature test for deleting a challenge that doesn't contain attachment.
@@ -23,7 +23,7 @@ class DeleteChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create();
 
-        $response = $this->deleteJson($this->endpoint.$challenge->id);
+        $response = $this->deleteJson($this->endpoint.$challenge->id.'/delete');
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [],
@@ -45,7 +45,7 @@ class DeleteChallengeTest extends AdminTestCase
         Track::factory()->create();
         $challenge = Challenge::factory()->create(['attachment' => $mockAttachment]);
 
-        $response = $this->deleteJson($this->endpoint.$challenge->id);
+        $response = $this->deleteJson($this->endpoint.$challenge->id.'/delete');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,

@@ -7,7 +7,7 @@ use Tests\AdminTestCase;
 
 class DeleteUserTest extends AdminTestCase
 {
-    protected $endpoint = '/api/admin/user/delete/';
+    protected $endpoint = '/api/admin/user/';
 
     /**
      * A feature test for successfull deletion of a user.
@@ -18,7 +18,7 @@ class DeleteUserTest extends AdminTestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->deleteJson($this->endpoint.$user->id);
+        $response = $this->deleteJson($this->endpoint.$user->id.'/delete');
 
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
@@ -40,7 +40,7 @@ class DeleteUserTest extends AdminTestCase
 
      public function test_delete_unexisting_user()
      {
-        $response = $this->deleteJson($this->endpoint.'2333');
+        $response = $this->deleteJson($this->endpoint.'2333'.'/delete');
 
         $response->assertStatus(400)->assertExactJson([
             'success' => false,

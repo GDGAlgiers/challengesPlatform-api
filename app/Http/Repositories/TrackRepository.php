@@ -133,9 +133,9 @@ Class TrackRepository {
         return $response;
     }
 
-    public function getLeaderboardByName($name) {
+    public function getLeaderboardByName($type) {
         $response = [];
-        $track = Track::where('type', $name)->first();
+        $track = Track::where('type', $type)->first();
         if(!$track) {
             $response['success'] = false;
             $response['message'] = 'Track can not be found!';
