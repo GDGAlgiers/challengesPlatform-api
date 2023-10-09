@@ -38,6 +38,7 @@ class UpdateChallengeTest extends AdminTestCase
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $challenge->id,
                 'track' => $payload['track'],
                 'name' => $payload['name'],
                 'author' => $payload['author'],
@@ -93,6 +94,7 @@ class UpdateChallengeTest extends AdminTestCase
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $oldChallenge->id,
                 'track' => $payload['track'],
                 'name' => $payload['name'],
                 'author' => $payload['author'],
@@ -153,6 +155,7 @@ class UpdateChallengeTest extends AdminTestCase
         $response->assertStatus(200)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $oldChallenge->id,
                 'track' => $payload['track'],
                 'name' => $payload['name'],
                 'author' => $payload['author'],

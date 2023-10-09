@@ -4,6 +4,8 @@ use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
+use App\Http\Controllers\API\GeneralController;
+use App\Models\Track;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['throttle:api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/tracks', [GeneralController::class, 'get_track_types']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']);
 
@@ -37,10 +40,10 @@ Route::middleware(['throttle:api'])->group(function() {
         Route::prefix('challenge')->group(function() {
             Route::get('/', 'get_challenges');
             Route::post('/create', 'create_challenges');
-            Route::post('/{id}/lock', 'lock_challenge')->middleware(['challengeExist', 'challengeNotLocked']);
-            Route::post('/{id}/unlock', 'unlock_challenge')->middleware('challengeExist');
-            Route::post('/{id}/update', 'update_challenge')->middleware('challengeExist');
-            Route::delete('{id}/delete', 'delete_challenge')->middleware('challengeExist');
+            Route::post('/{id}/lock', 'lock_challenge')->middleware(['challengeExists', 'challengeNotLocked']);
+            Route::post('/{id}/unlock', 'unlock_challenge')->middleware('challengeExists');
+            Route::post('/{id}/update', 'update_challenge')->middleware('challengeExists');
+            Route::delete('{id}/delete', 'delete_challenge')->middleware('challengeExists');
         });
 
         Route::prefix('track')->group(function() {
@@ -62,11 +65,11 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::get('/{id}/challenges', 'get_track_challenges')->middleware(['trackExists', 'trackNotLocked', 'hasAccessToTrack']);
         });
 
-        Route::prefix('challenge')->middleware(['challengeExist'])->group(function() {
-            Route::get('/{id}/download', 'download_attachment')->middleware(['trackNotLocked', 'challengeNotLocked']);
-            Route::get('/{id}', 'get_challenge')->middleware(['trackNotLocked', 'challengeNotLocked']);
+        Route::prefix('challenge')->middleware(['challengeExists'])->group(function() {
+            Route::get('/{id}/download', 'download_attachment')->middleware(['challengeTrackNotLocked', 'challengeNotLocked']);
+            Route::get('/{id}', 'get_challenge')->middleware(['challengeTrackNotLocked', 'challengeNotLocked']);
             Route::get('/{id}/submissions', 'get_submissions');
-            Route::post('/{id}/submit', 'submit_challenge')->middleware(['trackNotLocked', 'challengeNotLocked', 'canSubmit']);
+            Route::post('/{id}/submit', 'submit_challenge')->middleware(['challengeTrackNotLocked', 'challengeNotLocked', 'canSubmit']);
         });
         Route::prefix('submission')->group(function()  {
             Route::get('/', 'get_all_submissions');

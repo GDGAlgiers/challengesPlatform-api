@@ -104,7 +104,7 @@ class DownloadAttachmentTest extends ParticipantTestCase
         $response = $this->getJson($this->endpoint.$challenge->id.'/download');
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
-            'message' => 'Submissions can not be accepted now'
+            'message' => 'The track is locked for now'
         ]);
     }
 }

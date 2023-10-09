@@ -15,6 +15,7 @@ class ChallengeResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'track' => $this->track->type,
             'name' => $this->name,
             'author' => $this->author,

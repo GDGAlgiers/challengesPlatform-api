@@ -24,7 +24,7 @@ class CreateTrackTest extends AdminTestCase
 
         $response = $this->postJson($this->endpoint, $payload);
 
-        $response->assertStatus(Response::HTTP_OK)->assertExactJson([
+        $response->assertStatus(Response::HTTP_OK)->assertJson([
             'success' => true,
             'data' => [
                 'type' => $payload['type'],

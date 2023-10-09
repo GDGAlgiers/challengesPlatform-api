@@ -15,6 +15,7 @@ class JudgeResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'full_name' => $this->full_name,
             'role' => 'judge',
             'track' => $this->track->type

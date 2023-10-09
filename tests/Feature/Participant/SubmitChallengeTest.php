@@ -83,6 +83,29 @@ class SubmitChallengeTest extends ParticipantTestCase
     }
 
     /**
+     * A feature test for submitting a submission that does not require judgment with wrong answer.
+     *
+     * @return void
+     */
+    public function test_submit_challenge_that_does_not_require_judgment_with_wrong_answer()
+    {
+        $this->participant->track->is_locked = false;
+        $this->participant->track->save();
+
+        $challenge = Challenge::factory()->create(['max_tries' => 2, 'solution' => Hash::make('easyOne')]);
+        $challenge->track()->associate($this->participant->track);
+        $payload = [
+            'answer' => 'random'
+        ];
+
+        $response = $this->postJson($this->endpoint.$challenge->id.'/submit', $payload);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
+            'success' => false,
+            'message' => "That's wrong, think more",
+        ]);
+    }
+
+    /**
      * A feature test for submitting a submission of a challenge that its track is locked.
      *
      * @return void
@@ -126,7 +149,7 @@ class SubmitChallengeTest extends ParticipantTestCase
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
-            'message' => 'Submissions can not be accepted now'
+            'message' => 'The track is locked for now'
         ]);
 
         $this->assertDatabaseEmpty('submissions');

@@ -33,7 +33,7 @@ class CreateChallengeTest extends AdminTestCase
 
         $response = $this->postJson($this->endpoint, $payload);
 
-        $response->assertStatus(Response::HTTP_CREATED)->assertExactJson([
+        $response->assertStatus(Response::HTTP_CREATED)->assertJson([
             'success' => true,
             'data' => [
                 'track' => $payload['track'],
@@ -141,7 +141,7 @@ class CreateChallengeTest extends AdminTestCase
 
         $response = $this->postJson($this->endpoint, $payload);
 
-        $response->assertStatus(Response::HTTP_CREATED)->assertExactJson([
+        $response->assertStatus(Response::HTTP_CREATED)->assertJson([
             'success' => true,
             'data' => [
                 'track' => $payload['track'],

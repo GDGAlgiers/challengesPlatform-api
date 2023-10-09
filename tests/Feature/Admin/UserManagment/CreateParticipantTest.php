@@ -26,7 +26,7 @@ class CreateParticipantTest extends AdminTestCase
 
         $response = $this->postJson($this->endpoint, $payload);
 
-        $response->assertStatus(200)->assertExactJson([
+        $response->assertStatus(200)->assertJson([
             'success' => true,
             'data' => [
                 'full_name' => $payload["full_name"],

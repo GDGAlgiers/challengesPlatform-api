@@ -23,6 +23,7 @@ class GetAllParticipantTracksTest extends ParticipantTestCase
             'success',
             'data' => [
                 '*' => [
+                    'id',
                     'type',
                     'description',
                     'number_of_challenges',
@@ -34,6 +35,7 @@ class GetAllParticipantTracksTest extends ParticipantTestCase
 
         foreach ($tracks as $track) {
             $this->assertTrue(in_array([
+                'id' => $track->id,
                 'type' => $track->type,
                 'description' => $track->description,
                 'number_of_challenges' => count($track->challenges),

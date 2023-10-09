@@ -58,6 +58,7 @@ class GetChallengeSubmissionsTest extends ParticipantTestCase
             'success',
             'data' => [
                 '*' => [
+                    'id',
                     'track',
                     'challenge',
                     'included_attachment',
@@ -76,6 +77,7 @@ class GetChallengeSubmissionsTest extends ParticipantTestCase
         $this->assertEquals(1, count($response['data']));
         $this->assertEquals($this->participant->track->type, $returnedData['track']);
         $this->assertEquals([
+            'id' => $challenge->id,
             'track' => $this->participant->track->type,
             'name' => $challenge->name,
             'author' => $challenge->author,

@@ -3,11 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\Challenge;
-use App\Models\Track;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureTrackNotLocked
+class EnsureChallengeTrackNotLocked
 {
     /**
      * Handle an incoming request.
@@ -18,11 +17,12 @@ class EnsureTrackNotLocked
      */
     public function handle(Request $request, Closure $next)
     {
-        $track = Track::find($request->route('id'));
-        if($track->is_locked) return response()->json([
+        $challenge = Challenge::find($request->route('id'));
+        if($challenge->track->is_locked) return response()->json([
             'success' => false,
             'message' => 'The track is locked for now'
         ], 400);
+
         return $next($request);
     }
 }

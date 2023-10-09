@@ -150,4 +150,15 @@ Class TrackRepository {
         return $response;
     }
 
+    public function getTrackTypes() {
+        $response = [];
+
+        $tracksTypes = Track::all()->pluck('type');
+        $response["success"] = true;
+        $response["message"] = "Successfully retrieved all tracks types";
+        $response["data"] = $tracksTypes;
+
+        return $response;
+    }
+
 }

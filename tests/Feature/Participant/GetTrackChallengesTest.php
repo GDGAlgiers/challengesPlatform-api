@@ -47,6 +47,7 @@ class GetTrackChallengesTest extends ParticipantTestCase
         $this->assertEquals(2, count($response['data']));
         foreach($challenges as $challenge) {
             $this->assertTrue(in_array([
+                'id' => $challenge->id,
                 'track' => $this->participant->track->type,
                 'name' => $challenge->name,
                 'author' => $challenge->author,
@@ -74,7 +75,7 @@ class GetTrackChallengesTest extends ParticipantTestCase
         $response = $this->getJson($this->endpoint.$this->participant->track->id.'/challenges');
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
-            'message' => 'Submissions can not be accepted now'
+            'message' => 'The track is locked for now'
         ]);
     }
 

@@ -27,6 +27,7 @@ class UpdateTrackTest extends AdminTestCase
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $track->id,
                 'type' => $track->type,
                 'description' => $payload['description'],
                 'number_of_challenges' => count($track->challenges),
@@ -63,6 +64,7 @@ class UpdateTrackTest extends AdminTestCase
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $track->id,
                 'type' => $track->type,
                 'description' => $payload['description'],
                 'number_of_challenges' => count($track->challenges),

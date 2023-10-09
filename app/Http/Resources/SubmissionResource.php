@@ -15,6 +15,7 @@ class SubmissionResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'track' => $this->track->type,
             'challenge' => new ChallengeResource($this->challenge),
             'included_attachment' => $this->attachment ? true: false,

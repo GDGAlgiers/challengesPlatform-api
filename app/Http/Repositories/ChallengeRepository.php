@@ -201,6 +201,7 @@ Class ChallengeRepository {
                 $this->addSubmission($id, $challenge->track->id, 'rejected', NULL, 0);
                 $response['success'] = false;
                 $response['message'] = "That's wrong, think more";
+                $response['data'] = [];
                 return $response;
             }
         }else {

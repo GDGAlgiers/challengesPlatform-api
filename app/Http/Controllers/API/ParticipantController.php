@@ -28,8 +28,8 @@ class ParticipantController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
-    public function get_track_challenges($id) {
-        $response = $this->trackRepository->get_track_challenges($id);
+    public function get_track_challenges($type) {
+        $response = $this->trackRepository->get_track_challenges($type);
         return $this->sendResponse($response['data'], $response['message']);
     }
 

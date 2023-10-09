@@ -24,6 +24,7 @@ class GetAllChallengesTest extends AdminTestCase
             'success',
             'data' => [
                 '*' => [
+                    'id',
                     'track',
                     'name',
                     'author',

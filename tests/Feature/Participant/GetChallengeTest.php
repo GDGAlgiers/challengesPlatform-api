@@ -29,6 +29,7 @@ class GetChallengeTest extends ParticipantTestCase
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
+                'id' => $challenge->id,
                 'track' => $this->participant->track->type,
                 'name' => $challenge->name,
                 'author' => $challenge->author,
@@ -80,7 +81,7 @@ class GetChallengeTest extends ParticipantTestCase
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
-            'message' => 'Submissions can not be accepted now'
+            'message' => 'The track is locked for now'
         ]);
     }
 
