@@ -15,7 +15,6 @@ class Challenge extends Model
          'author',
          'difficulty',
          'description',
-         'step',
          'points',
          'attachment',
          'external_resource',

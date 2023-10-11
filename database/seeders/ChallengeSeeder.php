@@ -15,21 +15,7 @@ class ChallengeSeeder extends Seeder
      */
     public function run()
     {
-        $track= Track::where('type', 'Flutter Forward Challenges')->first()->pluck('id');
-
-
-        for($i=0; $i<= 12; $i++) {
-            Challenge::create([
-                'track_id' => $track,
-                'name' => 'challenge'.$i,
-                'difficulty' => 'easy',
-                'description' => 'description'.$i,
-                'external_resource' => '',
-                'points' => 250,
-                'max_tries' => 2,
-                'requires_judge' => true,
-            ]);
-        }
+        Challenge::factory()->count(6)->create();
 
     }
 }

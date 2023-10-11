@@ -15,10 +15,6 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
-            Track::create([
-                'type' => 'Flutter Forward Challenges',
-                'is_locked' => true,
-                'description' => 'Flutter Forward Challenges description',
-            ]);
+        Track::factory()->count(4)->create();
     }
 }

@@ -21,8 +21,8 @@ class EnsureSubmissionBelongsToAuth
         if($submission->participant_id !== auth()->user()->id) {
             return response()->json([
                 'success' => false,
-                'message' => 'Not valid submissions!'
-            ]);
+                'message' => 'Unauthorized'
+            ], 403);
         }
         return $next($request);
     }

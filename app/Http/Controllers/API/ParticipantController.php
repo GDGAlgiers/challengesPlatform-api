@@ -28,16 +28,14 @@ class ParticipantController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
-    public function get_track_challenges($id) {
-        $response = $this->trackRepository->get_track_challenges($id);
-        if(!$response['success']) return $this->sendError($response['message']);
-
+    public function get_track_challenges($type) {
+        $response = $this->trackRepository->get_track_challenges($type);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
     public function submit_challenge(Request $request, $id) {
         $response = $this->challengeRepository->submit($request, $id);
-        if(!$response['success']) return $this->sendError($response['message']);
+        if(!$response['success']) return $this->sendError($response['message'], $response['data']);
         return $this->sendResponse($response['data'], $response['message']);
     }
 
@@ -46,8 +44,8 @@ class ParticipantController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
-    public function leaderboard($name) {
-        $response = $this->trackRepository->getLeaderboardByName($name);
+    public function leaderboard($type) {
+        $response = $this->trackRepository->getLeaderboardByName($type);
         if(!$response['success']) return $this->sendError($response['message']);
         return $this->sendResponse($response['data'], $response['message']);
     }
@@ -63,16 +61,17 @@ class ParticipantController extends BaseController
         if(!$challenge->attachment) return response()->json([
             'success' => false,
             'message' => 'This challenge does not have an attachment'
-        ]);
-        $file = public_path()."/".$challenge->attachment;
-        $headers = ['Content-Type: application/zip, application/octet-stream'];
-        if(file_exists($file)) {
-            return response()->download($file, $challenge->name, $headers);
+        ], 404);
+
+        $headers = ['Content-Type: application/octet-stream'];
+        if(Storage::exists($challenge->attachment)) {
+            return Storage::download($challenge->attachment, $challenge->name, $headers);
         }
+
         return response()->json([
             'success' => false,
-            'message' => 'Can not find the challenge file'
-        ]);
+            'message' => 'Can not find the challenge file, contact the admins'
+        ], 404);
     }
 
     public function get_all_submissions() {

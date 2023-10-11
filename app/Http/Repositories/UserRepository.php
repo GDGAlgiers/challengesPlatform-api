@@ -60,7 +60,7 @@ Class UserRepository {
         ]);
         if($validator->fails()) {
             $response['success'] = false;
-            $response['message'] = 'Validation errors!';
+            $response['message'] = 'Validation failed!';
             $response['data'] = $validator->errors();
             return $response;
         }

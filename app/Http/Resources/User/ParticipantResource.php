@@ -22,7 +22,6 @@ class ParticipantResource extends JsonResource
             'role' => 'participant',
             'email_verified' => $this->email_verified_at ? true: false,
             'track' => $this->track?->type,
-            'is_member' => $this->is_member ? true: false,
             'submissions' => SubmissionResource::collection($this->submissions),
         ];
     }

@@ -20,8 +20,8 @@ class EnsureSubmissionHasStatus
         $submission = Submission::find($request->route('id'));
         if(!$submission->hasStatus($status)) return response()->json([
             'success' => false,
-            'message' => 'This Submssion either got approved, rejected, or already under judgement'
-        ]);
+            'message' => 'This action can be made for submissions that have status '.$status
+        ], 403);
         return $next($request);
     }
 }

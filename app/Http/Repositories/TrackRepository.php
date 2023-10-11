@@ -13,7 +13,7 @@ Class TrackRepository {
         $response = [];
         $tracks = Track::all();
         $response['success'] = true;
-        $response['message'] = 'Tracks were succefully restored';
+        $response['message'] = 'Tracks were succefully retreived';
         $response['data'] = TrackResource::collection($tracks);
         return $response;
     }
@@ -116,11 +116,6 @@ Class TrackRepository {
     public function delete($id) {
         $response = [];
         $track = Track::find($id);
-        if(!$track) {
-            $response['success'] = false;
-            $response['message'] = 'Track can not be found!';
-            return $response;
-        }
         $track->delete();
         $response['success'] = true;
         $response['message'] = 'Track was succefully deleted!';
@@ -131,27 +126,16 @@ Class TrackRepository {
     public function get_track_challenges($id) {
         $response = [];
         $track = Track::find($id);
-        if($track->is_locked) {
-            $response['success'] = false;
-            $response['message'] = "The track is locked for now!";
 
-            return $response;
-        }
-        if($track->id != auth()->user()->track_id) {
-            $response['success'] = false;
-            $response['message'] = 'You can not get access to this challenge!';
-            return $response;
-        }
-        $challenges = $track->challenges()->where('track_id', auth()->user()->track_id)->get();
         $response['success'] = true;
         $response['message'] = 'Challenges were succefully retrieved!';
-        $response['data'] = ChallengeResource::collection($challenges);
+        $response['data'] = ChallengeResource::collection($track->challenges);
         return $response;
     }
 
-    public function getLeaderboardByName($name) {
+    public function getLeaderboardByName($type) {
         $response = [];
-        $track = Track::where('type', $name)->first();
+        $track = Track::where('type', $type)->first();
         if(!$track) {
             $response['success'] = false;
             $response['message'] = 'Track can not be found!';
@@ -162,6 +146,17 @@ Class TrackRepository {
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved the leaderboard';
         $response['data'] = ParticipantResource::collection($participants);
+
+        return $response;
+    }
+
+    public function getTrackTypes() {
+        $response = [];
+
+        $tracksTypes = Track::all()->pluck('type');
+        $response["success"] = true;
+        $response["message"] = "Successfully retrieved all tracks types";
+        $response["data"] = $tracksTypes;
 
         return $response;
     }

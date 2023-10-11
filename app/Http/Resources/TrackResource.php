@@ -19,7 +19,7 @@ class TrackResource extends JsonResource
             'type' => $this->type,
             'description' => $this->description,
             'number_of_challenges' => count($this->challenges),
-            'is_locked' => $this->is_locked
+            'is_locked' => $this->is_locked ? true: false
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Submission;
 use App\Models\Track;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -32,11 +33,11 @@ Class ChallengeRepository {
             'author' => 'required|string',
             'difficulty' => 'required',
             'description' => 'required',
-            'step' => 'required',
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
-            'attachment' => 'nullable|mimes:zip,pdf,txt|max:2024'
+            'attachment' => 'nullable|mimes:zip,pdf,txt|max:2024',
+            'solution' => 'nullable|string'
         ]);
         if($validator->fails()) {
             $response['success'] = false;
@@ -44,8 +45,6 @@ Class ChallengeRepository {
             $response['data'] = $validator->errors();
             return $response;
         }
-
-
 
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $challenge = Challenge::create([
@@ -63,8 +62,7 @@ Class ChallengeRepository {
             'is_locked' => false
         ]);
         if($request->hasFile('attachment')) {
-            $name = $request->file('attachment')->getClientOriginalName();
-            $path = $request->file('attachment')->move('challenges/attachments', $name);
+            $path = $request->file('attachment')->store("challenges_attachments");
             $challenge->attachment = $path;
             $challenge->save();
         }
@@ -119,9 +117,8 @@ Class ChallengeRepository {
         if($request->external_resource) $challenge->external_resource = $request->external_resource;
 
         if($request->hasFile('attachment')) {
-            if($challenge->attachment) unlink(public_path()."/".$challenge->attachment);
-            $name = $request->file('attachment')->getClientOriginalName();
-            $path = $request->file('attachment')->move('challenges/attachments', $name);
+            if($challenge->attachment) Storage::delete($challenge->attachment);
+            $path = $request->file('attachment')->store('challenges_attachments');
             $challenge->attachment = $path;
         }
 
@@ -136,13 +133,10 @@ Class ChallengeRepository {
     public function delete($id) {
         $response = [];
         $challenge = Challenge::find($id);
-        if(!$challenge) {
-            $response['success'] = false;
-            $response['message'] = 'No challenge found!';
-            return $response;
-        }
-        if($challenge->attachment) unlink(public_path()."/".$challenge->attachment);
+
+        if($challenge->attachment) Storage::delete($challenge->attachment);
         $challenge->delete();
+
         $response['success'] = true;
         $response['message'] = 'The challenge was succefully deleted!';
         $response['data'] = [];
@@ -153,14 +147,12 @@ Class ChallengeRepository {
     public function lockById($id) {
         $response = [];
         $challenge = Challenge::find($id);
-        if($challenge->is_locked) {
-            $response['success'] = false;
-            $response['message'] = 'Challenge is already locked!';
-            return $response;
-        }
+
+        // We lock directly because the challenge should be not locked
+        // as this request already passed the middleware `challengeNotLocked`
         $challenge->is_locked = true;
         $challenge->save();
-        $response['success'] = false;
+        $response['success'] = true;
         $response['message'] = 'Challenge Succefully locked!';
         $response['data'] = [];
 
@@ -176,7 +168,7 @@ Class ChallengeRepository {
         }
         $challenge->is_locked = false;
         $challenge->save();
-        $response['success'] = false;
+        $response['success'] = true;
         $response['message'] = 'Challenge Succefully unlocked!';
         $response['data'] = [];
 
@@ -192,56 +184,44 @@ Class ChallengeRepository {
             ]);
             if($validator->fails()) {
                 $response['success'] = false;
-                $response['message'] = 'Validation failed, inputs missed';
+                $response['message'] = 'Validation failed';
                 $response['data'] = $validator->errors();
                 return $response;
             }
 
             if(Hash::check($request->answer, $challenge->solution)) {
-                $this->addSubmission($id, $challenge->track->id, 'Approved', NULL, $challenge->points);
+                $this->addSubmission($id, $challenge->track->id, 'approved', NULL, $challenge->points);
                 $this->challengeSolved($user, $challenge);
                 $response['success'] = true;
-                if(auth()->user()->step > $challenge->track->challenges()->count()) {
-                    $numOfWinners = User::where('is_member', false)->where('step', '>', count(Challenge::all()))->count();
-                    if($numOfWinners <= 3 && !auth()->user()->is_member) {
-                        $goldenTicket = 'GDGAlgiers'.Str::random(6).'WelcomeDay22';
-                        auth()->user()->golden_ticket = $goldenTicket;
-                        auth()->user()->save();
-                        $response['message'] = "Congrats! you've won the challenge!";
-                        $response['data'] = $goldenTicket;
-                    }else {
-                        $response['message'] = "Congrats! you've won the challenge! but there are others who came first :)";
-                        $response['data'] = [];
-                    }
-                }else {
-                    $response['message'] = "That's right! you've succefully solved this challenge";
-                    $response['data'] = [];
-                }
+                $response['message'] = "That's right! you've succefully solved this challenge";
+                $response['data'] = [];
+
                 return $response;
             }else {
-                $this->addSubmission($id, $challenge->track->id, 'Rejected', NULL, 0);
+                $this->addSubmission($id, $challenge->track->id, 'rejected', NULL, 0);
                 $response['success'] = false;
                 $response['message'] = "That's wrong, think more";
+                $response['data'] = [];
                 return $response;
             }
         }else {
             $validator = Validator::make($request->all(), [
-                'attachment' => 'required'
+                'attachment' => 'required|string'
             ]);
             if($validator->fails()) {
                 $response['success'] = false;
-                $response['message'] = 'Validation failed, inputes missed';
+                $response['message'] = 'Validation failed';
                 $response['data'] = $validator->errors();
                 return $response;
             }
 
-            //locking the challenge's submission until the judge reviewes it
+            // locking the challenge's submission until the judge reviewes it
             $user->locks()->attach($id);
             $user->save();
-            $this->addSubmission($id, $challenge->track->id, 'Pending', $request->attachment);
+            $this->addSubmission($id, $challenge->track->id, 'pending', $request->attachment);
 
             $response['success'] = true;
-            $response['message'] = 'The submission was succefully done, and it is under judgment';
+            $response['message'] = 'The submission was succefully done, it is under judgment...';
             $response['data'] = [];
             return $response;
         }
@@ -258,7 +238,7 @@ Class ChallengeRepository {
 
     }
 
-    private function addSubmission($challengeID,$trackID,  $status, $attachment = NULL, $points = NULL) {
+    private function addSubmission($challengeID, $trackID, $status, $attachment = NULL, $points = NULL) {
         Submission::create([
             'participant_id' => auth()->user()->id,
             'challenge_id' => $challengeID,
@@ -271,7 +251,6 @@ Class ChallengeRepository {
 
     private function challengeSolved($participant, $challenge) {
         $participant->points += $challenge->points;
-        $participant->step +=1;
         $participant->solves()->attach($challenge->id);
         $participant->locks()->attach($challenge->id);
         $participant->save();
