@@ -4,24 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class VerifyEmailController extends Controller
 {
 
-    public function __invoke(Request $request)
+    public function sendVerificationEmail(Request $request)
     {
-        $user = User::find($request->route('id'));
-
-        if ($user->hasVerifiedEmail()) {
-            return redirect(env('FRONT_URL'));
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'email already verified'
+            ], 400);
         }
 
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'email verification link has been sent'
+        ]);
+    }
+
+    public function verify(EmailVerificationRequest $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'email already verified'
+            ], 400);
         }
 
-        return redirect(env('FRONT_URL'));
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'email has been verified'
+        ]);
     }
 }
