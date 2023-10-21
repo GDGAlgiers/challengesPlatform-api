@@ -62,7 +62,7 @@ Route::middleware(['throttle:api'])->group(function() {
         });
     });
 
-    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
+    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant', 'verified'])
         ->controller(ParticipantController::class)->group(function() {
         Route::prefix('track')->group(function () {
             Route::get('/', 'get_tracks');

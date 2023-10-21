@@ -17,6 +17,7 @@ class JudgeResource extends JsonResource
         return [
             'id' => $this->id,
             'full_name' => $this->full_name,
+            'email' => $this->email,
             'role' => 'judge',
             'track' => $this->track->type
         ];
