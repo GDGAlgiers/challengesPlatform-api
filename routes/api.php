@@ -5,7 +5,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\JudgeController;
 use App\Http\Controllers\API\ParticipantController;
 use App\Http\Controllers\API\GeneralController;
-use App\Models\Track;
+use App\Http\Controllers\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,12 +20,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendVerificationEmail'])->middleware('auth:sanctum');
+Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, 'verify'])->name('verification.verify')->middleware('auth:sanctum');
+
+
 Route::middleware(['throttle:api'])->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/tracks', [GeneralController::class, 'get_track_types']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-    Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum']);
+    Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum', 'verified']);
 
     Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
         ->controller(AdminController::class)->group(function() {
@@ -58,7 +62,7 @@ Route::middleware(['throttle:api'])->group(function() {
         });
     });
 
-    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant'])
+    Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant', 'verified'])
         ->controller(ParticipantController::class)->group(function() {
         Route::prefix('track')->group(function () {
             Route::get('/', 'get_tracks');

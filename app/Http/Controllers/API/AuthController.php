@@ -11,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends BaseController
 {
     public function register(Request $request){
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|unique:users,full_name',
+            'email' => 'required|email|unique:users,email',
             'track' => 'required|string|exists:tracks,type',
             'password' => 'required|string|min:6',
         ]);
@@ -33,6 +35,7 @@ class AuthController extends BaseController
 
         $user = User::create([
             'full_name' => $request->full_name,
+            'email' => $request->email,
             'track_id' => $trackID,
             'password' => Hash::make($request->password),
             'role' => 'participant',
@@ -40,6 +43,7 @@ class AuthController extends BaseController
             'ip' => $request->ip()
         ]);
 
+        event(new Registered($user));
         $token = $user->createToken('arizona-platform')->plainTextToken;
         $result = [
             'user' => new ParticipantResource($user),
