@@ -20,6 +20,7 @@ class CreateParticipantTest extends AdminTestCase
         $track = Track::factory()->create();
         $payload = [
             'full_name' => $this->faker->name(),
+            'email' => $this->faker->email(),
             'password' => $this->faker->password(),
             'track' => $track->type
         ];
@@ -30,6 +31,7 @@ class CreateParticipantTest extends AdminTestCase
             'success' => true,
             'data' => [
                 'full_name' => $payload["full_name"],
+                'email' => $payload["email"],
                 'points' => 0,
                 'role' => 'participant',
                 'email_verified' => false,
@@ -63,7 +65,8 @@ class CreateParticipantTest extends AdminTestCase
             'data' => [
                 'full_name' => ['The full name field is required.'],
                 'password' => ['The password field is required.'],
-                'track' => ['The track field is required.']
+                'track' => ['The track field is required.'],
+                'email' => ['The email field is required.']
             ]
         ]);
 
@@ -79,6 +82,7 @@ class CreateParticipantTest extends AdminTestCase
     {
         $payload = [
             'full_name' => $this->faker->name(),
+            'email' => $this->faker->email(),
             'password' => $this->faker->password(),
             'track' => $this->faker->text(6)
         ];
@@ -97,16 +101,17 @@ class CreateParticipantTest extends AdminTestCase
     }
 
     /**
-     * A feature test for unsuccess creation of a participant because of existing participant.
+     * A feature test for unsuccess creation of a participant because of existing participant name.
      *
      * @return void
      */
-    public function test_unsuccess_creation_because_of_existing_participant()
+    public function test_unsuccess_creation_because_of_existing_participant_name()
     {
         $user = User::factory()->create();
         $track = Track::factory()->create();
         $payload = [
             'full_name' => $user->full_name,
+            'email' => $this->faker->email(),
             'password' => $this->faker->password(),
             'track' => $track->type
         ];
@@ -118,6 +123,35 @@ class CreateParticipantTest extends AdminTestCase
             'message' => 'Validation failed!',
             'data' => [
                 'full_name' => ['The full name has already been taken.']
+            ]
+        ]);
+
+        $this->assertDatabaseCount('users', 2);
+    }
+
+    /**
+     * A feature test for unsuccess creation of a participant because of existing participant email.
+     *
+     * @return void
+     */
+    public function test_unsuccess_creation_because_of_existing_participant_email()
+    {
+        $user = User::factory()->create();
+        $track = Track::factory()->create();
+        $payload = [
+            'full_name' => $this->faker->name(),
+            'email' => $user->email,
+            'password' => $this->faker->password(),
+            'track' => $track->type
+        ];
+
+        $response = $this->postJson($this->endpoint, $payload);
+
+        $response->assertStatus(400)->assertExactJson([
+            'success' => false,
+            'message' => 'Validation failed!',
+            'data' => [
+                'email' => ['The email has already been taken.']
             ]
         ]);
 

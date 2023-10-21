@@ -8,9 +8,6 @@ use App\Models\Track;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ParticipantAccountCreated;
-use App\Mail\JudgeAccountCreated;
 
 Class UserRepository {
 
@@ -26,6 +23,7 @@ Class UserRepository {
         $response = [];
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|unique:users,full_name',
+            'email' => 'required|unique:users,email',
             'password' => 'required|min:6',
             'track' => 'required|exists:tracks,type'
         ]);
@@ -39,6 +37,7 @@ Class UserRepository {
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $user = User::create([
             'full_name' => $request->full_name,
+            'email' => $request->email,
             'track_id' => $trackID,
             'password' => Hash::make($request->password),
             'role' => 'participant',
@@ -55,6 +54,7 @@ Class UserRepository {
         $response = [];
         $validator = Validator::make($request->all(), [
             'full_name' => 'required|string|unique:users,full_name',
+            'email' => 'required|unique:users,email',
             'password' => 'required|string|min:6',
             'track' => 'required|exists:tracks,type'
         ]);
@@ -67,6 +67,7 @@ Class UserRepository {
         $trackID = Track::where('type', $request->track)->pluck('id')->first();
         $user = User::create([
             'full_name' => $request->full_name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'judge',
             'track_id' => $trackID

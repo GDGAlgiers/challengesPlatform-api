@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\EmailVerificationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +12,10 @@ use App\Http\Controllers\API\EmailVerificationController;
 |
 */
 
-// Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+
+
 
