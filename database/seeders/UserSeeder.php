@@ -20,16 +20,16 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $track = Track::where('type', 'Flutter Forward Challenges')->first()->pluck('id');
-        for($i=1; $i<=15; $i++) {
-            User::create([
-                'full_name' => 'username'.$i,
-                'password' => Hash::make('123456789'),
-                'points' => 0,
-                'role' => 'participant',
-                'ip' => '127.0.0.1',
-                'track_id' => $track
-            ]);
-        }
+        // $track = Track::where('type', 'Flutter Forward Challenges')->first()->pluck('id');
+        // for($i=1; $i<=15; $i++) {
+        //     User::create([
+        //         'full_name' => 'username'.$i,
+        //         'password' => Hash::make('123456789'),
+        //         'points' => 0,
+        //         'role' => 'participant',
+        //         'ip' => '127.0.0.1',
+        //         'track_id' => $track
+        //     ]);
+        // }
     }
 }

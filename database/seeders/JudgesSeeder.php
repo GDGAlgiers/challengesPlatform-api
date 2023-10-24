@@ -20,20 +20,20 @@ class JudgesSeeder extends Seeder
      */
     public function run()
     {
-        $file = public_path("../database/seeders/judges.csv");
-        $records = CSVReader::import_CSV($file);
-        foreach($records as $record) {
-            $randomPassword = 'devfest22'.Str::random(5).'@algiers'.Str::random(12). 'challenges';
-            $trackID = Track::where('type', $record['track'])->pluck('id')->first();
-            $user = User::create([
-                'full_name' => $record['fullName'],
-                'email' => $record['email'],
-                'password' => Hash::make($randomPassword),
-                'role' => 'judge',
-                'track_id' => $trackID,
+        // $file = public_path("../database/seeders/judges.csv");
+        // $records = CSVReader::import_CSV($file);
+        // foreach($records as $record) {
+        //     $randomPassword = 'devfest22'.Str::random(5).'@algiers'.Str::random(12). 'challenges';
+        //     $trackID = Track::where('type', $record['track'])->pluck('id')->first();
+        //     $user = User::create([
+        //         'full_name' => $record['fullName'],
+        //         'email' => $record['email'],
+        //         'password' => Hash::make($randomPassword),
+        //         'role' => 'judge',
+        //         'track_id' => $trackID,
 
-            ]);
-            Mail::to($record['email'])->send(new JudgeAccountCreated($user->email, $randomPassword));
-        }
+        //     ]);
+        //     Mail::to($record['email'])->send(new JudgeAccountCreated($user->email, $randomPassword));
+        // }
     }
 }

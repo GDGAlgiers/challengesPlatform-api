@@ -18,20 +18,20 @@ class SubmissionSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::where('role', 'participant')->get();
-        foreach($users as $user) {
-            $challenges = $user->track->challenges()->where('requires_judge', true)->get()->toArray();
-            if(count($challenges) > 0) {
-                $randomChallenge = $challenges[rand(0, count($challenges)-1)];
-                $track = Track::find($randomChallenge['track_id']);
-                Submission::create([
-                    'challenge_id' => $randomChallenge['id'],
-                    'participant_id' => $user->id,
-                    'track_id' => $track->id,
-                    'attachment' => 'random attachment',
-                    'status' => 'pending'
-                ]);
-            }
-        }
+        // $users = User::where('role', 'participant')->get();
+        // foreach($users as $user) {
+        //     $challenges = $user->track->challenges()->where('requires_judge', true)->get()->toArray();
+        //     if(count($challenges) > 0) {
+        //         $randomChallenge = $challenges[rand(0, count($challenges)-1)];
+        //         $track = Track::find($randomChallenge['track_id']);
+        //         Submission::create([
+        //             'challenge_id' => $randomChallenge['id'],
+        //             'participant_id' => $user->id,
+        //             'track_id' => $track->id,
+        //             'attachment' => 'random attachment',
+        //             'status' => 'pending'
+        //         ]);
+        //     }
+        // }
     }
 }
