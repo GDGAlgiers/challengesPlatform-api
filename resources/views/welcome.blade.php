@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-        <title>Devfest22 challenges infra API</title>
+        <title>Devfest23 challenges infra API</title>
         <style>
             body {
                 height:100vh;
@@ -30,8 +30,8 @@
     </head>
     <body>
         <div>
-            <p>Flutter Forward Extended 2022 Challenges infra API</p>
-            <a href="https://ffe2023-challenges.gdgalgiers.com">Go to challenges</a>
+            <p>GDG Algiers Devfest23 Challenges infra API</p>
+            <a href="https://devfest23-challenges.gdgalgiers.com">Go to challenges</a>
         </div>
     </body>
 </html>
