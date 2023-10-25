@@ -16,10 +16,9 @@ class ApiDomainRestriction
      */
     public function handle(Request $request, Closure $next)
     {
-        $allowedOrigins = ['https://flutter-forward-extended-2023-challenges.gdgalgiers.com'];
+        $allowedOrigins = [env('FRONT_URL')];
         $requestOrigin = $request->headers->get('Origin');
-        $allowedIps = ['105.106.171.160'];
-        if(!in_array($requestOrigin, $allowedOrigins, false) && !in_array($request->ip(), $allowedIps))
+        if(!in_array($requestOrigin, $allowedOrigins, false))
         {
             return response('Unauthorized', 401);
         }
