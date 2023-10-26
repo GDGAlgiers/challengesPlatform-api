@@ -2,6 +2,7 @@
 namespace App\Http\Repositories;
 
 use App\Http\Resources\SubmissionResource;
+use App\Http\Resources\SubmissionResourceForJudge;
 use App\Models\Submission;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ Class SubmissionRepository {
         })->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved all the pending submissions';
-        $response['data'] = SubmissionResource::collection($submissions);
+        $response['data'] = SubmissionResourceForJudge::collection($submissions);
 
         return $response;
     }

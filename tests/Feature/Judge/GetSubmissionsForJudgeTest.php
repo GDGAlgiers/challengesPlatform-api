@@ -46,7 +46,7 @@ class GetSubmissionsForJudgeTest extends JudgeTestCase
                     'requires_judge',
                     'is_locked'
                   ],
-                  'included_attachment',
+                  'attachment',
                   'status',
                   'assigned_points',
                   'submitted_at'
@@ -97,7 +97,7 @@ class GetSubmissionsForJudgeTest extends JudgeTestCase
                     'requires_judge',
                     'is_locked'
                   ],
-                  'included_attachment',
+                  'attachment',
                   'status',
                   'assigned_points',
                   'submitted_at'
