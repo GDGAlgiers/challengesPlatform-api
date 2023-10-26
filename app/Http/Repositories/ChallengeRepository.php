@@ -36,7 +36,7 @@ Class ChallengeRepository {
             'max_tries' => 'required|integer',
             'requires_judge' => 'required',
             'points' => 'required',
-            'attachment' => 'nullable|mimes:zip,pdf,txt|max:2024',
+            'attachment' => 'nullable|mimes:zip,pdf,txt|max:256000',
             'solution' => 'nullable|string'
         ]);
         if($validator->fails()) {
