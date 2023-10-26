@@ -27,7 +27,7 @@ class AuthController extends BaseController
         }
 
         $usersCount = count(User::where('ip', $request->ip())->get());
-        if($usersCount >=2) {
+        if($usersCount > 5) {
             return $this->sendError("You have reached your accounts limit, contact admins in case of issues");
         }
 
