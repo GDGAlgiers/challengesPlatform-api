@@ -182,7 +182,7 @@ class CreateChallengeTest extends AdminTestCase
     public function test_creating_challenge_with_too_big_attachment()
     {
         Storage::fake('local');
-        $mockAttachment = UploadedFile::fake()->create('mockFile.zip', 3072); // 3KB
+        $mockAttachment = UploadedFile::fake()->create('mockFile.zip', 257000); // 3KB
         $track = Track::factory()->create();
         $payload = [
             'track' => $track->type,
@@ -201,7 +201,7 @@ class CreateChallengeTest extends AdminTestCase
             'success' => false,
             'message' => 'Validation failed',
             'data' => [
-                'attachment' => ['The attachment must not be greater than 2024 kilobytes.']
+                'attachment' => ['The attachment must not be greater than 256000 kilobytes.']
             ]
         ]);
 
