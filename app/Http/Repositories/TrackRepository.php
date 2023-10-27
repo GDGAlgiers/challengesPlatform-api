@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 use App\Http\Resources\ChallengeResource;
 use App\Http\Resources\TrackResource;
 use App\Http\Resources\User\ParticipantResource;
+use App\Http\Resources\User\ParticipantResourceWithSubmissions;
 use App\Models\Track;
 use Illuminate\Support\Facades\Validator;
 
@@ -145,7 +146,7 @@ Class TrackRepository {
         $participants = $track->participants()->where('role', 'participant')->orderBy('points', 'DESC')->orderBy('updated_at', 'ASC')->get();
         $response['success'] = true;
         $response['message'] = 'Succefully retrieved the leaderboard';
-        $response['data'] = ParticipantResource::collection($participants);
+        $response['data'] = ParticipantResourceWithSubmissions::collection($participants);
 
         return $response;
     }
