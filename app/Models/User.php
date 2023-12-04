@@ -25,7 +25,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'points',
         'role',
         'track_id',
-        'ip'
+        'ip',
+        'team_id'
 
     ];
 
@@ -76,6 +77,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function username() {
         return "full_name";
+    }
+
+    public function team()
+    {
+        return $this->belongsTo('App\Models\Team');
     }
 
 

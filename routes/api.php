@@ -60,6 +60,13 @@ Route::middleware(['throttle:api'])->group(function() {
             Route::post('/{id}/unlock', 'unlock_track')->middleware('trackExists');
             Route::delete('/{id}/delete', 'delete_track')->middleware('trackExists');
         });
+
+            Route::prefix('team')->group(function () {
+                Route::get('/', 'get_teams');
+                Route::post('/create', 'create_team');
+                Route::post('/{id}/update', 'update_team')->middleware('teamExists');
+
+            });
     });
 
     Route::prefix('participant')->middleware(['auth:sanctum', 'hasRole:participant', 'verified'])
