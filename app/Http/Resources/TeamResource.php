@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Team;
+namespace App\Http\Resources;
 
 use App\Http\Resources\User\ParticipantResource;
 use App\Models\User;
@@ -15,7 +15,8 @@ class TeamResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'participants' => ParticipantResource::collection(User::where('team_id', $this->id)->get()->toArray()),
+            'token'=> $this->token
+            // 'participants' => ParticipantResource::collection(User::where('team_id', $this->id)->get()->toArray()),
         ];
     }
 
