@@ -31,7 +31,7 @@ Route::middleware(['throttle:api'])->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum', 'verified']);
 
-    Route::prefix('admin')
+    Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin', 'verified'])
         ->controller(AdminController::class)->group(function() {
         Route::get('/stats', 'get_stats');
         Route::prefix('user')->group(function() {
