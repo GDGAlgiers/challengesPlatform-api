@@ -57,4 +57,38 @@ class TeamRepository
         $response['message'] = 'Successfully updated the team!';
         return $response;
     }
+
+    public function deleteTeam($id)
+    {
+        $response = [];
+        $team = Team::find($id);
+        $team->delete();
+        $response['success'] = true;
+        $response['data'] = $team;
+        $response['message'] = 'Successfully deleted the team!';
+        return $response;
+    }
+
+    public function addMember($request, $id)
+    {
+        $response = [];
+        $team = Team::find($id);
+        $team->members()->attach($request->user_id);
+        $response['success'] = true;
+        $response['data'] = $team;
+        $response['message'] = 'Successfully added the member!';
+        return $response;
+    }
+
+
+    public function removeMember($request, $id)
+    {
+        $response = [];
+        $team = Team::find($id);
+        $team->members()->detach($request->user_id);
+        $response['success'] = true;
+        $response['data'] = $team;
+        $response['message'] = 'Successfully removed the member!';
+        return $response;
+    }
 }

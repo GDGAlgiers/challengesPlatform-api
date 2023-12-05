@@ -167,4 +167,30 @@ class AdminController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
 
     }
+    public function delete_team($id)
+    {
+        $response = $this->teamRepository->deleteTeam($id);
+        if (!$response['success'])
+            return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function add_member(Request $request, $id)
+    {
+        $response = $this->teamRepository->addMember($request, $id);
+        if (!$response['success'])
+            return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function remove_member(Request $request, $id)
+    {
+        $response = $this->teamRepository->removeMember($request, $id);
+        if (!$response['success'])
+            return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
 }
