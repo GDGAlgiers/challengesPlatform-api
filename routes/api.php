@@ -67,7 +67,7 @@ Route::middleware(['throttle:api'])->group(function() {
                 Route::post('/{id}/update', 'update_team')->middleware('teamExists');
                 Route::delete('/{id}/delete', 'delete_team')->middleware('teamExists');
                 Route::post('/{id}/add-member', 'add_member')->middleware('teamExists');
-                Route::post('/{id}/remove-member', 'remove_member')->middleware('teamExists');
+                Route::post('/remove-member', 'remove_member');
                 
 
 

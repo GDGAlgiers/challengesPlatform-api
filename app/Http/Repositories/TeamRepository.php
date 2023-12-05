@@ -2,8 +2,10 @@
 
 namespace App\Http\Repositories;
 
-use App\Http\Resources\Team\TeamResource;
+use App\Http\Resources\TeamResource;
 use App\Models\Team;
+use App\Models\User;
+
 use Illuminate\Support\Facades\Validator;
 
 class TeamRepository
@@ -31,7 +33,10 @@ class TeamRepository
     public function createTeam($request)
     {
         $response = [];
-        $validator = Validator::make($request->all(), ['name' => 'required|unique:teams,name']);
+        $validator = Validator::make($request->all(),
+         ['name' => 'required|unique:teams,name',
+         'token' => 'required|unique|min:8:teams,token',
+        ]);
 
         if ($validator->fails()) {
             $response['success'] = false;
@@ -39,7 +44,10 @@ class TeamRepository
             $response['data'] = $validator->errors();
             return $response;
         }
-        $team = Team::create($request);
+        $team = Team::create([
+            'name' => $request->name,
+            'token'=> $request->token,
+        ]);
         $response['success'] = true;
         $response['data'] = $team;
         $response['message'] = 'Successfully created the team!';
@@ -72,22 +80,26 @@ class TeamRepository
     public function addMember($request, $id)
     {
         $response = [];
-        $team = Team::find($id);
-        $team->members()->attach($request->user_id);
+        $member = User::find($request->id);
+
+        $member->team_id = $id;
+        $member->save();
         $response['success'] = true;
-        $response['data'] = $team;
+        $response['data'] = $member;
         $response['message'] = 'Successfully added the member!';
         return $response;
     }
 
 
-    public function removeMember($request, $id)
+    public function removeMember($request)
     {
         $response = [];
-        $team = Team::find($id);
-        $team->members()->detach($request->user_id);
+
+        $member = User::find($request->id);
+        $member->team_id = null;
+        $member->save();
         $response['success'] = true;
-        $response['data'] = $team;
+        $response['data'] = $member;
         $response['message'] = 'Successfully removed the member!';
         return $response;
     }

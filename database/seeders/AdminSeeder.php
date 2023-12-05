@@ -20,18 +20,21 @@ class AdminSeeder extends Seeder
                 'full_name' => 'abdessamed',
                 'password' => Hash::make('5RO8TTzmUPg4'),
                 'role' => 'admin',
+                "email" => "aa@gmail.com",
                 'ip' => '127.0.0.1'
             ]);
             User::create([
                 'full_name' => 'ouael',
                 'password' => Hash::make('FVFHAOEr3FA8'),
                 'role' => 'admin',
+                "email" => "cc@gmail.com",
                 'ip' => '127.0.0.1'
             ]);
             User::create([
                 'full_name' => 'abderraouf',
                 'password' => Hash::make('Ui3tCLLtlpl2'),
                 'role' => 'admin',
+                "email" => "bb@gmail.com",
                 'ip' => '127.0.0.1'
             ]);
     }
