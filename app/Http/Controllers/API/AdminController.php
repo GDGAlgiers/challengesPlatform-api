@@ -177,8 +177,8 @@ class AdminController extends BaseController
     public function add_member(Request $request, $id)
     {
         $response = $this->teamRepository->addMember($request, $id);
-        if (!$response['success'])
-        return $this->sendError($response['message'], $response['data']);
+        if (!$response['success']) return $this->sendError($response['message'], $response['data']);
+
         return $this->sendResponse($response['data'], $response['message']);
 
     }
@@ -186,8 +186,7 @@ class AdminController extends BaseController
     public function remove_member(Request $request)
     {
         $response = $this->teamRepository->removeMember($request);
-        if (!$response['success'])
-        return $this->sendError($response['message'], $response['data']);
+        if (!$response['success'])  return $this->sendError($response['message'], $response['data']);
         return $this->sendResponse($response['data'], $response['message']);
 
     }
