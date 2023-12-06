@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
                 'points' => 0,
                 'role' => 'participant',
                 'ip' => '127.0.0.1',
+                'team_id' => "1",
                 'track_id' => $track
             ]);
         }

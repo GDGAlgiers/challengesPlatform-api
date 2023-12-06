@@ -15,8 +15,8 @@ class TeamResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'token'=> $this->token
-            // 'participants' => ParticipantResource::collection(User::where('team_id', $this->id)->get()->toArray()),
+            'token'=> $this->token,
+            'participants' => ParticipantResource::collection($this->participants),
         ];
     }
 

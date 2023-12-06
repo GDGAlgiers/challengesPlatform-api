@@ -17,11 +17,11 @@ class EnsureTeamExists
      */
     public function handle(Request $request, Closure $next)
     {
-        $challenge = Team::find($request->route('id'));
-        if (!$challenge)
+        $team = Team::find($request->route('id'));
+        if (!$team)
             return response()->json([
                 'success' => false,
-                'message' => 'Team can not be found'
+                'message' => 'Team can not be found!'
             ], 400);
 
         return $next($request);

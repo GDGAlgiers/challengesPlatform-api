@@ -10,7 +10,6 @@ class Team extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'token'];
-    //Relationship
 
     public function participants()
     {

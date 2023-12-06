@@ -31,7 +31,7 @@ Route::middleware(['throttle:api'])->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/track/{type}/leaderboard', [ParticipantController::class, 'leaderboard'])->middleware(['auth:sanctum', 'verified']);
 
-    Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin', 'verified'])
+    Route::prefix('admin')->middleware(['auth:sanctum', 'hasRole:admin'])
         ->controller(AdminController::class)->group(function() {
         Route::get('/stats', 'get_stats');
         Route::prefix('user')->group(function() {
@@ -63,6 +63,7 @@ Route::middleware(['throttle:api'])->group(function() {
 
             Route::prefix('team')->group(function () {
                 Route::get('/', 'get_teams');
+                Route::get('/{id}', 'get_team')->middleware('teamExists');
                 Route::post('/create', 'create_team');
                 Route::post('/{id}/update', 'update_team')->middleware('teamExists');
                 Route::delete('/{id}/delete', 'delete_team')->middleware('teamExists');

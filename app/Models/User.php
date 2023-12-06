@@ -81,7 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function team()
     {
-        return $this->belongsTo('App\Models\Team' , 'team_id');
+        return $this->belongsTo('App\Models\Team');
     }
 
 
