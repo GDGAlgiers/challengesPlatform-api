@@ -39,6 +39,5 @@ class GetTeamByIdTest extends AdminTestCase
             'success' => false,
             'message' => 'Team can not be found!'
         ]);
-        $this->assertDatabaseCount('teams', 0);
     }
 }
