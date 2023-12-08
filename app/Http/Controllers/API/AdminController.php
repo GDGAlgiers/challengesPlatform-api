@@ -6,6 +6,7 @@ use App\Http\Repositories\ChallengeRepository;
 use App\Http\Repositories\GeneralRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Repositories\TrackRepository;
+use App\Http\Repositories\TeamRepository;
 use Illuminate\Http\Request;
 
 class AdminController extends BaseController
@@ -14,11 +15,14 @@ class AdminController extends BaseController
     private $challengeRepository;
     private $trackRepository;
     private $generalRepository;
-    public function __construct(UserRepository $userRepository, ChallengeRepository $challengeRepository, TrackRepository $trackRepository, GeneralRepository $generalRepository) {
+    private $teamRepository;
+    public function __construct(UserRepository $userRepository, ChallengeRepository $challengeRepository, TrackRepository $trackRepository, GeneralRepository $generalRepository, TeamRepository $teamRepository)
+    {
         $this->userRepository = $userRepository;
         $this->challengeRepository = $challengeRepository;
         $this->trackRepository = $trackRepository;
         $this->generalRepository = $generalRepository;
+        $this->teamRepository = $teamRepository;
     }
 
     public function get_all_users() {
@@ -133,4 +137,57 @@ class AdminController extends BaseController
         return $this->sendResponse($response['data'], $response['message']);
     }
 
+    public function get_teams()
+    {
+        $response = $this->teamRepository->getTeams();
+        return $this->sendResponse($response['data'], $response['message']);
+    }
+
+    public function get_team($id)
+    {
+        $response = $this->teamRepository->getTeam($id);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function create_team(Request $request)
+    {
+        $response = $this->teamRepository->createTeam($request);
+        if (!$response['success'])
+            return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function update_team(Request $request, $id)
+    {
+        $response = $this->teamRepository->updateTeam($request, $id);
+        if (!$response['success'])
+            return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+    public function delete_team($id)
+    {
+        $response = $this->teamRepository->deleteTeam($id);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function add_member(Request $request, $id)
+    {
+        $response = $this->teamRepository->addMember($request, $id);
+        if (!$response['success']) return $this->sendError($response['message'], $response['data']);
+
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
+
+    public function remove_member(Request $request)
+    {
+        $response = $this->teamRepository->removeMember($request);
+        if (!$response['success'])  return $this->sendError($response['message'], $response['data']);
+        return $this->sendResponse($response['data'], $response['message']);
+
+    }
 }

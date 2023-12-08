@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $track = Track::where('type', 'Flutter Forward Challenges')->first()->pluck('id');
+        $track = Track::where('type', 'DEVFEST')->first()->pluck('id');
         for($i=1; $i<=15; $i++) {
             User::create([
                 'full_name' => 'username'.$i,
@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
                 'points' => 0,
                 'role' => 'participant',
                 'ip' => '127.0.0.1',
+                'team_id' => "1",
                 'track_id' => $track
             ]);
         }
