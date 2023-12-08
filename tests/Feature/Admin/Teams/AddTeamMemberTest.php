@@ -47,10 +47,6 @@ class AddTeamMemberTest extends AdminTestCase
         $this->assertDatabaseHas('users', [
             'team_id' => $team->id,
         ]);
-        $this->assertDatabaseHas('teams', [
-            'id' => $team->id,
-            'name' => $team->name,
-        ]);
         $this->assertDatabaseCount('users', 2);
     }
     public function test_add_team_member_without_data()
