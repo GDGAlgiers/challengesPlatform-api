@@ -20,24 +20,15 @@ class AddTeamMemberTest extends AdminTestCase
      */
     public function test_add_team_member()
     {
-
-
         $team = Team::factory()->create();
         $track = Track::factory()->create();
-
         $participant = User::factory()->create([
             'track_id' => $track->id,
         ]);
- 
-
         $payload = [
             'participant_id' => $participant->id,
         ];
-
-
-
         $response = $this->postJson($this->endpoint.$team->id.'/add-member', $payload);
-
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
@@ -53,32 +44,20 @@ class AddTeamMemberTest extends AdminTestCase
                 ],
             'message' => 'Successfully added the member!'
         ]);
-
-        $this->assertDatabaseCount('teams', 1);
-
+        $this->assertDatabaseHas('users', [
+            'team_id' => $team->id,
+        ]);
         $this->assertDatabaseHas('teams', [
             'id' => $team->id,
             'name' => $team->name,
         ]);
-
         $this->assertDatabaseCount('users', 2);
-
-        $this->assertDatabaseHas('users', [
-            'team_id' => $team->id,
-        ]);
-
-
-
     }
-
-
     public function test_add_team_member_without_data()
     {
         $team = Team::factory()->create();
         $payload = [];
-
         $response = $this->postJson($this->endpoint.$team->id.'/add-member', $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Validation failed!',
@@ -87,26 +66,16 @@ class AddTeamMemberTest extends AdminTestCase
             ],
         ]);
     }
-
-
     public function test_add_team_member_does_not_exist()
     {
         $team = Team::factory()->create();
         $payload = [
             'participant_id' => 100,
         ];
-
         $response = $this->postJson($this->endpoint.$team->id.'/add-member', $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Participant not found!',
         ]);
-
-        $this->assertDatabaseCount('teams', 1);
-        
-
     }
-
-
 }

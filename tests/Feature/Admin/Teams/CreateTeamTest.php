@@ -20,9 +20,7 @@ class CreateTeamTest extends AdminTestCase
             'name' => $this->faker->text(8),
             'token' => $this->faker->text(30)
         ];
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
@@ -33,14 +31,12 @@ class CreateTeamTest extends AdminTestCase
             ],
             'message' => 'Successfully created the team!'
         ]);
-
         $this->assertDatabaseCount('teams', 1);
         $this->assertDatabaseHas('teams', [
             'name' => $payload['name'],
             'token' => $payload['token'],
         ]);
     }
-
     /**
      * A feature test for creating a team without data.
      *
@@ -49,9 +45,7 @@ class CreateTeamTest extends AdminTestCase
     public function test_creating_team_without_data()
     {
         $payload = [];
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Validation failed!',
@@ -60,10 +54,8 @@ class CreateTeamTest extends AdminTestCase
                 'token' => ['The token field is required.'],
             ],
         ]);
-
         $this->assertDatabaseCount('teams', 0);
     }
-
     /**
      * A feature test for creating a team that exists.
      *
@@ -72,14 +64,11 @@ class CreateTeamTest extends AdminTestCase
     public function test_create_team_that_exists()
     {
         $team = Team::factory()->create();
-
         $payload = [
             'name' => $team->name,
             'token' => $this->faker->text(30)
         ];
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Validation failed!',
@@ -87,7 +76,6 @@ class CreateTeamTest extends AdminTestCase
                 'name' => ['The name has already been taken.'],
             ],
         ]);
-
         $this->assertDatabaseCount('teams', 1);
     }
 }

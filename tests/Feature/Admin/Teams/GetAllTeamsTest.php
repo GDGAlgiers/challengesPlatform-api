@@ -18,7 +18,6 @@ class GetAllTeamsTest extends AdminTestCase
     public function test_get_all_teams()
     {
         $teams = Team::factory()->count(3)->create();
-
         $response = $this->getJson($this->endpoint);
         $response
             ->assertStatus(Response::HTTP_OK)

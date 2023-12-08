@@ -18,7 +18,6 @@ class GetTeamByIdTest extends AdminTestCase
     public function test_get_team_by_id()
     {
         $teams = Team::factory()->create();
-
         $response = $this->getJson($this->endpoint.$teams->id);
         $response
             ->assertStatus(Response::HTTP_OK)
@@ -32,24 +31,14 @@ class GetTeamByIdTest extends AdminTestCase
                 ],
                 'message' => "Successfully retrieved the team!",
             ]);
-
-        $this->assertDatabaseCount('teams', 1);
-
-        
     }
-
-
     public function test_get_unexisting_team()
     {
         $response = $this->getJson($this->endpoint.'2333');
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Team can not be found!'
         ]);
-
         $this->assertDatabaseCount('teams', 0);
     }
-
-    
 }

@@ -21,7 +21,6 @@ class UpdateTeamTest extends AdminTestCase
         $payload = [
             'name' => $this->faker->text(30)
         ];
-
         $response = $this->postJson($this->endpoint.$team->id.'/update', $payload);
 
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
@@ -44,7 +43,6 @@ class UpdateTeamTest extends AdminTestCase
             'name' => $payload['name']
         ]);
     }
-
     public function test_update_team_name_without_data()
     {
         $team = Team::factory()->create();
@@ -60,6 +58,16 @@ class UpdateTeamTest extends AdminTestCase
             ],
         ]);
     }
-
-
+    public function test_update_team_name_dont_exist()
+    {
+        $payload = [
+            "name"  =>  $this->faker->name()
+        ];
+        $response = $this->postJson($this->endpoint."233".'/update', $payload);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
+            'success' => false,
+            'message' => 'Team can not be found!',
+        ]);
+        $this->assertDatabaseCount('teams', 0);
+    }
 }

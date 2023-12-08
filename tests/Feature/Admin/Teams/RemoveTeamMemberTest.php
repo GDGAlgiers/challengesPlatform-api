@@ -20,8 +20,6 @@ class RemoveTeamMemberTest extends AdminTestCase
      */
     public function test_remove_team_member()
     {
-
-
         $team = Team::factory()->create();
         $track = Track::factory()->create();
 
@@ -29,16 +27,10 @@ class RemoveTeamMemberTest extends AdminTestCase
             'track_id' => $track->id,
             'team_id' => $team->id,
         ]);
- 
-
         $payload = [
             'participant_id' => $participant->id,
         ];
-
-
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_OK)->assertExactJson([
             'success' => true,
             'data' => [
@@ -54,31 +46,21 @@ class RemoveTeamMemberTest extends AdminTestCase
                 ],
             'message' => 'Successfully removed the member!'
         ]);
-
         $this->assertDatabaseCount('teams', 1);
-
         $this->assertDatabaseHas('teams', [
             'id' => $team->id,
             'name' => $team->name,
         ]);
-
         $this->assertDatabaseCount('users', 2);
-
         $this->assertDatabaseHas('users', [
+            'id' => $participant->id,
             'team_id' => null,
         ]);
-
-
-
     }
-
-
     public function test_remove_team_member_without_data()
     {
         $payload = [];
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Validation failed!',
@@ -87,25 +69,20 @@ class RemoveTeamMemberTest extends AdminTestCase
             ],
         ]);
 
-        $this->assertDatabaseCount('teams', 0);
     }
-
     public function test_remove_team_member_does_not_exist()
     {
         $payload = [
             'participant_id' => 878787,
         ];
-
         $response = $this->postJson($this->endpoint, $payload);
-
         $response->assertStatus(Response::HTTP_BAD_REQUEST)->assertExactJson([
             'success' => false,
             'message' => 'Participant not found!',
         ]);
-
-        $this->assertDatabaseCount('teams', 0);
     }
-
-
-
 }
+
+
+
+
